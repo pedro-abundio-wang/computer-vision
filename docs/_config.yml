@@ -1,0 +1,58 @@
+# Temporary GitPage Host setup
+title: Computer Vision
+baseurl: ""
+
+# Theme settings
+doks:
+    color_theme: yellow
+    header:
+        logo:
+            text: Computer Vision
+            image: false
+        nav:
+            - item_name: Papers
+              item_url: '/papers'
+            - item_name: Projects
+              item_url: '/projects'
+            - item_name: Blogs
+              item_url: '/blogs'
+    footer:
+        content:
+            logo:
+                text:
+                image:
+            copyright: Copyright &copy; 2020. - Pedro Abundio Wang <br>All rights reserved.
+        social_list:
+    comments:
+        disqus_forum_shortname: # Add your disqus forum shortname to activate comments
+
+# SASS settings
+sass:
+    sass_dir: ./doks-theme/_sass
+    style: :compressed
+
+# Jekyll settings
+plugins_dir: ./_plugins
+layouts_dir: ./doks-theme/_layouts
+includes_dir: ./doks-theme/_includes
+exclude: [ 'README.md', 'CHANGELOG.md', 'scripts']
+permalink: /:title/
+
+# Course logistics
+course:
+    links:
+        papers:
+            icon:
+            content: Papers
+            url: '/papers'
+            external_url: false
+        projects:
+            icon:
+            content: Projects
+            url: '/projects'
+            external_url: false
+        blogs:
+            icon:
+            content: Blogs
+            url: '/blogs'
+            external_url: false
