@@ -21,17 +21,11 @@ page_nav:
         url: '#'
 ---
 
-Python is a great general-purpose programming language on its own, but with the
-help of a few popular libraries (numpy, scipy, matplotlib) it becomes a powerful
-environment for scientific computing.
+Python is a great general-purpose programming language on its own, but with the help of a few popular libraries (numpy, scipy, matplotlib) it becomes a powerful environment for scientific computing.
 
 ## Python
 
-Python is a high-level, dynamically typed multiparadigm programming language.
-Python code is often said to be almost like pseudocode, since it allows you
-to express very powerful ideas in very few lines of code while being very
-readable. As an example, here is an implementation of the classic quicksort
-algorithm in Python:
+Python is a high-level, dynamically typed multiparadigm programming language. Python code is often said to be almost like pseudocode, since it allows you to express very powerful ideas in very few lines of code while being very readable. As an example, here is an implementation of the classic quicksort algorithm in Python:
 
 ```python
 def quicksort(arr):
@@ -49,9 +43,7 @@ print(quicksort([3,6,8,10,1,2,1]))
 
 ### Basic data types
 
-Like most languages, Python has a number of basic types including integers,
-floats, booleans, and strings. These data types behave in ways that are
-familiar from other programming languages.
+Like most languages, Python has a number of basic types including integers, floats, booleans, and strings. These data types behave in ways that are familiar from other programming languages.
 
 **Numbers:** Integers and floats work as you would expect from other languages:
 
@@ -71,15 +63,12 @@ y = 2.5
 print(type(y)) # Prints "<class 'float'>"
 print(y, y + 1, y * 2, y ** 2) # Prints "2.5 3.5 5.0 6.25"
 ```
-Note that unlike many languages, Python does not have unary increment (`x++`)
-or decrement (`x--`) operators.
 
-Python also has built-in types for complex numbers;
-you can find all of the details
-[in the documentation](https://docs.python.org/3.6/library/stdtypes.html#numeric-types-int-float-complex).
+Note that unlike many languages, Python does not have unary increment (`x++`) or decrement (`x--`) operators.
 
-**Booleans:** Python implements all of the usual operators for Boolean logic,
-but uses English words rather than symbols (`&&`, `||`, etc.):
+Python also has built-in types for complex numbers; you can find all of the details [in the documentation](https://docs.python.org/3.6/library/stdtypes.html#numeric-types-int-float-complex).
+
+**Booleans:** Python implements all of the usual operators for Boolean logic, but uses English words rather than symbols (`&&`, `||`, etc.):
 
 ```python
 t = True
@@ -119,11 +108,12 @@ print('  world '.strip())  # Strip leading and trailing whitespace; prints "worl
 You can find a list of all string methods [in the documentation](https://docs.python.org/3.6/library/stdtypes.html#string-methods).
 
 ### Containers
+
 Python includes several built-in container types: lists, dictionaries, sets, and tuples.
 
 #### Lists
-A list is the Python equivalent of an array, but is resizeable
-and can contain elements of different types:
+
+A list is the Python equivalent of an array, but is resizeable and can contain elements of different types:
 
 ```python
 xs = [3, 1, 2]    # Create a list
@@ -136,12 +126,12 @@ print(xs)         # Prints "[3, 1, 'foo', 'bar']"
 x = xs.pop()      # Remove and return the last element of the list
 print(x, xs)      # Prints "bar [3, 1, 'foo']"
 ```
-As usual, you can find all the gory details about lists
-[in the documentation](https://docs.python.org/3.6/tutorial/datastructures.html#more-on-lists).
+
+As usual, you can find all the gory details about lists [in the documentation](https://docs.python.org/3.6/tutorial/datastructures.html#more-on-lists).
 
 **Slicing:**
-In addition to accessing list elements one at a time, Python provides
-concise syntax to access sublists; this is known as *slicing*:
+
+In addition to accessing list elements one at a time, Python provides concise syntax to access sublists; this is known as *slicing*:
 
 ```python
 nums = list(range(5))     # range is a built-in function that creates a list of integers
@@ -154,6 +144,7 @@ print(nums[:-1])          # Slice indices can be negative; prints "[0, 1, 2, 3]"
 nums[2:4] = [8, 9]        # Assign a new sublist to a slice
 print(nums)               # Prints "[0, 1, 8, 9, 4]"
 ```
+
 We will see slicing again in the context of numpy arrays.
 
 **Loops:** You can loop over the elements of a list like this:
@@ -165,8 +156,7 @@ for animal in animals:
 # Prints "cat", "dog", "monkey", each on its own line.
 ```
 
-If you want access to the index of each element within the body of a loop,
-use the built-in `enumerate` function:
+If you want access to the index of each element within the body of a loop, use the built-in `enumerate` function:
 
 ```python
 animals = ['cat', 'dog', 'monkey']
@@ -176,8 +166,8 @@ for idx, animal in enumerate(animals):
 ```
 
 **List comprehensions:**
-When programming, frequently we want to transform one type of data into another.
-As a simple example, consider the following code that computes square numbers:
+
+When programming, frequently we want to transform one type of data into another. As a simple example, consider the following code that computes square numbers:
 
 ```python
 nums = [0, 1, 2, 3, 4]
@@ -204,8 +194,8 @@ print(even_squares)  # Prints "[0, 4, 16]"
 ```
 
 #### Dictionaries
-A dictionary stores (key, value) pairs, similar to a `Map` in Java or
-an object in Javascript. You can use it like this:
+
+A dictionary stores (key, value) pairs, similar to a `Map` in Java or an object in Javascript. You can use it like this:
 
 ```python
 d = {'cat': 'cute', 'dog': 'furry'}  # Create a new dictionary with some data
@@ -219,8 +209,8 @@ print(d.get('fish', 'N/A'))    # Get an element with a default; prints "wet"
 del d['fish']         # Remove an element from a dictionary
 print(d.get('fish', 'N/A')) # "fish" is no longer a key; prints "N/A"
 ```
-You can find all you need to know about dictionaries
-[in the documentation](https://docs.python.org/3.6/library/stdtypes.html#dict).
+
+You can find all you need to know about dictionaries [in the documentation](https://docs.python.org/3.6/library/stdtypes.html#dict).
 
 **Loops:** It is easy to iterate over the keys in a dictionary:
 
@@ -242,8 +232,8 @@ for animal, legs in d.items():
 ```
 
 **Dictionary comprehensions:**
-These are similar to list comprehensions, but allow you to easily construct
-dictionaries. For example:
+
+These are similar to list comprehensions, but allow you to easily construct dictionaries. For example:
 
 ```python
 nums = [0, 1, 2, 3, 4]
@@ -252,8 +242,8 @@ print(even_num_to_square)  # Prints "{0: 0, 2: 4, 4: 16}"
 ```
 
 #### Sets
-A set is an unordered collection of distinct elements. As a simple example, consider
-the following:
+
+A set is an unordered collection of distinct elements. As a simple example, consider the following:
 
 ```python
 animals = {'cat', 'dog'}
@@ -268,14 +258,11 @@ animals.remove('cat')     # Remove an element from a set
 print(len(animals))       # Prints "2"
 ```
 
-As usual, everything you want to know about sets can be found
-[in the documentation](https://docs.python.org/3.6/library/stdtypes.html#set).
-
+As usual, everything you want to know about sets can be found [in the documentation](https://docs.python.org/3.6/library/stdtypes.html#set).
 
 **Loops:**
-Iterating over a set has the same syntax as iterating over a list;
-however since sets are unordered, you cannot make assumptions about the order
-in which you visit the elements of the set:
+
+Iterating over a set has the same syntax as iterating over a list; however since sets are unordered, you cannot make assumptions about the order in which you visit the elements of the set:
 
 ```python
 animals = {'cat', 'dog', 'fish'}
@@ -285,6 +272,7 @@ for idx, animal in enumerate(animals):
 ```
 
 **Set comprehensions:**
+
 Like lists and dictionaries, we can easily construct sets using set comprehensions:
 
 ```python
@@ -294,10 +282,8 @@ print(nums)  # Prints "{0, 1, 2, 3, 4, 5}"
 ```
 
 #### Tuples
-A tuple is an (immutable) ordered list of values.
-A tuple is in many ways similar to a list; one of the most important differences is that
-tuples can be used as keys in dictionaries and as elements of sets, while lists cannot.
-Here is a trivial example:
+
+tuple is an (immutable) ordered list of values. A tuple is in many ways similar to a list; one of the most important differences is that tuples can be used as keys in dictionaries and as elements of sets, while lists cannot. Here is a trivial example:
 
 ```python
 d = {(x, x + 1): x for x in range(10)}  # Create a dictionary with tuple keys
@@ -306,9 +292,11 @@ print(type(t))    # Prints "<class 'tuple'>"
 print(d[t])       # Prints "5"
 print(d[(1, 2)])  # Prints "1"
 ```
+
 [The documentation](https://docs.python.org/3.6/tutorial/datastructures.html#tuples-and-sequences) has more information about tuples.
 
 ### Functions
+
 Python functions are defined using the `def` keyword. For example:
 
 ```python
@@ -337,8 +325,8 @@ def hello(name, loud=False):
 hello('Bob') # Prints "Hello, Bob"
 hello('Fred', loud=True)  # Prints "HELLO, FRED!"
 ```
-There is a lot more information about Python functions
-[in the documentation](https://docs.python.org/3.6/tutorial/controlflow.html#defining-functions).
+
+There is a lot more information about Python functions [in the documentation](https://docs.python.org/3.6/tutorial/controlflow.html#defining-functions).
 
 ### Classes
 
@@ -362,22 +350,18 @@ g = Greeter('Fred')  # Construct an instance of the Greeter class
 g.greet()            # Call an instance method; prints "Hello, Fred"
 g.greet(loud=True)   # Call an instance method; prints "HELLO, FRED!"
 ```
-You can read a lot more about Python classes
-[in the documentation](https://docs.python.org/3.6/tutorial/classes.html).
+
+You can read a lot more about Python classes [in the documentation](https://docs.python.org/3.6/tutorial/classes.html).
 
 ## Numpy
 
-[Numpy](http://www.numpy.org/) is the core library for scientific computing in Python.
-It provides a high-performance multidimensional array object, and tools for working with these
-arrays.
+[Numpy](http://www.numpy.org/) is the core library for scientific computing in Python. It provides a high-performance multidimensional array object, and tools for working with these arrays.
 
 ### Arrays
-A numpy array is a grid of values, all of the same type, and is indexed by a tuple of
-nonnegative integers. The number of dimensions is the *rank* of the array; the *shape*
-of an array is a tuple of integers giving the size of the array along each dimension.
 
-We can initialize numpy arrays from nested Python lists,
-and access elements using square brackets:
+A numpy array is a grid of values, all of the same type, and is indexed by a tuple of nonnegative integers. The number of dimensions is the *rank* of the array; the *shape* of an array is a tuple of integers giving the size of the array along each dimension.
+
+We can initialize numpy arrays from nested Python lists, and access elements using square brackets:
 
 ```python
 import numpy as np
@@ -418,16 +402,16 @@ e = np.random.random((2,2))  # Create an array filled with random values
 print(e)                     # Might print "[[ 0.91940167  0.08143941]
                              #               [ 0.68744134  0.87236687]]"
 ```
-You can read about other methods of array creation
-[in the documentation](http://docs.scipy.org/doc/numpy/user/basics.creation.html#arrays-creation).
+
+You can read about other methods of array creation [in the documentation](http://docs.scipy.org/doc/numpy/user/basics.creation.html#arrays-creation).
 
 ### Array indexing
+
 Numpy offers several ways to index into arrays.
 
 **Slicing:**
-Similar to Python lists, numpy arrays can be sliced.
-Since arrays may be multidimensional, you must specify a slice for each dimension
-of the array:
+
+Similar to Python lists, numpy arrays can be sliced. Since arrays may be multidimensional, you must specify a slice for each dimension of the array:
 
 ```python
 import numpy as np
@@ -451,8 +435,7 @@ b[0, 0] = 77     # b[0, 0] is the same piece of data as a[0, 1]
 print(a[0, 1])   # Prints "77"
 ```
 
-You can also mix integer indexing with slice indexing.
-However, doing so will yield an array of lower rank than the original array.
+You can also mix integer indexing with slice indexing. However, doing so will yield an array of lower rank than the original array.
 
 ```python
 import numpy as np
@@ -482,10 +465,8 @@ print(col_r2, col_r2.shape)  # Prints "[[ 2]
 ```
 
 **Integer array indexing:**
-When you index into numpy arrays using slicing, the resulting array view
-will always be a subarray of the original array. In contrast, integer array
-indexing allows you to construct arbitrary arrays using the data from another
-array. Here is an example:
+
+When you index into numpy arrays using slicing, the resulting array view will always be a subarray of the original array. In contrast, integer array indexing allows you to construct arbitrary arrays using the data from another array. Here is an example:
 
 ```python
 import numpy as np
@@ -507,8 +488,7 @@ print(a[[0, 0], [1, 1]])  # Prints "[2 2]"
 print(np.array([a[0, 1], a[0, 1]]))  # Prints "[2 2]"
 ```
 
-One useful trick with integer array indexing is selecting or mutating one
-element from each row of a matrix:
+One useful trick with integer array indexing is selecting or mutating one element from each row of a matrix:
 
 ```python
 import numpy as np
@@ -537,9 +517,8 @@ print(a)  # prints "array([[11,  2,  3],
 ```
 
 **Boolean array indexing:**
-Boolean array indexing lets you pick out arbitrary elements of an array.
-Frequently this type of indexing is used to select the elements of an array
-that satisfy some condition. Here is an example:
+
+Boolean array indexing lets you pick out arbitrary elements of an array. Frequently this type of indexing is used to select the elements of an array that satisfy some condition. Here is an example:
 
 ```python
 import numpy as np
@@ -564,16 +543,11 @@ print(a[bool_idx])  # Prints "[3 4 5 6]"
 print(a[a > 2])     # Prints "[3 4 5 6]"
 ```
 
-For brevity we have left out a lot of details about numpy array indexing;
-if you want to know more you should
-[read the documentation](http://docs.scipy.org/doc/numpy/reference/arrays.indexing.html).
+For brevity we have left out a lot of details about numpy array indexing; if you want to know more you should [read the documentation](http://docs.scipy.org/doc/numpy/reference/arrays.indexing.html).
 
 ### Datatypes
-Every numpy array is a grid of elements of the same type.
-Numpy provides a large set of numeric datatypes that you can use to construct arrays.
-Numpy tries to guess a datatype when you create an array, but functions that construct
-arrays usually also include an optional argument to explicitly specify the datatype.
-Here is an example:
+
+Every numpy array is a grid of elements of the same type. Numpy provides a large set of numeric datatypes that you can use to construct arrays. Numpy tries to guess a datatype when you create an array, but functions that construct arrays usually also include an optional argument to explicitly specify the datatype. Here is an example:
 
 ```python
 import numpy as np
@@ -587,12 +561,12 @@ print(x.dtype)             # Prints "float64"
 x = np.array([1, 2], dtype=np.int64)   # Force a particular datatype
 print(x.dtype)                         # Prints "int64"
 ```
-You can read all about numpy datatypes
-[in the documentation](http://docs.scipy.org/doc/numpy/reference/arrays.dtypes.html).
+
+You can read all about numpy datatypes [in the documentation](http://docs.scipy.org/doc/numpy/reference/arrays.dtypes.html).
 
 ### Array math
-Basic mathematical functions operate elementwise on arrays, and are available
-both as operator overloads and as functions in the numpy module:
+
+Basic mathematical functions operate elementwise on arrays, and are available both as operator overloads and as functions in the numpy module:
 
 ```python
 import numpy as np
@@ -630,11 +604,7 @@ print(np.divide(x, y))
 print(np.sqrt(x))
 ```
 
-`*` is elementwise multiplication, not matrix
-multiplication. We instead use the `dot` function to compute inner
-products of vectors, to multiply a vector by a matrix, and to
-multiply matrices. `dot` is available both as a function in the numpy
-module and as an instance method of array objects:
+`*` is elementwise multiplication, not matrix multiplication. We instead use the `dot` function to compute inner products of vectors, to multiply a vector by a matrix, and to multiply matrices. `dot` is available both as a function in the numpy module and as an instance method of array objects:
 
 ```python
 import numpy as np
@@ -660,8 +630,7 @@ print(x.dot(y))
 print(np.dot(x, y))
 ```
 
-Numpy provides many useful functions for performing computations on
-arrays; one of the most useful is `sum`:
+Numpy provides many useful functions for performing computations on arrays; one of the most useful is `sum`:
 
 ```python
 import numpy as np
@@ -672,13 +641,10 @@ print(np.sum(x))  # Compute sum of all elements; prints "10"
 print(np.sum(x, axis=0))  # Compute sum of each column; prints "[4 6]"
 print(np.sum(x, axis=1))  # Compute sum of each row; prints "[3 7]"
 ```
-You can find the full list of mathematical functions provided by numpy
-[in the documentation](http://docs.scipy.org/doc/numpy/reference/routines.math.html).
 
-Apart from computing mathematical functions using arrays, we frequently
-need to reshape or otherwise manipulate data in arrays. The simplest example
-of this type of operation is transposing a matrix; to transpose a matrix,
-simply use the `T` attribute of an array object:
+You can find the full list of mathematical functions provided by numpy [in the documentation](http://docs.scipy.org/doc/numpy/reference/routines.math.html).
+
+Apart from computing mathematical functions using arrays, we frequently need to reshape or otherwise manipulate data in arrays. The simplest example of this type of operation is transposing a matrix; to transpose a matrix, simply use the `T` attribute of an array object:
 
 ```python
 import numpy as np
@@ -694,17 +660,14 @@ v = np.array([1,2,3])
 print(v)    # Prints "[1 2 3]"
 print(v.T)  # Prints "[1 2 3]"
 ```
-Numpy provides many more functions for manipulating arrays; you can see the full list
-[in the documentation](http://docs.scipy.org/doc/numpy/reference/routines.array-manipulation.html).
+
+Numpy provides many more functions for manipulating arrays; you can see the full list [in the documentation](http://docs.scipy.org/doc/numpy/reference/routines.array-manipulation.html).
 
 ### Broadcasting
-Broadcasting is a powerful mechanism that allows numpy to work with arrays of different
-shapes when performing arithmetic operations. Frequently we have a smaller array and a
-larger array, and we want to use the smaller array multiple times to perform some operation
-on the larger array.
 
-For example, suppose that we want to add a constant vector to each
-row of a matrix. We could do it like this:
+Broadcasting is a powerful mechanism that allows numpy to work with arrays of different shapes when performing arithmetic operations. Frequently we have a smaller array and a larger array, and we want to use the smaller array multiple times to perform some operation on the larger array.
+
+For example, suppose that we want to add a constant vector to each row of a matrix. We could do it like this:
 
 ```python
 import numpy as np
@@ -727,11 +690,7 @@ for i in range(4):
 print(y)
 ```
 
-This works; however when the matrix `x` is very large, computing an explicit loop
-in Python could be slow. Note that adding the vector `v` to each row of the matrix
-`x` is equivalent to forming a matrix `vv` by stacking multiple copies of `v` vertically,
-then performing elementwise summation of `x` and `vv`. We could implement this
-approach like this:
+This works; however when the matrix `x` is very large, computing an explicit loop in Python could be slow. Note that adding the vector `v` to each row of the matrix `x` is equivalent to forming a matrix `vv` by stacking multiple copies of `v` vertically, then performing elementwise summation of `x` and `vv`. We could implement this approach like this:
 
 ```python
 import numpy as np
@@ -752,8 +711,7 @@ print(y)  # Prints "[[ 2  2  4
           #          [11 11 13]]"
 ```
 
-Numpy broadcasting allows us to perform this computation without actually
-creating multiple copies of `v`. Consider this version, using broadcasting:
+Numpy broadcasting allows us to perform this computation without actually creating multiple copies of `v`. Consider this version, using broadcasting:
 
 ```python
 import numpy as np
@@ -769,28 +727,19 @@ print(y)  # Prints "[[ 2  2  4]
           #          [11 11 13]]"
 ```
 
-The line `y = x + v` works even though `x` has shape `(4, 3)` and `v` has shape
-`(3,)` due to broadcasting; this line works as if `v` actually had shape `(4, 3)`,
-where each row was a copy of `v`, and the sum was performed elementwise.
+The line `y = x + v` works even though `x` has shape `(4, 3)` and `v` has shape `(3,)` due to broadcasting; this line works as if `v` actually had shape `(4, 3)`, where each row was a copy of `v`, and the sum was performed elementwise.
 
 Broadcasting two arrays together follows these rules:
 
-1. If the arrays do not have the same rank, prepend the shape of the lower rank array
-   with 1s until both shapes have the same length.
-2. The two arrays are said to be *compatible* in a dimension if they have the same
-   size in the dimension, or if one of the arrays has size 1 in that dimension.
+1. If the arrays do not have the same rank, prepend the shape of the lower rank array with 1s until both shapes have the same length.
+2. The two arrays are said to be *compatible* in a dimension if they have the same size in the dimension, or if one of the arrays has size 1 in that dimension.
 3. The arrays can be broadcast together if they are compatible in all dimensions.
-4. After broadcasting, each array behaves as if it had shape equal to the elementwise
-   maximum of shapes of the two input arrays.
-5. In any dimension where one array had size 1 and the other array had size greater than 1,
-   the first array behaves as if it were copied along that dimension
+4. After broadcasting, each array behaves as if it had shape equal to the elementwise maximum of shapes of the two input arrays.
+5. In any dimension where one array had size 1 and the other array had size greater than 1, the first array behaves as if it were copied along that dimension
 
-If this explanation does not make sense, try reading the explanation
-[from the documentation](http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html).
+If this explanation does not make sense, try reading the explanation [from the documentation](http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html).
 
-Functions that support broadcasting are known as *universal functions*. You can find
-the list of all universal functions
-[in the documentation](http://docs.scipy.org/doc/numpy/reference/ufuncs.html#available-ufuncs).
+Functions that support broadcasting are known as *universal functions*. You can find the list of all universal functions [in the documentation](http://docs.scipy.org/doc/numpy/reference/ufuncs.html#available-ufuncs).
 
 Here are some applications of broadcasting:
 
@@ -839,32 +788,21 @@ print(x + np.reshape(w, (2, 1)))
 print(x * 2)
 ```
 
-Broadcasting typically makes your code more concise and faster, so you
-should strive to use it where possible.
+Broadcasting typically makes your code more concise and faster, so you should strive to use it where possible.
 
 ### Numpy Documentation
-This brief overview has touched on many of the important things that you need to
-know about numpy, but is far from complete. Check out the
-[numpy reference](http://docs.scipy.org/doc/numpy/reference/)
-to find out much more about numpy.
+
+This brief overview has touched on many of the important things that you need to know about numpy, but is far from complete. Check out the [numpy reference](http://docs.scipy.org/doc/numpy/reference/) to find out much more about numpy.
 
 ## SciPy
-Numpy provides a high-performance multidimensional array and basic tools to
-compute with and manipulate these arrays.
-[SciPy](http://docs.scipy.org/doc/scipy/reference/)
-builds on this, and provides
-a large number of functions that operate on numpy arrays and are useful for
-different types of scientific and engineering applications.
 
-The best way to get familiar with SciPy is to
-[browse the documentation](http://docs.scipy.org/doc/scipy/reference/index.html).
-We will highlight some parts of SciPy that you might find useful for this class.
+Numpy provides a high-performance multidimensional array and basic tools to compute with and manipulate these arrays. [SciPy](http://docs.scipy.org/doc/scipy/reference/) builds on this, and provides a large number of functions that operate on numpy arrays and are useful for different types of scientific and engineering applications.
+
+The best way to get familiar with SciPy is to [browse the documentation](http://docs.scipy.org/doc/scipy/reference/index.html). We will highlight some parts of SciPy that you might find useful for this class.
 
 ### Image operations
-SciPy provides some basic functions to work with images.
-For example, it has functions to read images from disk into numpy arrays,
-to write numpy arrays to disk as images, and to resize images.
-Here is a simple example that showcases these functions:
+
+SciPy provides some basic functions to work with images. For example, it has functions to read images from disk into numpy arrays, to write numpy arrays to disk as images, and to resize images. Here is a simple example that showcases these functions:
 
 ```python
 from scipy.misc import imread, imsave, imresize
@@ -893,15 +831,14 @@ imsave('assets/cat_tinted.jpg', img_tinted)
 {% include image.html description="The tinted and resized image." image="blogs/python-numpy-tutorial/cat_tinted.jpg" caption="true"%}
 
 ### MATLAB files
-The functions `scipy.io.loadmat` and `scipy.io.savemat` allow you to read and
-write MATLAB files. You can read about them
-[in the documentation](http://docs.scipy.org/doc/scipy/reference/io.html).
+
+The functions `scipy.io.loadmat` and `scipy.io.savemat` allow you to read and write MATLAB files. You can read about them [in the documentation](http://docs.scipy.org/doc/scipy/reference/io.html).
 
 ### Distance between points
+
 SciPy defines some useful functions for computing distances between sets of points.
 
-The function `scipy.spatial.distance.pdist` computes the distance between all pairs
-of points in a given set:
+The function `scipy.spatial.distance.pdist` computes the distance between all pairs of points in a given set:
 
 ```python
 import numpy as np
@@ -923,21 +860,18 @@ print(x)
 d = squareform(pdist(x, 'euclidean'))
 print(d)
 ```
-You can read all the details about this function
-[in the documentation](http://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.distance.pdist.html).
 
-A similar function (`scipy.spatial.distance.cdist`) computes the distance between all pairs
-across two sets of points; you can read about it
-[in the documentation](http://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.distance.cdist.html).
+You can read all the details about this function [in the documentation](http://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.distance.pdist.html).
+
+A similar function (`scipy.spatial.distance.cdist`) computes the distance between all pairs across two sets of points; you can read about it [in the documentation](http://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.distance.cdist.html).
 
 ## Matplotlib
-[Matplotlib](http://matplotlib.org/) is a plotting library.
-In this section give a brief introduction to the `matplotlib.pyplot` module,
-which provides a plotting system.
+
+[Matplotlib](http://matplotlib.org/) is a plotting library. The `matplotlib.pyplot` module, which provides a plotting system.
 
 ### Plotting
-The most important function in matplotlib is `plot`,
-which allows you to plot 2D data. Here is a simple example:
+
+The most important function in matplotlib is `plot`, which allows you to plot 2D data. Here is a simple example:
 
 ```python
 import numpy as np
@@ -956,8 +890,7 @@ Running this code produces the following plot:
 
 {% include image.html description="" image="blogs/python-numpy-tutorial/sine.png" caption="false"%}
 
-With just a little bit of extra work we can easily plot multiple lines
-at once, and add a title, legend, and axis labels:
+With just a little bit of extra work we can easily plot multiple lines at once, and add a title, legend, and axis labels:
 
 ```python
 import numpy as np
@@ -980,12 +913,11 @@ plt.show()
 
 {% include image.html description="" image="blogs/python-numpy-tutorial/sine_cosine.png" caption="false"%}
 
-You can read much more about the `plot` function
-[in the documentation](http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.plot).
+You can read much more about the `plot` function [in the documentation](http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.plot).
 
 ### Subplots
-You can plot different things in the same figure using the `subplot` function.
-Here is an example:
+
+You can plot different things in the same figure using the `subplot` function. Here is an example:
 
 ```python
 import numpy as np
@@ -1015,10 +947,10 @@ plt.show()
 
 {% include image.html description="" image="blogs/python-numpy-tutorial/sine_cosine_subplot.png" caption="false"%}
 
-You can read much more about the `subplot` function
-[in the documentation](http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.subplot).
+You can read much more about the `subplot` function [in the documentation](http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.subplot).
 
 ### Images
+
 You can use the `imshow` function to show images. Here is an example:
 
 ```python
