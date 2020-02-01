@@ -13,8 +13,8 @@ micro_nav: false
 
 <table id="schedule" class="table table-bordered no-more-tables" style="width: 100%; font-size: 0.8em;">
     <colgroup>
-        <col style="width: 70%;">
-        <col style="width: 30%;">
+        <col style="width: 60%;">
+        <col style="width: 40%;">
     </colgroup>
     <thead class="active" style="background-color:#f9f9f9" align="left">
         <th>Paper</th>
