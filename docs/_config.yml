@@ -16,6 +16,8 @@ doks:
               item_url: '/projects'
             - item_name: Blogs
               item_url: '/blogs'
+            - item_name: Readings
+              item_url: '/readings'
     footer:
         content:
             logo:
@@ -55,4 +57,9 @@ course:
             icon:
             content: Blogs
             url: '/blogs'
+            external_url: false
+        readings:
+            icon:
+            content: Readings
+            url: '/readings'
             external_url: false
