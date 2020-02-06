@@ -5,7 +5,7 @@ keywords:
 comments: false
 
 # Hero section
-title: Image Classification
+title: K Nearest Neighbor
 description:
 
 # Micro navigation
@@ -20,6 +20,8 @@ page_nav:
         content:
         url: '#'
 ---
+
+### Image Classification
 
 **Motivation**. Image Classification problem, which is the task of assigning an input image one label from a fixed set of categories. This is one of the core problems in Computer Vision that, despite its simplicity, has a large variety of practical applications. Moreover, many other seemingly distinct Computer Vision tasks (such as object detection, segmentation) can be reduced to image classification.
 
@@ -107,7 +109,7 @@ class NearestNeighbor(object):
     self.ytr = y
 
   def predict(self, X):
-    """ X is N x D where each row is an example we wish to predict label for """
+    """ X is M x D where each row is an example we wish to predict label for """
     num_test = X.shape[0]
     # lets make sure that the output type matches the input type
     Ypred = np.zeros(num_test, dtype = self.ytr.dtype)
@@ -142,6 +144,45 @@ distances = np.sqrt(np.sum(np.square(self.Xtr - X[i,:]), axis = 1))
 Note that I included the `np.sqrt` call above, but in a practical nearest neighbor application we could leave out the square root operation because square root is a *monotonic function*. That is, it scales the absolute sizes of the distances but it preserves the ordering, so the nearest neighbors with or without it are identical. If you ran the Nearest Neighbor classifier on CIFAR-10 with this distance, you would obtain **35.4%** accuracy (slightly lower than our L1 distance result).
 
 **L1 vs. L2.** It is interesting to consider differences between the two metrics. In particular, the L2 distance is much more unforgiving than the L1 distance when it comes to differences between two vectors. That is, the L2 distance prefers many medium disagreements to one big one. L1 and L2 distances (or equivalently the L1/L2 norms of the differences between a pair of images) are the most commonly used special cases of a p-norm.
+
+### Distance Matrix Vectorization Trick
+
+A common problem that comes up in machine learning is to find the L2 distance between two sets of vectors. For example, in implementing the K nearest neighbors algorithm, we have to find the L2 distance between the a set of test vectors, held in a matrix `X` (`MxD`), and a set of training vectors, held in a matrix `X_train` (`NxD`). Our goal is to create a distance matrix `D` (`MxN`) that contains the L2 distance from every test vector to every training vector. How can we do this efficiently?
+
+**Single Loop**
+
+There is the really stupid way of constructing the distance matrix using using two loops — but let’s not even go there. That is known inefficient. The first thing I tried was to use a single loop over the test vectors. The code is below. The logic is simple — for each test vector I subtract it from the entire training matrix. I use a trick called numpy addition broadcasting. As long as the dimensions match up, numpy knows to do a row-wise subtraction if the element on the right is one-dimensional. After this subtraction, I simply element-wise square and sum along the column dimension to get a single row of the distance matrix for test vector i.
+
+With `M=500` (test vectors) and `N=5000` (training vectors) running this function takes about 50.8 seconds. Too long!
+
+```python
+dists = np.zeros((num_test, num_train))
+for i in range(num_test):
+    dists[i,:] = np.sum((self.X_train - X[i,:]) ** 2, axis = 1)
+return dists
+
+1 loops, best of 3: 50.8 s per loop
+```
+
+**No Loops**
+
+I need to vectorize more. How? The “trick” is to expand the L2 distance formula. For each vector $$x$$ and $$y$$, the l2 distance between them can be expressed as:
+
+$$ (x-y)^2 = x^2 + y^2 - 2xy $$
+
+To vectorize efficiently, we need to express this operation for ALL the vectors at once in numpy. The first two terms are easy — just take the l2 norm of every row in the matrices `X` and `X_train`. The last term can be expressed as a matrix multiply between `X` and transpose(`X_train`). Numpy can do all of these things super efficiently.
+
+The final code is below. It took a second to get it right. The trickiest part was figuring out how to transpose the last row vector that comes out of np.sum() back into a column vector so the sum broadcast operation works easily, i.e. using [:, np.newaxis].
+
+```python
+def compute_distances_no_loops(self, X):
+    dists = -2 * np.dot(X, self.X_train.T) + np.sum(self.X_train**2, axis=1) + np.sum(X**2, axis=1)[:, np.newaxis]
+    return dists
+
+1 loops, best of 3: 190 ms per loop
+```
+
+So, what does it buy me? It takes only 190 ms for this code to run on the same example above. That’s a speedup of OVER 267 times! A dirty vectorization trick — but well worth the effort. Now I don’t have to sit around while my distance matrix is computed.
 
 ### K Nearest Neighbor Classifier
 
