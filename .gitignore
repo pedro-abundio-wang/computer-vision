@@ -127,3 +127,13 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Datasets
+**/cifar-10-batches-py/*
+**/tiny-imagenet-100-A*
+**/tiny-imagenet-100-B*
+**/tiny-100-A-pretrained/*
+
+
+
+
