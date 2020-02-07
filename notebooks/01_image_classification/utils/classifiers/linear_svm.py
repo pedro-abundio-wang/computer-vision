@@ -92,11 +92,11 @@ def svm_loss_vectorized(W, X, y, reg):
     # loss.                                                                     #
     #############################################################################
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-    binary = margins
-    binary[margins > 0] = 1
-    loss_count = np.sum(binary, axis=1)
-    binary[np.arange(scores.shape[0]), y] = -loss_count.T
-    dW = np.dot(X.T, binary)
+    masks = margins
+    masks[margins > 0] = 1
+    loss_count = np.sum(masks, axis=1)
+    masks[np.arange(masks.shape[0]), y] = -loss_count.T
+    dW = np.dot(X.T, masks)
     # Average
     dW /= num_train
     # Regularize
