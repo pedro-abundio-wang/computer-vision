@@ -23,7 +23,7 @@ micro_nav: false
     <tbody>
         <tr>
             <td id="Optimization" colspan="2" style="text-align:center; vertical-align:middle;background-color:#b7ffbf">
-                <strong>Classic ConvNets</strong>
+                <strong>VGG</strong>
             </td>
         </tr>
         <tr>
