@@ -140,7 +140,7 @@ def batchnorm_forward(x, gamma, beta, bn_param):
     behavior: they compute sample mean and variance for each feature using a
     large number of training images rather than using a running average. For
     this implementation we have chosen to use running averages instead since
-    they do not require an additional estimation step; the torch7
+    they do not require an additional estimation step; the torch
     implementation of batch normalization also uses running averages.
 
     Input:
@@ -190,9 +190,16 @@ def batchnorm_forward(x, gamma, beta, bn_param):
         # might prove to be helpful.                                          #
         #######################################################################
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-
-        pass
-
+        sample_mean = x.mean(axis = 0)
+        sample_var = x.var(axis = 0)
+        x_normalized = (x - sample_mean) / np.sqrt(sample_var + eps)
+        x_shifted = gamma * x_normalized + beta
+        
+        running_mean = momentum * running_mean + (1 - momentum) * sample_mean
+        running_var = momentum * running_var + (1 - momentum) * sample_var
+        
+        cache = (x, gamma, beta, x_normalized, sample_mean, sample_var, eps)
+        out = x_shifted
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
         #######################################################################
         #                           END OF YOUR CODE                          #
@@ -205,9 +212,9 @@ def batchnorm_forward(x, gamma, beta, bn_param):
         # Store the result in the out variable.                               #
         #######################################################################
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-
-        pass
-
+        x_normalized = (x - running_mean) / np.sqrt(running_var + eps)
+        x_shifted = gamma * x_normalized + beta
+        out = x_shifted
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
         #######################################################################
         #                          END OF YOUR CODE                           #
@@ -247,9 +254,16 @@ def batchnorm_backward(dout, cache):
     # might prove to be helpful.                                              #
     ###########################################################################
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
+    x, gamma, beta, x_normalized, sample_mean, sample_var, eps = cache
+    N = x.shape[0]
+    
+    dgamma = np.sum(dout * x_normalized, axis = 0)
+    dbeta = np.sum(dout, axis = 0)
 
-    pass
-
+    dnorm = dout * gamma 
+    dsample_var = np.sum((x - sample_mean) * dnorm * (-0.5) * np.power(sample_var + eps, -1.5), axis=0)
+    dsample_mean = np.sum(-1/np.sqrt(sample_var + eps) * dnorm, axis=0) + dsample_var * np.mean(-2 * (x - sample_mean), axis=0)
+    dx = dnorm * 1/np.sqrt(sample_var + eps) + dsample_var * 2/N * (x - sample_mean) + dsample_mean * 1/N
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
     ###########################################################################
     #                             END OF YOUR CODE                            #
@@ -282,9 +296,16 @@ def batchnorm_backward_alt(dout, cache):
     # single statement; our implementation fits on a single 80-character line.#
     ###########################################################################
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
+    x, gamma, beta, x_normalized, sample_mean, sample_var, eps = cache
+    N = x.shape[0]
+    
+    dgamma = np.sum(dout * x_normalized, axis = 0)
+    dbeta = np.sum(dout, axis = 0)
 
-    pass
-
+    dnorm = dout * gamma 
+    dsample_var = np.sum((x - sample_mean) * dnorm * (-0.5) * np.power(sample_var + eps, -1.5), axis=0)
+    dsample_mean = np.sum(-1/np.sqrt(sample_var + eps) * dnorm, axis=0) + dsample_var * np.mean(-2 * (x - sample_mean), axis=0)
+    dx = dnorm * 1/np.sqrt(sample_var + eps) + dsample_var * 2/N * (x - sample_mean) + dsample_mean * 1/N
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
     ###########################################################################
     #                             END OF YOUR CODE                            #
