@@ -302,10 +302,25 @@ def batchnorm_backward_alt(dout, cache):
     dgamma = np.sum(dout * x_normalized, axis = 0)
     dbeta = np.sum(dout, axis = 0)
 
-    dnorm = dout * gamma 
-    dsample_var = np.sum((x - sample_mean) * dnorm * (-0.5) * np.power(sample_var + eps, -1.5), axis=0)
-    dsample_mean = np.sum(-1/np.sqrt(sample_var + eps) * dnorm, axis=0) + dsample_var * np.mean(-2 * (x - sample_mean), axis=0)
-    dx = dnorm * 1/np.sqrt(sample_var + eps) + dsample_var * 2/N * (x - sample_mean) + dsample_mean * 1/N
+    dnorm = dout * gamma # (N,D)
+
+    std = np.sqrt(sample_var + eps)
+    
+    partial_norm_x = 1/std # (1,D)
+    partial_norm_mean = -1/std # (1,D)
+    partial_norm_std = -(x - sample_mean)/(std**2) # (N,D)
+    
+    partial_std_var = 0.5 * (sample_var + eps) ** (-0.5) # (1,D)
+    partial_var_mean = -2/N * np.sum(x - sample_mean, axis = 0) # (N,D)
+    partial_var_x = 2/N * np.sum(x - sample_mean, axis = 0) # (N,D)
+    partial_mean_x = 1/N
+    
+    dvar = dnorm * partial_norm_std * partial_std_var
+    print(dvar.shape)
+    dmean = dnorm * partial_norm_mean + dvar * partial_var_mean
+    print(dmean.shape)
+    dx = dnorm * partial_norm_x + dmean * partial_mean_x + dvar * partial_var_x
+    
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
     ###########################################################################
     #                             END OF YOUR CODE                            #
