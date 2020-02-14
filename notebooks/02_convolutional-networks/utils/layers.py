@@ -302,17 +302,16 @@ def batchnorm_backward_alt(dout, cache):
     dgamma = np.sum(dout * x_normalized, axis = 0)
     dbeta = np.sum(dout, axis = 0)
 
-    dnorm = dout * gamma # (N,D)
-
-    std = np.sqrt(sample_var + eps)
+    dnorm = dout * gamma # (N, D) = (N, D) * (1, D)
+    std = np.sqrt(sample_var + eps) # (1, D)
     
-    partial_norm_x = 1/std # (1,D)
-    partial_norm_mean = -1/std # (1,D)
-    partial_norm_std = -(x - sample_mean)/(std**2) # (N,D)
+    partial_norm_x = 1/std # (1, D)
+    partial_norm_mean = -1/std # (1, D)
+    partial_norm_std = -(x - sample_mean)/(std**2) # (N, D)
     
-    partial_std_var = 0.5 * (sample_var + eps) ** (-0.5) # (1,D)
-    partial_var_mean = -2/N * np.sum(x - sample_mean, axis = 0) # (N,D)
-    partial_var_x = 2/N * np.sum(x - sample_mean, axis = 0) # (N,D)
+    partial_std_var = 0.5 * (sample_var + eps) ** (-0.5) # (1, D)
+    partial_var_mean = -2/N * np.sum(x - sample_mean, axis = 0) # (N, D)
+    partial_var_x = 2/N * np.sum(x - sample_mean, axis = 0) # (N, D)
     partial_mean_x = 1/N
     
     dvar = dnorm * partial_norm_std * partial_std_var
