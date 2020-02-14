@@ -96,13 +96,9 @@ The x-axis of the plots below are always in units of epochs, which measure how m
 
 The first quantity that is useful to track during training is the loss, as it is evaluated on the individual batches during the forward pass. Below is a cartoon diagram showing the loss over time, and especially what the shape might tell you about the learning rate:
 
-<div class="fig figcenter fighighlight">
-  <img src="/assets/nn3/learningrates.jpeg" width="49%">
-  <img src="/assets/nn3/loss.jpeg" width="49%">
-  <div class="figcaption">
-    <b>Left:</b> A cartoon depicting the effects of different learning rates. With low learning rates the improvements will be linear. With high learning rates they will start to look more exponential. Higher learning rates will decay the loss faster, but they get stuck at worse values of loss (green line). This is because there is too much "energy" in the optimization and the parameters are bouncing around chaotically, unable to settle in a nice spot in the optimization landscape. <b>Right:</b> An example of a typical loss function over time, while training a small network on CIFAR-10 dataset. This loss function looks reasonable (it might indicate a slightly too small learning rate based on its speed of decay, but it's hard to say), and also indicates that the batch size might be a little too low (since the cost is a little too noisy).
-  </div>
-</div>
+{% include image.html description="A cartoon depicting the effects of different learning rates. With low learning rates the improvements will be linear. With high learning rates they will start to look more exponential. Higher learning rates will decay the loss faster, but they get stuck at worse values of loss (green line). This is because there is too much energy in the optimization and the parameters are bouncing around chaotically, unable to settle in a nice spot in the optimization landscape." image="blogs/nn-learning-and-evaluation/learningrates.jpeg" caption="true"%}
+
+{% include image.html description="An example of a typical loss function over time, while training a small network on CIFAR-10 dataset. This loss function looks reasonable (it might indicate a slightly too small learning rate based on its speed of decay, but it's hard to say), and also indicates that the batch size might be a little too low (since the cost is a little too noisy)." image="blogs/nn-learning-and-evaluation/loss.jpeg" caption="true"%}
 
 The amount of "wiggle" in the loss is related to the batch size. When the batch size is 1, the wiggle will be relatively high. When the batch size is the full dataset, the wiggle will be minimal because every gradient update should be improving the loss function monotonically (unless the learning rate is set too high).
 
@@ -114,13 +110,7 @@ Sometimes loss functions can look funny [lossfunctions.tumblr.com](http://lossfu
 
 The second important quantity to track while training a classifier is the validation/training accuracy. This plot can give you valuable insights into the amount of overfitting in your model:
 
-<div class="fig figleft fighighlight">
-  <img src="/assets/nn3/accuracies.jpeg">
-  <div class="figcaption">
-    The gap between the training and validation accuracy indicates the amount of overfitting. Two possible cases are shown in the diagram on the left. The blue validation error curve shows very small validation accuracy compared to the training accuracy, indicating strong overfitting (note, it's possible for the validation accuracy to even start to go down after some point). When you see this in practice you probably want to increase regularization (stronger L2 weight penalty, more dropout, etc.) or collect more data. The other possible case is when the validation accuracy tracks the training accuracy fairly well. This case indicates that your model capacity is not high enough: make the model larger by increasing the number of parameters.
-  </div>
-  <div style="clear:both"></div>
-</div>
+{% include image.html description="The gap between the training and validation accuracy indicates the amount of overfitting. Two possible cases are shown in the diagram on the left. The blue validation error curve shows very small validation accuracy compared to the training accuracy, indicating strong overfitting (note, it's possible for the validation accuracy to even start to go down after some point). When you see this in practice you probably want to increase regularization (stronger L2 weight penalty, more dropout, etc.) or collect more data. The other possible case is when the validation accuracy tracks the training accuracy fairly well. This case indicates that your model capacity is not high enough: make the model larger by increasing the number of parameters." image="blogs/nn-learning-and-evaluation/accuracies.jpeg" caption="true"%}
 
 #### Ratio of weights:updates
 
@@ -145,13 +135,9 @@ An incorrect initialization can slow down or even completely stall the learning 
 
 Lastly, when one is working with image pixels it can be helpful and satisfying to plot the first-layer features visually:
 
-<div class="fig figcenter fighighlight">
-  <img src="/assets/nn3/weights.jpeg" width="43%" style="margin-right:10px;">
-  <img src="/assets/nn3/cnnweights.jpg" width="49%">
-  <div class="figcaption">
-    Examples of visualized weights for the first layer of a neural network. <b>Left</b>: Noisy features indicate could be a symptom: Unconverged network, improperly set learning rate, very low weight regularization penalty. <b>Right:</b> Nice, smooth, clean and diverse features are a good indication that the training is proceeding well.
-  </div>
-</div>
+{% include image.html description="Examples of visualized weights for the first layer of a neural network. Noisy features indicate could be a symptom: Unconverged network, improperly set learning rate, very low weight regularization penalty." image="blogs/nn-learning-and-evaluation/weights.jpeg" caption="true"%}
+
+{% include image.html description="Examples of visualized weights for the first layer of a neural network. Nice, smooth, clean and diverse features are a good indication that the training is proceeding well." image="blogs/nn-learning-and-evaluation/cnnweights.jpg" caption="true"%}
 
 ### Parameter updates
 
@@ -182,18 +168,13 @@ x += v # integrate position
 
 Here we see an introduction of a `v` variable that is initialized at zero, and an additional hyperparameter (`mu`). As an unfortunate misnomer, this variable is in optimization referred to as *momentum* (its typical value is about 0.9), but its physical meaning is more consistent with the coefficient of friction. Effectively, this variable damps the velocity and reduces the kinetic energy of the system, or otherwise the particle would never come to a stop at the bottom of a hill. When cross-validated, this parameter is usually set to values such as [0.5, 0.9, 0.95, 0.99]. Similar to annealing schedules for learning rates (discussed later, below), optimization can sometimes benefit a little from momentum schedules, where the momentum is increased in later stages of learning. A typical setting is to start with momentum of about 0.5 and anneal it to 0.99 or so over multiple epochs.
 
-> With Momentum update, the parameter vector will build up velocity in any direction that has consistent gradient.
+With Momentum update, the parameter vector will build up velocity in any direction that has consistent gradient.
 
 **Nesterov Momentum** is a slightly different version of the momentum update that has recently been gaining popularity. It enjoys stronger theoretical converge guarantees for convex functions and in practice it also consistenly works slightly better than standard momentum.
 
 The core idea behind Nesterov momentum is that when the current parameter vector is at some position `x`, then looking at the momentum update above, we know that the momentum term alone (i.e. ignoring the second term with the gradient) is about to nudge the parameter vector by `mu * v`. Therefore, if we are about to compute the gradient, we can treat the future approximate position `x + mu * v` as a "lookahead" - this is a point in the vicinity of where we are soon going to end up. Hence, it makes sense to compute the gradient at `x + mu * v` instead of at the "old/stale" position `x`.
 
-<div class="fig figcenter fighighlight">
-  <img src="/assets/nn3/nesterov.jpeg">
-  <div class="figcaption">
-    Nesterov momentum. Instead of evaluating gradient at the current position (red circle), we know that our momentum is about to carry us to the tip of the green arrow. With Nesterov momentum we therefore instead evaluate the gradient at this "looked-ahead" position.
-  </div>
-</div>
+{% include image.html description="Nesterov momentum. Instead of evaluating gradient at the current position (red circle), we know that our momentum is about to carry us to the tip of the green arrow. With Nesterov momentum we therefore instead evaluate the gradient at this looked-ahead position." image="blogs/nn-learning-and-evaluation/nesterov.jpeg" caption="true"%}
 
 That is, in a slightly awkward notation, we would like to do the following:
 
@@ -296,13 +277,9 @@ Additional References:
 
 - [Unit Tests for Stochastic Optimization](http://arxiv.org/abs/1312.6055) proposes a series of tests as a standardized benchmark for stochastic optimization.
 
-<div class="fig figcenter fighighlight">
-  <img src="/assets/nn3/opt2.gif" width="49%" style="margin-right:10px;">
-  <img src="/assets/nn3/opt1.gif" width="49%">
-  <div class="figcaption">
-    Animations that may help your intuitions about the learning process dynamics. <b>Left:</b> Contours of a loss surface and time evolution of different optimization algorithms. Notice the "overshooting" behavior of momentum-based methods, which make the optimization look like a ball rolling down the hill. <b>Right:</b> A visualization of a saddle point in the optimization landscape, where the curvature along different dimension has different signs (one dimension curves up and another down). Notice that SGD has a very hard time breaking symmetry and gets stuck on the top. Conversely, algorithms such as RMSprop will see very low gradients in the saddle direction. Due to the denominator term in the RMSprop update, this will increase the effective learning rate along this direction, helping RMSProp proceed. Images credit: <a href="https://twitter.com/alecrad">Alec Radford</a>.
-  </div>
-</div>
+{% include image.html description="Animations that may help your intuitions about the learning process dynamics. Contours of a loss surface and time evolution of different optimization algorithms. Notice the overshooting behavior of momentum-based methods, which make the optimization look like a ball rolling down the hill." image="blogs/nn-learning-and-evaluation/opt2.gif" caption="true"%}
+
+{% include image.html description="Animations that may help your intuitions about the learning process dynamics. A visualization of a saddle point in the optimization landscape, where the curvature along different dimension has different signs (one dimension curves up and another down). Notice that SGD has a very hard time breaking symmetry and gets stuck on the top. Conversely, algorithms such as RMSprop will see very low gradients in the saddle direction. Due to the denominator term in the RMSprop update, this will increase the effective learning rate along this direction, helping RMSProp proceed." image="blogs/nn-learning-and-evaluation/opt1.gif" caption="true"%}
 
 ### Hyperparameter optimization
 
@@ -322,12 +299,7 @@ But as we saw, there are many more relatively less sensitive hyperparameters, fo
 
 **Prefer random search to grid search**. As argued by Bergstra and Bengio in [Random Search for Hyper-Parameter Optimization](http://www.jmlr.org/papers/volume13/bergstra12a/bergstra12a.pdf), "randomly chosen trials are more efficient for hyper-parameter optimization than trials on a grid". As it turns out, this is also usually easier to implement.
 
-<div class="fig figcenter fighighlight">
-  <img src="/assets/nn3/gridsearchbad.jpeg" width="50%">
-  <div class="figcaption">
-    Core illustration from <a href="http://www.jmlr.org/papers/volume13/bergstra12a/bergstra12a.pdf">Random Search for Hyper-Parameter Optimization</a> by Bergstra and Bengio. It is very often the case that some of the hyperparameters matter much more than others (e.g. top hyperparam vs. left one in this figure). Performing random search rather than grid search allows you to much more precisely discover good values for the important ones.
-  </div>
-</div>
+{% include image.html description="Core illustration from Random Search for Hyper-Parameter Optimization by Bergstra and Bengio. It is very often the case that some of the hyperparameters matter much more than others (e.g. top hyperparam vs. left one in this figure). Performing random search rather than grid search allows you to much more precisely discover good values for the important ones." image="blogs/nn-learning-and-evaluation/gridsearchbad.jpeg" caption="true"%}
 
 **Careful with best values on border**. Sometimes it can happen that you're searching for a hyperparameter (e.g. learning rate) in a bad range. For example, suppose we use `learning_rate = 10 ** uniform(-6, 1)`. Once we receive the results, it is important to double check that the final learning rate is not at the edge of this interval, or otherwise you may be missing more optimal hyperparameter setting beyond the interval.
 

@@ -52,9 +52,17 @@ grid_navigation:
     - title: Understanding And Visualizing Convolutional Neural Networks
       excerpt:
       cta: tSNE embeddings, deconvnets, data gradients, fooling ConvNets, human comparisons
-      url: '/blogs/understanding-cnns'
+      url: '/blogs/understanding-cnn'
     - title: Transfer Learning And Fine Tuning Convolutional Neural Networks
       excerpt:
       cta: read more
       url: '/blogs/transfer-learning'
+    - title: Implement Batch Normalization
+      excerpt:
+      cta: computational graph
+      url: '/blogs/implement-batch-norm'
+    - title: Efficient Batch Normalization 
+      excerpt:
+      cta: calculus 
+      url: '/blogs/efficient-batch-normalization'
 ---

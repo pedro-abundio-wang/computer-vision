@@ -44,12 +44,7 @@ plt.scatter(X[:, 0], X[:, 1], c=y, s=40, cmap=plt.cm.Spectral)
 plt.show()
 ```
 
-<div class="fig figcenter fighighlight">
-  <img src="/assets/eg/spiral_raw.png">
-  <div class="figcaption">
-    The toy spiral data consists of three classes (blue, red, yellow) that are not linearly separable.
-  </div>
-</div>
+{% include image.html description="The toy spiral data consists of three classes (blue, red, yellow) that are not linearly separable." image="blogs/minimal-neural-network/spiral_raw.png" caption="true"%}
 
 Normally we would want to preprocess the dataset so that each feature has zero mean and unit standard deviation, but in this case the features are already in a nice range from -1 to 1, so we skip this step.
 
@@ -251,12 +246,7 @@ print 'training accuracy: %.2f' % (np.mean(predicted_class == y))
 
 This prints **49%**. Not very good at all, but also not surprising given that the dataset is constructed so it is not linearly separable. We can also plot the learned decision boundaries:
 
-<div class="fig figcenter fighighlight">
-  <img src="/assets/eg/spiral_linear.png">
-  <div class="figcaption">
-    Linear classifier fails to learn the toy spiral dataset.
-  </div>
-</div>
+{% include image.html description="Linear classifier fails to learn the toy spiral dataset." image="blogs/minimal-neural-network/spiral_linear.png" caption="true"%}
 
 ## Training a Neural Network
 
@@ -400,12 +390,7 @@ print 'training accuracy: %.2f' % (np.mean(predicted_class == y))
 
 Which prints **98%**!. We can also visualize the decision boundaries:
 
-<div class="fig figcenter fighighlight">
-  <img src="/assets/eg/spiral_net.png">
-  <div class="figcaption">
-    Neural Network classifier crushes the spiral dataset.
-  </div>
-</div>
+{% include image.html description="Neural Network classifier crushes the spiral dataset." image="blogs/minimal-neural-network/spiral_net.png" caption="true"%}
 
 ## Summary
 
