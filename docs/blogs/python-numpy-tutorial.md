@@ -64,7 +64,7 @@ print(type(y)) # Prints "<class 'float'>"
 print(y, y + 1, y * 2, y ** 2) # Prints "2.5 3.5 5.0 6.25"
 ```
 
-Note that unlike many languages, Python does not have unary increment (`x++`) or decrement (`x--`) operators.
+Note that unlike many languages, Python does not have increment (`x++`) or decrement (`x--`) operators.
 
 Python also has built-in types for complex numbers; you can find all of the details [in the documentation](https://docs.python.org/3.6/library/stdtypes.html#numeric-types-int-float-complex).
 
@@ -283,7 +283,7 @@ print(nums)  # Prints "{0, 1, 2, 3, 4, 5}"
 
 #### Tuples
 
-tuple is an (immutable) ordered list of values. A tuple is in many ways similar to a list; one of the most important differences is that tuples can be used as keys in dictionaries and as elements of sets, while lists cannot. Here is a trivial example:
+tuple is an **immutable** ordered list of values. A tuple is in many ways similar to a list; one of the most important differences is that **tuples can be used as keys in dictionaries and as elements of sets, while lists cannot**. Here is a trivial example:
 
 ```python
 d = {(x, x + 1): x for x in range(10)}  # Create a dictionary with tuple keys
@@ -359,7 +359,7 @@ You can read a lot more about Python classes [in the documentation](https://docs
 
 ### Arrays
 
-A numpy array is a grid of values, all of the same type, and is indexed by a tuple of nonnegative integers. The number of dimensions is the *rank* of the array; the *shape* of an array is a tuple of integers giving the size of the array along each dimension.
+A numpy array is a grid of values, all of the same type, and is indexed by a list of nonnegative integers. The **number of dimensions** is the **rank** of the array; the **shape** of an array is a tuple of integers giving the size of the array along each dimension.
 
 We can initialize numpy arrays from nested Python lists, and access elements using square brackets:
 
@@ -407,7 +407,7 @@ You can read about other methods of array creation [in the documentation](http:/
 
 ### Array indexing
 
-Numpy offers several ways to index into arrays.
+Numpy arrays offers several ways to index.
 
 **Slicing:**
 
@@ -435,7 +435,7 @@ b[0, 0] = 77     # b[0, 0] is the same piece of data as a[0, 1]
 print(a[0, 1])   # Prints "77"
 ```
 
-You can also mix integer indexing with slice indexing. However, doing so will yield an array of lower rank than the original array.
+You can also **mix integer indexing with slice indexing**. However, doing so will **yield an array of lower rank than the original array**.
 
 ```python
 import numpy as np
@@ -488,7 +488,7 @@ print(a[[0, 0], [1, 1]])  # Prints "[2 2]"
 print(np.array([a[0, 1], a[0, 1]]))  # Prints "[2 2]"
 ```
 
-One useful trick with integer array indexing is selecting or mutating one element from each row of a matrix:
+One useful trick with integer array indexing is **selecting or mutating one element from each row of a matrix**:
 
 ```python
 import numpy as np
@@ -518,7 +518,7 @@ print(a)  # prints "array([[11,  2,  3],
 
 **Boolean array indexing:**
 
-Boolean array indexing lets you pick out arbitrary elements of an array. Frequently this type of indexing is used to select the elements of an array that satisfy some condition. Here is an example:
+Boolean array indexing lets you pick out arbitrary elements of an array. Frequently this type of indexing is used to **selecting or mutating the elements of an array that satisfy some condition**. Here is an example:
 
 ```python
 import numpy as np
@@ -541,6 +541,12 @@ print(a[bool_idx])  # Prints "[3 4 5 6]"
 
 # We can do all of the above in a single concise statement:
 print(a[a > 2])     # Prints "[3 4 5 6]"
+
+a[bool_idx] += 10
+
+print(a)  # prints "array([[ 1,  2],
+          #                [13, 14],
+          #                [15, 16]])
 ```
 
 For brevity we have left out a lot of details about numpy array indexing; if you want to know more you should [read the documentation](http://docs.scipy.org/doc/numpy/reference/arrays.indexing.html).
@@ -644,7 +650,7 @@ print(np.sum(x, axis=1))  # Compute sum of each row; prints "[3 7]"
 
 You can find the full list of mathematical functions provided by numpy [in the documentation](http://docs.scipy.org/doc/numpy/reference/routines.math.html).
 
-Apart from computing mathematical functions using arrays, we frequently need to reshape or otherwise manipulate data in arrays. The simplest example of this type of operation is transposing a matrix; to transpose a matrix, simply use the `T` attribute of an array object:
+Apart from computing mathematical functions using arrays, we frequently need to transposing a matrix. To **transpose a matrix**, simply use the `T` attribute of an array object:
 
 ```python
 import numpy as np
@@ -731,15 +737,15 @@ The line `y = x + v` works even though `x` has shape `(4, 3)` and `v` has shape 
 
 Broadcasting two arrays together follows these rules:
 
-1. If the arrays do not have the same rank, prepend the shape of the lower rank array with 1s until both shapes have the same length.
-2. The two arrays are said to be *compatible* in a dimension if they have the same size in the dimension, or if one of the arrays has size 1 in that dimension.
+1. If the arrays do not have the same rank, **prepend the shape of the lower rank array with 1s until both shapes have the same length**.
+2. The two arrays are said to be **compatible** in a dimension if they have the same size in the dimension, or if one of the arrays has size 1 in that dimension.
 3. The arrays can be broadcast together if they are compatible in all dimensions.
 4. After broadcasting, each array behaves as if it had shape equal to the elementwise maximum of shapes of the two input arrays.
 5. In any dimension where one array had size 1 and the other array had size greater than 1, the first array behaves as if it were copied along that dimension
 
 If this explanation does not make sense, try reading the explanation [from the documentation](http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html).
 
-Functions that support broadcasting are known as *universal functions*. You can find the list of all universal functions [in the documentation](http://docs.scipy.org/doc/numpy/reference/ufuncs.html#available-ufuncs).
+Functions that support broadcasting are known as **universal functions**. You can find the list of all universal functions [in the documentation](http://docs.scipy.org/doc/numpy/reference/ufuncs.html#available-ufuncs).
 
 Here are some applications of broadcasting:
 
@@ -796,7 +802,7 @@ This brief overview has touched on many of the important things that you need to
 
 ## SciPy
 
-Numpy provides a high-performance multidimensional array and basic tools to compute with and manipulate these arrays. [SciPy](http://docs.scipy.org/doc/scipy/reference/) builds on this, and provides a large number of functions that operate on numpy arrays and are useful for different types of scientific and engineering applications.
+Numpy provides a high-performance multidimensional array and basic tools to compute with and manipulate these arrays. SciPy builds on numpy, and provides a large number of functions that operate on numpy arrays and are useful for different types of scientific and engineering applications.
 
 The best way to get familiar with SciPy is to [browse the documentation](http://docs.scipy.org/doc/scipy/reference/index.html).
 

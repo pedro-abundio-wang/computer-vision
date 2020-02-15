@@ -61,8 +61,8 @@ grid_navigation:
       excerpt:
       cta: computational graph
       url: '/blogs/implement-batch-norm'
-    - title: Efficient Batch Normalization 
+    - title: Efficient Batch Normalization
       excerpt:
-      cta: calculus 
+      cta: calculus
       url: '/blogs/efficient-batch-normalization'
 ---
