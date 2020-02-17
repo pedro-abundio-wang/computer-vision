@@ -110,13 +110,13 @@ $$
 
 You can see that the first term gives zero since [-7 - 13 + 10] gives a negative number, which is then thresholded to zero with the \\(max(0,-)\\) function. We get zero loss for this pair because the correct class score (13) was greater than the incorrect class score (-7) by at least the margin 10. In fact the difference was 20, which is much greater than 10 but the SVM only cares that the difference is at least 10; Any additional difference above the margin is clamped at zero with the max operation. The second term computes [11 - 13 + 10] which gives 8. That is, even though the correct class had a higher score than the incorrect class (13 > 11), it was not greater by the desired margin of 10. The difference was only 2, which is why the loss comes out to 8 (i.e. how much higher the difference would have to be to meet the margin). In summary, the SVM loss function wants the score of the correct class \\(y_i\\) to be larger than the incorrect class scores by at least by \\(\Delta\\) (delta). If this is not the case, we will accumulate loss.
 
-Note that in this particular module we are working with linear score functions ( \\( f(x_i; W) =  W x_i \\) ), so we can also rewrite the loss function in this equivalent form:
+Note that in this particular module we are working with linear score functions ( \\( f(x_i, W) =  W x_i \\) ), so we can also rewrite the loss function in this equivalent form:
 
 $$
-L_i = \sum_{j\neq y_i} \max(0, w_j^T x_i - w_{y_i}^T x_i + \Delta)
+L_i = \sum_{j\neq y_i} \max(0, w_j x_i - w_{y_i} x_i + \Delta)
 $$
 
-where \\(w_j\\) is the j-th row of \\(W\\) reshaped as a column. However, this will not necessarily be the case once we start to consider more complex forms of the score function \\(f\\).
+where \\(w_j\\) is the j-th row of \\(W\\). However, this will not necessarily be the case once we start to consider more complex forms of the score function \\(f\\).
 
 A last piece of terminology we'll mention is that the threshold at zero \\(max(0,-)\\) function is often called the **hinge loss**. You'll sometimes hear about people instead using the **squared hinge loss SVM (L2-SVM)**, which uses the form \\(max(0,-)^2\\) that penalizes violated margins more strongly (quadratically instead of linearly). The unsquared version is more standard, but in some datasets the squared hinge loss can work better. This can be determined during cross-validation.
 
@@ -124,9 +124,9 @@ The loss function quantifies our unhappiness with predictions on the training se
 
 {% include image.html description="The Multiclass Support Vector Machine wants the score of the correct class to be higher than all other scores by at least a margin of delta. If any class has a score inside the red region (or higher), then there will be accumulated loss. Otherwise the loss will be zero. Our objective will be to find the weights that will simultaneously satisfy this constraint for all examples in the training data and give a total loss that is as low as possible." image="blogs/linear-classify/margin.jpg" caption="true"%}
 
-**Regularization**. There is one bug with the loss function we presented above. Suppose that we have a dataset and a set of parameters **W** that correctly classify every example (i.e. all scores are so that all the margins are met, and \\(L_i = 0\\) for all i). The issue is that this set of **W** is not necessarily unique: there might be many similar **W** that correctly classify the examples. One easy way to see this is that if some parameters **W** correctly classify all examples (so loss is zero for each example), then any multiple of these parameters \\( \lambda W \\) where \\( \lambda > 1 \\) will also give zero loss because this transformation uniformly stretches all score magnitudes and hence also their absolute differences. For example, if the difference in scores between a correct class and a nearest incorrect class was 15, then multiplying all elements of **W** by 2 would make the new difference 30.
+**Regularization**. There is one bug with the loss function we presented above. Suppose that we have a dataset and a set of parameters $$W$$ that correctly classify every example (i.e. all scores are so that all the margins are met, and \\(L_i = 0\\) for all i). The issue is that this set of $$W$$ is not necessarily unique: there might be many similar $$W$$ that correctly classify the examples. One easy way to see this is that if some parameters $$W$$ correctly classify all examples (so loss is zero for each example), then any multiple of these parameters \\( \lambda W \\) where \\( \lambda > 1 \\) will also give zero loss because this transformation uniformly stretches all score magnitudes and hence also their absolute differences. For example, if the difference in scores between a correct class and a nearest incorrect class was 15, then multiplying all elements of $$W$$ by 2 would make the new difference 30.
 
-In other words, we wish to encode some preference for a certain set of weights **W** over others to remove this ambiguity. We can do so by extending the loss function with a **regularization penalty** \\(R(W)\\). The most common regularization penalty is the **L2** norm that discourages large weights through an elementwise quadratic penalty over all parameters:
+In other words, we wish to encode some preference for a certain set of weights $$W$$ over others to remove this ambiguity. We can do so by extending the loss function with a **regularization penalty** \\(R(W)\\). The most common regularization penalty is the L2 norm that discourages large weights through an elementwise quadratic penalty over all parameters:
 
 $$
 R(W) = \sum_k\sum_l W_{k,l}^2
@@ -141,12 +141,12 @@ $$
 Or expanding this out in its full form:
 
 $$
-L = \frac{1}{N} \sum_i \sum_{j\neq y_i} \left[ \max(0, {f(x_i; W)}_j - {f(x_i; W)}_{y_i} + \Delta) \right] + \lambda \sum_k\sum_l W_{k,l}^2
+L = \frac{1}{N} \sum_i \sum_{j\neq y_i} \left[ \max(0, {f(x_i, W)}_j - {f(x_i, W)}_{y_i} + \Delta) \right] + \lambda \sum_k\sum_l W_{k,l}^2
 $$
 
 Where \\(N\\) is the number of training examples. As you can see, we append the regularization penalty to the loss objective, weighted by a hyperparameter \\(\lambda\\). There is no simple way of setting this hyperparameter and it is usually determined by cross-validation.
 
-The most appealing property is that penalizing large weights tends to improve generalization, because it means that no input dimension can have a very large influence on the scores all by itself. For example, suppose that we have some input vector \\(x = [1,1,1,1] \\) and two weight vectors \\(w_1 = [1,0,0,0]\\), \\(w_2 = [0.25,0.25,0.25,0.25] \\). Then \\(w_1^Tx = w_2^Tx = 1\\) so both weight vectors lead to the same dot product, but the L2 penalty of \\(w_1\\) is 1.0 while the L2 penalty of \\(w_2\\) is only 0.25. Therefore, according to the L2 penalty the weight vector \\(w_2\\) would be preferred since it achieves a lower regularization loss. Intuitively, this is because the weights in \\(w_2\\) are smaller and more diffuse. Since the L2 penalty prefers smaller and more diffuse weight vectors, the final classifier is encouraged to take into account all input dimensions to small amounts rather than a few input dimensions and very strongly. This effect can improve the generalization performance of the classifiers on test images and lead to less *overfitting*.
+The most appealing property is that penalizing large weights tends to improve generalization, because it means that no input dimension can have a very large influence on the scores all by itself. For example, suppose that we have some input column vector \\(x = [1,1,1,1] \\) and two weight vectors \\(w_1 = [1,0,0,0]\\), \\(w_2 = [0.25,0.25,0.25,0.25] \\). Then \\(w_1 x = w_2 x = 1\\) so both weight vectors lead to the same dot product, but the L2 penalty of \\(w_1\\) is 1.0 while the L2 penalty of \\(w_2\\) is only 0.25. Therefore, according to the L2 penalty the weight vector \\(w_2\\) would be preferred since it achieves a lower regularization loss. Intuitively, this is because the weights in \\(w_2\\) are smaller and more diffuse. Since the L2 penalty prefers smaller and more diffuse weight vectors, the final classifier is encouraged to take into account all input dimensions to small amounts rather than a few input dimensions and very strongly. This effect can improve the generalization performance of the classifiers on test images and lead to less overfitting.
 
 Note that biases do not have the same effect since, unlike the weights, they do not control the strength of influence of an input dimension. Therefore, it is common to only regularize the weights \\(W\\) but not the biases \\(b\\). However, in practice this often turns out to have a negligible effect. Lastly, note that due to the regularization penalty we can never achieve loss of exactly 0.0 on all examples, because this would only be possible in the pathological setting of \\(W = 0\\).
 
@@ -203,7 +203,7 @@ def L(X, y, W):
 
 The takeaway from this section is that the SVM loss takes one particular approach to measuring how consistent the predictions on training data are with the ground truth labels. Additionally, making good predictions on the training set is equivalent to minimizing the loss.
 
-> All we have to do now is to come up with a way to find the weights that minimize the loss.
+All we have to do now is to come up with a way to find the weights that minimize the loss.
 
 ### Practical Considerations
 
@@ -212,14 +212,14 @@ The takeaway from this section is that the SVM loss takes one particular approac
 **Relation to Binary Support Vector Machine**. You may be coming to this class with previous experience with Binary Support Vector Machines, where the loss for the i-th example can be written as:
 
 $$
-L_i = C \max(0, 1 - y_i w^Tx_i) + R(W)
+L_i = C \max(0, 1 - y_i w x_i) + R(W)
 $$
 
 where \\(C\\) is a hyperparameter, and \\(y_i \in \\{ -1,1 \\} \\). You can convince yourself that the formulation we presented in this section contains the binary SVM as a special case when there are only two classes. That is, if we only had two classes then the loss reduces to the binary SVM shown above. Also, \\(C\\) in this formulation and \\(\lambda\\) in our formulation control the same tradeoff and are related through reciprocal relation \\(C \propto \frac{1}{\lambda}\\).
 
-**Aside: Optimization in primal**. If you're coming to this class with previous knowledge of SVMs, you may have also heard of kernels, duals, the SMO algorithm, etc. In this class (as is the case with Neural Networks in general) we will always work with the optimization objectives in their unconstrained primal form. Many of these objectives are technically not differentiable (e.g. the max(x,y) function isn't because it has a *kink* when x=y), but in practice this is not a problem and it is common to use a subgradient.
+**Aside: Optimization in primal**. If you're coming to this class with previous knowledge of SVMs, you may have also heard of **kernels**, **duals**, the **SMO** algorithm, etc. In this class (as is the case with Neural Networks in general) we will always work with the **optimization objectives** in their **unconstrained primal form**. Many of these objectives are technically not differentiable (e.g. the max(x,y) function isn't because it has a kink when x=y), but in practice this is not a problem and it is common to use a **subgradient**.
 
-**Aside: Other Multiclass SVM formulations.** It is worth noting that the Multiclass SVM presented in this section is one of few ways of formulating the SVM over multiple classes. Another commonly used form is the *One-Vs-All* (OVA) SVM which trains an independent binary SVM for each class vs. all other classes. Related, but less common to see in practice is also the *All-vs-All* (AVA) strategy. Our formulation follows the [Weston and Watkins 1999 (pdf)](https://www.elen.ucl.ac.be/Proceedings/esann/esannpdf/es1999-461.pdf) version, which is a more powerful version than OVA (in the sense that you can construct multiclass datasets where this version can achieve zero data loss, but OVA cannot. See details in the paper if interested). The last formulation you may see is a *Structured SVM*, which maximizes the margin between the score of the correct class and the score of the highest-scoring incorrect runner-up class. Understanding the differences between these formulations is outside of the scope of the class. The version presented in these notes is a safe bet to use in practice, but the arguably simplest OVA strategy is likely to work just as well (as also argued by Rikin et al. 2004 in [In Defense of One-Vs-All Classification (pdf)](http://www.jmlr.org/papers/volume5/rifkin04a/rifkin04a.pdf)).
+**Aside: Other Multiclass SVM formulations.** It is worth noting that the Multiclass SVM presented in this section is one of few ways of formulating the SVM over multiple classes. Another commonly used form is the **One-Vs-All (OVA) SVM** which trains an independent binary SVM for each class vs. all other classes. Related, but less common to see in practice is also the **All-vs-All (AVA)** strategy. Our formulation follows the [Weston and Watkins](https://www.elen.ucl.ac.be/Proceedings/esann/esannpdf/es1999-461.pdf) version, which is a more powerful version than OVA (in the sense that you can construct multiclass datasets where this version can achieve zero data loss, but OVA cannot.). The last formulation you may see is a **Structured SVM**, which maximizes the margin between the score of the correct class and the score of the highest-scoring incorrect runner-up class. Understanding the differences between these formulations is outside of the scope of the class. The version presented in these notes is a safe bet to use in practice, but the arguably simplest OVA strategy is likely to work just as well (as also argued in [In Defense of One-Vs-All Classification (pdf)](http://www.jmlr.org/papers/volume5/rifkin04a/rifkin04a.pdf)).
 
 ### Softmax classifier
 
@@ -301,8 +301,8 @@ http://vision.stanford.edu/teaching/cs231n/linear-classify-demo
 
 In summary,
 
-- We defined a **score function** from image pixels to class scores (in this section, a linear function that depends on weights **W** and biases **b**).
-- Unlike kNN classifier, the advantage of this **parametric approach** is that once we learn the parameters we can discard the training data. Additionally, the prediction for a new test image is fast since it requires a single matrix multiplication with **W**, not an exhaustive comparison to every single training example.
+- We defined a **score function** from image pixels to class scores (in this section, a linear function that depends on weights $$W$$ and biases $$b$$).
+- Unlike kNN classifier, the advantage of this **parametric approach** is that once we learn the parameters we can discard the training data. Additionally, the prediction for a new test image is fast since it requires a single matrix multiplication with $$W$$, not an exhaustive comparison to every single training example.
 - We introduced the **bias trick**, which allows us to fold the bias vector into the weight matrix for convenience of only having to keep track of one parameter matrix.
 - We defined a **loss function** (we introduced two commonly used losses for linear classifiers: the **SVM** and the **Softmax**) that measures how compatible a given set of parameters is with respect to the ground truth labels in the training dataset. We also saw that the loss function was defined in such way that making good predictions on the training data is equivalent to having a small loss.
 
