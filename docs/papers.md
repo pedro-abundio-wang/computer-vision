@@ -21,6 +21,15 @@ micro_nav: false
         <th>Description</th>
     </thead>
     <tbody>
+		<tr>
+            <td id="Optimization" colspan="2" style="text-align:center; vertical-align:middle;background-color:#b7ffbf">
+                <strong>SVM</strong>
+            </td>
+        </tr>
+		<tr>
+            <td><a href="http://arxiv.org/abs/1306.0239">Deep Learning using Linear Support Vector Machines</a></td>
+            <td>claiming that the L2SVM outperforms Softmax.</td>
+        </tr>
         <tr>
             <td id="Optimization" colspan="2" style="text-align:center; vertical-align:middle;background-color:#b7ffbf">
                 <strong>VGG</strong>
