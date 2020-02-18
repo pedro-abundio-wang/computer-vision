@@ -21,15 +21,11 @@ page_nav:
         url: '#'
 ---
 
-### Introduction
-
 **Motivation**. In this section we will develop expertise with an intuitive understanding of **backpropagation**, which is a way of computing gradients of expressions through recursive application of **chain rule**. Understanding of this process and its subtleties is critical for you to understand, and effectively develop, design and debug Neural Networks.
 
 **Problem statement**. The core problem studied in this section is as follows: We are given some function \\(f(x)\\) where \\(x\\) is a vector of inputs and we are interested in computing the gradient of \\(f\\) at \\(x\\) (i.e. \\(\nabla f(x)\\) ).
 
-**Motivation**. Recall that the primary reason we are interested in this problem is that in the specific case of Neural Networks, \\(f\\) will correspond to the loss function ( \\(L\\) ) and the inputs \\(x\\) will consist of the training data and the neural network weights. For example, the loss could be the SVM loss function and the inputs are both the training data \\((x_i,y_i), i=1 \ldots N\\) and the weights and biases \\(W,b\\). Note that (as is usually the case in Machine Learning) we think of the training data as given and fixed, and of the weights as variables we have control over. Hence, even though we can easily use backpropagation to compute the gradient on the input examples \\(x_i\\), in practice we usually only compute the gradient for the parameters (e.g. \\(W,b\\)) so that we can use it to perform a parameter update. However, as we will see later in the class the gradient on \\(x_i\\) can still be useful sometimes, for example for purposes of visualization and interpreting what the Neural Network might be doing.
-
-If you are coming to this class and you're comfortable with deriving gradients with chain rule, we would still like to encourage you to at least skim this section, since it presents a rarely developed view of backpropagation as backward flow in real-valued circuits and any insights you'll gain may help you throughout the class.
+**Motivation**. Recall that the primary reason we are interested in this problem is that in the specific case of Neural Networks, \\(f\\) will correspond to the loss function ( \\(L\\) ) and the inputs \\(x\\) will consist of the training data and the neural network weights. For example, the loss could be the SVM loss function and the inputs are both the training data \\((x_i,y_i), i=1 \ldots N\\) and the weights and biases \\(W,b\\). Note that (as is usually the case in Machine Learning) we think of the training data as given and fixed, and of the weights as variables we have control over. Hence, even though we can easily use backpropagation to compute the gradient on the input examples \\(x_i\\), in practice we usually only compute the gradient for the parameters (e.g. \\(W,b\\)) so that we can use it to perform a parameter update. However, the gradient on \\(x_i\\) can still be useful sometimes, for example for purposes of visualization and interpreting what the Neural Network might be doing.
 
 ### Simple expressions and interpretation of the gradient
 
@@ -47,9 +43,7 @@ $$
 
 A technical note is that the division sign on the left-hand side is, unlike the division sign on the right-hand side, not a division. Instead, this notation indicates that the operator \\(  \frac{d}{dx} \\) is being applied to the function \\(f\\), and returns a different function (the derivative). A nice way to think about the expression above is that when \\(h\\) is very small, then the function is well-approximated by a straight line, and the derivative is its slope. In other words, the derivative on each variable tells you the sensitivity of the whole expression on its value. For example, if \\(x = 4, y = -3\\) then \\(f(x,y) = -12\\) and the derivative on \\(x\\) \\(\frac{\partial f}{\partial x} = -3\\). This tells us that if we were to increase the value of this variable by a tiny amount, the effect on the whole expression would be to decrease it (due to the negative sign), and by three times that amount. This can be seen by rearranging the above equation ( \\( f(x + h) = f(x) + h \frac{df(x)}{dx} \\) ). Analogously, since \\(\frac{\partial f}{\partial y} = 4\\), we expect that increasing the value of \\(y\\) by some very small amount \\(h\\) would also increase the output of the function (due to the positive sign), and by \\(4h\\).
 
-> The derivative on each variable tells you the sensitivity of the whole expression on its value.
-
-As mentioned, the gradient \\(\nabla f\\) is the vector of partial derivatives, so we have that \\(\nabla f = [\frac{\partial f}{\partial x}, \frac{\partial f}{\partial y}] = [y, x]\\). Even though the gradient is technically a vector, we will often use terms such as *"the gradient on x"* instead of the technically correct phrase *"the partial derivative on x"* for simplicity.
+As mentioned, the gradient \\(\nabla f\\) is the vector of partial derivatives, so we have that \\(\nabla f = [\frac{\partial f}{\partial x}, \frac{\partial f}{\partial y}] = [y, x]\\). Even though the gradient is technically a vector, we will often use terms such as **the gradient on x** instead of the technically correct phrase **the partial derivative on x** for simplicity.
 
 We can also derive the derivatives for the addition operation:
 
@@ -57,7 +51,7 @@ $$
 f(x,y) = x + y \hspace{0.5in} \rightarrow \hspace{0.5in} \frac{\partial f}{\partial x} = 1 \hspace{0.5in} \frac{\partial f}{\partial y} = 1
 $$
 
-that is, the derivative on both \\(x,y\\) is one regardless of what the values of \\(x,y\\) are. This makes sense, since increasing either \\(x,y\\) would increase the output of \\(f\\), and the rate of that increase would be independent of what the actual values of \\(x,y\\) are (unlike the case of multiplication above). The last function we'll use quite a bit in the class is the *max* operation:
+that is, the derivative on both \\(x,y\\) is one regardless of what the values of \\(x,y\\) are. This makes sense, since increasing either \\(x,y\\) would increase the output of \\(f\\), and the rate of that increase would be independent of what the actual values of \\(x,y\\) are (unlike the case of multiplication above). The last function we'll use quite a bit in the class is the max operation:
 
 $$
 f(x,y) = \max(x, y) \hspace{0.5in} \rightarrow \hspace{0.5in} \frac{\partial f}{\partial x} = \mathbb{1}(x >= y) \hspace{0.5in} \frac{\partial f}{\partial y} = \mathbb{1}(y >= x)

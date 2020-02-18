@@ -22,7 +22,7 @@ micro_nav: false
     </thead>
     <tbody>
 		<tr>
-            <td id="Optimization" colspan="2" style="text-align:center; vertical-align:middle;background-color:#b7ffbf">
+            <td id="" colspan="2" style="text-align:center; vertical-align:middle;background-color:#b7ffbf">
                 <strong>SVM</strong>
             </td>
         </tr>
@@ -30,8 +30,17 @@ micro_nav: false
             <td><a href="http://arxiv.org/abs/1306.0239">Deep Learning using Linear Support Vector Machines</a></td>
             <td>claiming that the L2SVM outperforms Softmax.</td>
         </tr>
+		<tr>
+            <td id="" colspan="2" style="text-align:center; vertical-align:middle;background-color:#b7ffbf">
+                <strong>Autograd</strong>
+            </td>
+        </tr>
+		<tr>
+            <td><a href="http://arxiv.org/abs/1306.0239">Automatic differentiation in machine learning</a></td>
+            <td>backpropagation</td>
+        </tr>
         <tr>
-            <td id="Optimization" colspan="2" style="text-align:center; vertical-align:middle;background-color:#b7ffbf">
+            <td id="" colspan="2" style="text-align:center; vertical-align:middle;background-color:#b7ffbf">
                 <strong>VGG</strong>
             </td>
         </tr>

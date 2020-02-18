@@ -22,7 +22,7 @@ micro_nav: false
     </thead>
     <tbody>
         <tr>
-            <td id="Optimization" colspan="2" style="text-align:center; vertical-align:middle;background-color:#b7ffbf">
+            <td id="" colspan="2" style="text-align:center; vertical-align:middle;background-color:#b7ffbf">
                 <strong>Readings</strong>
             </td>
         </tr>
@@ -38,7 +38,5 @@ micro_nav: false
             <td><a href="http://stanford.edu/~boyd/cvxbook/">Convex Optimization</a></td>
             <td>stanford convex optimization</td>
         </tr>
-		
-		
     </tbody>
 </table>
