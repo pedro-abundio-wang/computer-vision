@@ -34,5 +34,11 @@ micro_nav: false
             <td><a href="http://people.csail.mit.edu/torralba/shortCourseRLOC/index.html">Recognizing and Learning Object Categories</a></td>
             <td>a short course of object categorization at ICCV 2005</td>
         </tr>
+		<tr>
+            <td><a href="http://stanford.edu/~boyd/cvxbook/">Convex Optimization</a></td>
+            <td>stanford convex optimization</td>
+        </tr>
+		
+		
     </tbody>
 </table>

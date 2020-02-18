@@ -19,7 +19,7 @@ grid_navigation:
       url: '/blogs/image-classification'
     - title: Linear Classification
       excerpt:
-      cta: support vector machine, softmax, parameteric approach, bias trick, hinge loss, cross-entropy loss, L2 regularization
+      cta: svm, softmax, parameteric approach, bias trick, hinge loss, cross-entropy loss, L2 regularization
       url: '/blogs/linear-classify'
     - title: Optimization
       excerpt:
