@@ -38,5 +38,9 @@ micro_nav: false
             <td><a href="http://stanford.edu/~boyd/cvxbook/">Convex Optimization</a></td>
             <td>stanford convex optimization</td>
         </tr>
+		<tr>
+            <td><a href="http://cs231n.stanford.edu/vecDerivs.pdf">Vectorized Backpropagation</a></td>
+            <td>Vector, Matrix, and Tensor Derivatives</td>
+        </tr>
     </tbody>
 </table>
