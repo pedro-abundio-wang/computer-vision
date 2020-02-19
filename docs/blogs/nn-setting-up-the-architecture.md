@@ -126,7 +126,7 @@ To give you some context, modern Convolutional Networks contain on orders of 100
 
 ### Example feed-forward computation
 
-*Repeated matrix multiplications interwoven with activation function*. One of the primary reasons that Neural Networks are organized into layers is that this structure makes it very simple and efficient to evaluate Neural Networks using matrix vector operations. Working with the example three-layer neural network in the diagram above, the input would be a [3x1] vector. All connection strengths for a layer can be stored in a single matrix. For example, the first hidden layer's weights `W1` would be of size [4x3], and the biases for all units would be in the vector `b1`, of size [4x1]. Here, every single neuron has its weights in a row of `W1`, so the matrix vector multiplication `np.dot(W1,x)` evaluates the activations of all neurons in that layer. Similarly, `W2` would be a [4x4] matrix that stores the connections of the second hidden layer, and `W3` a [1x4] matrix for the last (output) layer. The full forward pass of this 3-layer neural network is then simply three matrix multiplications, interwoven with the application of the activation function:
+**Repeated matrix multiplications interwoven with activation function**. One of the primary reasons that Neural Networks are organized into layers is that this structure makes it very simple and efficient to evaluate Neural Networks using matrix vector operations. Working with the example three-layer neural network in the diagram above, the input would be a [3x1] vector. All connection strengths for a layer can be stored in a single matrix. For example, the first hidden layer's weights `W1` would be of size [4x3], and the biases for all units would be in the vector `b1`, of size [4x1]. Here, every single neuron has its weights in a row of `W1`, so the matrix vector multiplication `np.dot(W1,x)` evaluates the activations of all neurons in that layer. Similarly, `W2` would be a [4x4] matrix that stores the connections of the second hidden layer, and `W3` a [1x4] matrix for the last (output) layer. The full forward pass of this 3-layer neural network is then simply three matrix multiplications, interwoven with the application of the activation function:
 
 ```python
 # forward-pass of a 3-layer neural network:
@@ -145,23 +145,15 @@ The forward pass of a fully-connected layer corresponds to one matrix multiplica
 
 One way to look at Neural Networks with fully-connected layers is that they define a family of functions that are parameterized by the weights of the network. A natural question that arises is: What is the representational power of this family of functions? In particular, are there functions that cannot be modeled with a Neural Network?
 
-It turns out that Neural Networks with at least one hidden layer are *universal approximators*. That is, it can be shown (e.g. see [*Approximation by Superpositions of Sigmoidal Function*](http://www.dartmouth.edu/~gvc/Cybenko_MCSS.pdf) from 1989 (pdf), or this [intuitive explanation](http://neuralnetworksanddeeplearning.com/chap4.html) from Michael Nielsen) that given any continuous function \\(f(x)\\) and some \\(\epsilon > 0\\), there exists a Neural Network \\(g(x)\\) with one hidden layer (with a reasonable choice of non-linearity, e.g. sigmoid) such that \\( \forall x, \mid f(x) - g(x) \mid < \epsilon \\). In other words, the neural network can approximate any continuous function.
+It turns out that **Neural Networks with at least one hidden layer are universal approximators**. That is, that given any continuous function \\(f(x)\\) and some \\(\epsilon > 0\\), there exists a Neural Network \\(g(x)\\) with one hidden layer (with a reasonable choice of non-linearity, e.g. sigmoid) such that \\( \forall x, \mid f(x) - g(x) \mid < \epsilon \\). In other words, **the neural network can approximate any continuous function.**
 
 If one hidden layer suffices to approximate any function, why use more layers and go deeper? The answer is that the fact that a two-layer Neural Network is a universal approximator is, while mathematically cute, a relatively weak and useless statement in practice. In one dimension, the "sum of indicator bumps" function \\(g(x) = \sum_i c_i \mathbb{1}(a_i < x < b_i)\\) where \\(a,b,c\\) are parameter vectors is also a universal approximator, but noone would suggest that we use this functional form in Machine Learning. Neural Networks work well in practice because they compactly express nice, smooth functions that fit well with the statistical properties of data we encounter in practice, and are also easy to learn using our optimization algorithms (e.g. gradient descent). Similarly, the fact that deeper networks (with multiple hidden layers) can work better than a single-hidden-layer networks is an empirical observation, despite the fact that their representational power is equal.
 
 As an aside, in practice it is often the case that 3-layer neural networks will outperform 2-layer nets, but going even deeper (4,5,6-layer) rarely helps much more. This is in stark contrast to Convolutional Networks, where depth has been found to be an extremely important component for a good recognition system (e.g. on order of 10 learnable layers). One argument for this observation is that images contain hierarchical structure (e.g. faces are made up of eyes, which are made up of edges, etc.), so several layers of processing make intuitive sense for this data domain.
 
-The full story is, of course, much more involved and a topic of much recent research. If you are interested in these topics we recommend for further reading:
-
-- [Deep Learning](http://www.deeplearningbook.org/) book in press by Bengio, Goodfellow, Courville, in particular [Chapter 6.4](http://www.deeplearningbook.org/contents/mlp.html).
-- [Do Deep Nets Really Need to be Deep?](http://arxiv.org/abs/1312.6184)
-- [FitNets: Hints for Thin Deep Nets](http://arxiv.org/abs/1412.6550)
-
 ### Setting number of layers and their sizes
 
 How do we decide on what architecture to use when faced with a practical problem? Should we use no hidden layers? One hidden layer? Two hidden layers? How large should each layer be? First, note that as we increase the size and number of layers in a Neural Network, the **capacity** of the network increases. That is, the space of representable functions grows since the neurons can collaborate to express many different functions. For example, suppose we had a binary classification problem in two dimensions. We could train three separate neural networks, each with one hidden layer of some size and obtain the following classifiers:
-
-<a href="http://cs.stanford.edu/people/karpathy/convnetjs/demo/classify2d.html">ConvNetsJS demo</a>
 
 {% include image.html description="Larger Neural Networks can represent more complicated functions. The data are shown as circles colored by their class, and the decision regions by a trained neural network are shown underneath." image="blogs/nn-setting-up-the-architecture/layer_sizes.jpeg" caption="true"%}
 
@@ -181,8 +173,6 @@ The takeaway is that you should not be using smaller networks because you are af
 
 ## Summary
 
-In summary,
-
 - We introduced a very coarse model of a biological **neuron**
 - We discussed several types of **activation functions** that are used in practice, with ReLU being the most common choice
 - We introduced **Neural Networks** where neurons are connected with **Fully-Connected layers** where neurons in adjacent layers have full pair-wise connections, but neurons within a layer are not connected.
@@ -194,4 +184,3 @@ In summary,
 
 - [deeplearning.net tutorial](http://www.deeplearning.net/tutorial/mlp.html) with Theano
 - [ConvNetJS](http://cs.stanford.edu/people/karpathy/convnetjs/) demos for intuitions
-- [Michael Nielsen's](http://neuralnetworksanddeeplearning.com/chap1.html) tutorials
