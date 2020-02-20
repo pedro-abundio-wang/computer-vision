@@ -34,13 +34,21 @@ micro_nav: false
             <td><a href="http://people.csail.mit.edu/torralba/shortCourseRLOC/index.html">Recognizing and Learning Object Categories</a></td>
             <td>a short course of object categorization at ICCV 2005</td>
         </tr>
-		<tr>
+		    <tr>
             <td><a href="http://stanford.edu/~boyd/cvxbook/">Convex Optimization</a></td>
             <td>stanford convex optimization</td>
         </tr>
-		<tr>
+		    <tr>
             <td><a href="http://cs231n.stanford.edu/vecDerivs.pdf">Vectorized Backpropagation</a></td>
             <td>Vector, Matrix, and Tensor Derivatives</td>
+        </tr>
+        <tr>
+            <td><a href="http://www.deeplearning.net/tutorial/mlp.html">deeplearning net tutorial with theano</a></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td><a href="https://cs.stanford.edu/people/karpathy/">ConvNetJS</a></td>
+            <td></td>
         </tr>
     </tbody>
 </table>
