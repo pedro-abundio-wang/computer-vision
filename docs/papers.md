@@ -26,53 +26,74 @@ micro_nav: false
                 <strong>SVM</strong>
             </td>
         </tr>
-    		<tr>
+        <tr>
             <td><a href="http://arxiv.org/abs/1306.0239">Deep Learning using Linear Support Vector Machines</a></td>
             <td>claiming that the L2SVM outperforms Softmax.</td>
         </tr>
-    		<tr>
+        <tr>
             <td id="" colspan="2" style="text-align:center; vertical-align:middle;background-color:#b7ffbf">
                 <strong>Autograd</strong>
             </td>
         </tr>
-    		<tr>
+    	<tr>
             <td><a href="http://arxiv.org/abs/1306.0239">Automatic differentiation in machine learning</a></td>
-                <td>backpropagation</td>
-            </tr>
-    		<tr>
+            <td>backpropagation</td>
+        </tr>
+        <tr>
             <td id="" colspan="2" style="text-align:center; vertical-align:middle;background-color:#b7ffbf">
                 <strong>Universal Approximators</strong>
             </td>
         </tr>
-    		<tr>
+    	<tr>
             <td><a href="http://www.dartmouth.edu/~gvc/Cybenko_MCSS.pdf">Approximation by Superpositions of Sigmoidal Function</a></td>
             <td>universal approximators</td>
         </tr>
-    		<tr>
+        <tr>
             <td id="" colspan="2" style="text-align:center; vertical-align:middle;background-color:#b7ffbf">
                 <strong>Activation</strong>
             </td>
         </tr>
-    		<tr>
-            <td><a href="http://arxiv.org/abs/1502.01852">Delving Deep into Rectifiers</a></td>
-            <td>backpropagation</td>
-        </tr>        
-    		<tr>
+        <tr>
+            <td><a href="http://arxiv.org/abs/1502.01852">Delving Deep into Rectifiers: Surpassing Human-Level Performance on ImageNet Classification</a></td>
+            <td>RELU weights initialization, backpropagation</td>
+        </tr>
+        <tr>
             <td id="" colspan="2" style="text-align:center; vertical-align:middle;background-color:#b7ffbf">
                 <strong>Deep Neural Networks</strong>
             </td>
         </tr>
-    		<tr>
+        <tr>
             <td><a href="http://arxiv.org/abs/1312.6184">Do Deep Nets Really Need to be Deep?</a></td>
             <td></td>
         </tr>
-    		<tr>
+        <tr>
             <td><a href="http://arxiv.org/abs/1412.6550">FitNets: Hints for Thin Deep Nets</a></td>
             <td></td>
         </tr>
         <tr>
             <td><a href="http://arxiv.org/abs/1412.0233">The Loss Surfaces of Multilayer Networks</a></td>
             <td></td>
+        </tr>
+		<tr>
+            <td><a href="http://jmlr.org/proceedings/papers/v9/glorot10a/glorot10a.pdf">Understanding the difficulty of training deep feedforward neural networks</a></td>
+            <td>weights initialization</td>
+        </tr>
+		<tr>
+            <td><a href="http://arxiv.org/abs/1502.03167">Batch Normalization</a></td>
+            <td></td>
+        </tr>
+		<tr>
+            <td id="" colspan="2" style="text-align:center; vertical-align:middle;background-color:#b7ffbf">
+                <strong>Regularization</strong>
+            </td>
+        </tr>
+        <tr>
+            <td><a href="https://web.stanford.edu/~hastie/Papers/elasticnet.pdf">Elastic net regularization</a></td>
+            <td></td>
+        </tr>
+		<tr>
+            <td><a href="http://www.cs.toronto.edu/~rsalakhu/papers/srivastava14a.pdf">Dropout: A Simple Way to Prevent Neural Networks from Overfitting</a></td>
+            <td>dropout</td>
         </tr>
         <tr>
             <td id="" colspan="2" style="text-align:center; vertical-align:middle;background-color:#b7ffbf">
