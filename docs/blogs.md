@@ -35,7 +35,7 @@ grid_navigation:
       url: '/blogs/nn-setting-up-the-architecture'
     - title: Neural Networks - Setting Up The Data And The Loss
       excerpt:
-      cta: preprocessing, weight initialization, batch normalization, regularization (L2/dropout), loss functions
+      cta: preprocessing, weight initialization, batch normalization, regularization, loss functions
       url: '/blogs/nn-setting-up-the-data-and-the-loss'
     - title: Neural Networks - Learning And Evaluation
       excerpt:
@@ -65,4 +65,8 @@ grid_navigation:
       excerpt:
       cta: calculus
       url: '/blogs/efficient-batch-normalization'
+    - title: Understanding Reinforcement Learning
+      excerpt:
+      cta: Markov Decision Processes, Policies, Value Functions, Bellman Equations
+      url: '/blogs/understanding-reinforcement-learning'	  
 ---

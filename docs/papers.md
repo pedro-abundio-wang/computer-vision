@@ -28,7 +28,16 @@ micro_nav: false
         </tr>
         <tr>
             <td><a href="http://arxiv.org/abs/1306.0239">Deep Learning using Linear Support Vector Machines</a></td>
-            <td>claiming that the L2SVM outperforms Softmax.</td>
+            <td>claiming that the L2SVM outperforms Softmax</td>
+        </tr>
+        <tr>
+            <td id="" colspan="2" style="text-align:center; vertical-align:middle;background-color:#b7ffbf">
+                <strong>Softmax</strong>
+            </td>
+        </tr>
+        <tr>
+            <td><a href="http://arxiv.org/pdf/1310.4546.pdf">Hierarchical Softmax</a></td>
+            <td>large category</td>
         </tr>
         <tr>
             <td id="" colspan="2" style="text-align:center; vertical-align:middle;background-color:#b7ffbf">
@@ -41,21 +50,16 @@ micro_nav: false
         </tr>
         <tr>
             <td id="" colspan="2" style="text-align:center; vertical-align:middle;background-color:#b7ffbf">
-                <strong>Universal Approximators</strong>
+                <strong>Activation</strong>
             </td>
         </tr>
-    	<tr>
+		<tr>
             <td><a href="http://www.dartmouth.edu/~gvc/Cybenko_MCSS.pdf">Approximation by Superpositions of Sigmoidal Function</a></td>
             <td>universal approximators</td>
         </tr>
         <tr>
-            <td id="" colspan="2" style="text-align:center; vertical-align:middle;background-color:#b7ffbf">
-                <strong>Activation</strong>
-            </td>
-        </tr>
-        <tr>
             <td><a href="http://arxiv.org/abs/1502.01852">Delving Deep into Rectifiers: Surpassing Human-Level Performance on ImageNet Classification</a></td>
-            <td>RELU weights initialization, backpropagation</td>
+            <td>RELU, RELU weights initialization</td>
         </tr>
         <tr>
             <td id="" colspan="2" style="text-align:center; vertical-align:middle;background-color:#b7ffbf">
@@ -89,11 +93,19 @@ micro_nav: false
         </tr>
         <tr>
             <td><a href="https://web.stanford.edu/~hastie/Papers/elasticnet.pdf">Elastic net regularization</a></td>
-            <td></td>
+            <td>L1 regularization, L2 regularization</td>
         </tr>
 		<tr>
             <td><a href="http://www.cs.toronto.edu/~rsalakhu/papers/srivastava14a.pdf">Dropout: A Simple Way to Prevent Neural Networks from Overfitting</a></td>
             <td>dropout</td>
+        </tr>
+		<tr>
+            <td><a href="http://papers.nips.cc/paper/4882-dropout-training-as-adaptive-regularization.pdf">Dropout Training as Adaptive Regularization</a></td>
+            <td>dropout relation to the other regularization techniques</td>
+        </tr>
+		<tr>
+            <td><a href="">DropConnect</a></td>
+            <td></td>
         </tr>
         <tr>
             <td id="" colspan="2" style="text-align:center; vertical-align:middle;background-color:#b7ffbf">

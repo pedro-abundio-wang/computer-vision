@@ -35,7 +35,7 @@ $$
 \frac{df(x)}{dx} = \frac{f(x + h) - f(x)}{h} \hspace{0.1in} \text{(bad, do not use)}
 $$
 
-where \\(h\\) is a very small number, in practice approximately 1e-5 or so. In practice, it turns out that it is much better to use the *centered* difference formula of the form:
+where \\(h\\) is a very small number, in practice approximately 1e-5 or so. In practice, it turns out that it is much better to use the **centered** difference formula of the form:
 
 $$
 \frac{df(x)}{dx} = \frac{f(x + h) - f(x - h)}{2h} \hspace{0.1in} \text{(use instead)}
@@ -43,7 +43,7 @@ $$
 
 This requires you to evaluate the loss function twice to check every single dimension of the gradient (so it is about 2 times as expensive), but the gradient approximation turns out to be much more precise. To see this, you can use Taylor expansion of \\(f(x+h)\\) and \\(f(x-h)\\) and verify that the first formula has an error on order of \\(O(h)\\), while the second formula only has error terms on order of \\(O(h^2)\\) (i.e. it is a second order approximation).
 
-**Use relative error for the comparison**. What are the details of comparing the numerical gradient \\({f'}_n\\) and analytic gradient \\({f'}_a\\)? That is, how do we know if the two are not compatible? You might be temped to keep track of the difference \\(\mid {f'}_a - {f'}_n \mid \\) or its square and define the gradient check as failed if that difference is above a threshold. However, this is problematic. For example, consider the case where their difference is 1e-4. This seems like a very appropriate difference if the two gradients are about 1.0, so we'd consider the two gradients to match. But if the gradients were both on order of 1e-5 or lower, then we'd consider 1e-4 to be a huge difference and likely a failure. Hence, it is always more appropriate to consider the *relative error*:
+**Use relative error for the comparison**. What are the details of comparing the **numerical gradient** \\({f'}_n\\) and **analytic gradient** \\({f'}_a\\)? That is, how do we know if the two are not compatible? You might be temped to keep track of the difference \\(\mid {f'}_a - {f'}_n \mid \\) or its square and define the gradient check as failed if that difference is above a threshold. However, this is problematic. For example, consider the case where their difference is 1e-4. This seems like a very appropriate difference if the two gradients are about 1.0, so we'd consider the two gradients to match. But if the gradients were both on order of 1e-5 or lower, then we'd consider 1e-4 to be a huge difference and likely a failure. Hence, it is always more appropriate to consider the **relative error**:
 
 $$
 \frac{\mid {f'}_a - {f'}_n \mid}{\max(\mid {f'}_a \mid, \mid {f'}_n \mid)}
