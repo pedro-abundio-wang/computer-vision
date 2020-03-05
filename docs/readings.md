@@ -54,5 +54,9 @@ micro_nav: false
             <td><a href="http://docs.oracle.com/cd/E19957-01/806-3568/ncg_goldberg.html">What Every Computer Scientist Should Know About Floating-Point Arithmetic</a></td>
             <td>numerical issues</td>
         </tr>
+		<tr>
+            <td><a href="http://www.cs.utoronto.ca/~ilya/pubs/ilya_sutskever_phd_thesis.pdf">Ilya Sutskever's thesis</a></td>
+            <td>Nesterov Momentum</td>
+        </tr>
     </tbody>
 </table>

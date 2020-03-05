@@ -35,15 +35,15 @@ $$
 \frac{df(x)}{dx} = \frac{f(x + h) - f(x)}{h} \hspace{0.1in} \text{(bad, do not use)}
 $$
 
-where \\(h\\) is a very small number, in practice approximately 1e-5 or so. In practice, it turns out that it is much better to use the **centered** difference formula of the form:
+where $$h$$ is a very small number, in practice approximately 1e-5 or so. In practice, it turns out that it is much better to use the **centered** difference formula of the form:
 
 $$
 \frac{df(x)}{dx} = \frac{f(x + h) - f(x - h)}{2h} \hspace{0.1in} \text{(use instead)}
 $$
 
-This requires you to evaluate the loss function twice to check every single dimension of the gradient (so it is about 2 times as expensive), but the gradient approximation turns out to be much more precise. To see this, you can use Taylor expansion of \\(f(x+h)\\) and \\(f(x-h)\\) and verify that the first formula has an error on order of \\(O(h)\\), while the second formula only has error terms on order of \\(O(h^2)\\) (i.e. it is a second order approximation).
+This requires you to evaluate the loss function twice to check every single dimension of the gradient (so it is about 2 times as expensive), but the gradient approximation turns out to be much more precise. To see this, you can use Taylor expansion of $$f(x+h)$$ and $$f(x-h)$$ and verify that the first formula has an error on order of $$O(h)$$, while the second formula only has error terms on order of $$O(h^2)$$ (i.e. it is a second order approximation).
 
-**Use relative error for the comparison**. What are the details of comparing the **numerical gradient** \\({f'}_n\\) and **analytic gradient** \\({f'}_a\\)? That is, how do we know if the two are not compatible? You might be temped to keep track of the difference \\(\mid {f'}_a - {f'}_n \mid \\) or its square and define the gradient check as failed if that difference is above a threshold. However, this is problematic. For example, consider the case where their difference is 1e-4. This seems like a very appropriate difference if the two gradients are about 1.0, so we'd consider the two gradients to match. But if the gradients were both on order of 1e-5 or lower, then we'd consider 1e-4 to be a huge difference and likely a failure. Hence, it is always more appropriate to consider the **relative error**:
+**Use relative error for the comparison**. What are the details of comparing the **numerical gradient** $${f'}_n$$ and **analytic gradient** $${f'}_a$$? That is, how do we know if the two are not compatible? You might be temped to keep track of the difference $$ \mid {f'}_a - {f'}_n \mid $$ or its square and define the gradient check as failed if that difference is above a threshold. However, this is problematic. For example, consider the case where their difference is 1e-4. This seems like a very appropriate difference if the two gradients are about 1.0, so we'd consider the two gradients to match. But if the gradients were both on order of 1e-5 or lower, then we'd consider 1e-4 to be a huge difference and likely a failure. Hence, it is always more appropriate to consider the **relative error**:
 
 $$
 \frac{\mid {f'}_a - {f'}_n \mid}{\max(\mid {f'}_a \mid, \mid {f'}_n \mid)}
@@ -62,19 +62,19 @@ Also keep in mind that the deeper the network, the higher the relative errors wi
 
 **Stick around active range of floating point**. In neural nets it can be common to normalize the loss function over the batch. However, if your gradients per datapoint are very small, then additionally dividing them by the number of data points is starting to give very small numbers, which in turn will lead to more numerical issues. This is why I like to always print the raw numerical/analytic gradient, and make sure that the numbers you are comparing are not extremely small (e.g. roughly 1e-10 and smaller in absolute value is worrying). If they are you may want to temporarily scale your loss function up by a constant to bring them to a "nicer" range where floats are more dense.
 
-**Kinks in the objective**. One source of inaccuracy to be aware of during gradient checking is the problem of kinks. Kinks refer to non-differentiable parts of an objective function, introduced by functions such as ReLU (\\(max(0,x)\\)), or the SVM loss, Maxout neurons, etc. Consider gradient checking the ReLU function at \\(x = -1e6\\). Since \\(x < 0\\), the analytic gradient at this point is exactly zero. However, the numerical gradient would suddenly compute a non-zero gradient because \\(f(x+h)\\) might cross over the kink (e.g. if \\(h > 1e-6\\)) and introduce a non-zero contribution. You might think that this is a pathological case, but in fact this case can be very common. For example, an SVM for CIFAR-10 contains up to 450,000 \\(max(0,x)\\) terms because there are 50,000 examples and each example yields 9 terms to the objective. Moreover, a Neural Network with an SVM classifier will contain many more kinks due to ReLUs.
+**Kinks in the objective**. One source of inaccuracy to be aware of during gradient checking is the problem of kinks. Kinks refer to non-differentiable parts of an objective function, introduced by functions such as ReLU ($$max(0,x)$$), or the SVM loss, Maxout neurons, etc. Consider gradient checking the ReLU function at $$x = -1e-6$$. Since $$x < 0$$, the analytic gradient at this point is exactly zero. However, the numerical gradient would suddenly compute a non-zero gradient because $$f(x+h)$$ might cross over the kink (e.g. if $$h > 1e-6$$) and introduce a non-zero contribution. You might think that this is a pathological case, but in fact this case can be very common. For example, an SVM for CIFAR-10 contains up to 450,000 $$max(0,x)$$ terms because there are 50,000 examples and each example yields 9 terms to the objective. Moreover, a Neural Network with an SVM classifier will contain many more kinks due to ReLUs.
 
-Note that it is possible to know if a kink was **crossed** in the evaluation of the loss. This can be done by keeping track of the identities of all "winners" in a function of form \\(max(x,y)\\); That is, was x or y higher during the forward pass. If the identity of at least one winner changes when evaluating \\(f(x+h)\\) and then \\(f(x-h)\\), then a kink was crossed and the numerical gradient will not be exact.
+Note that it is possible to know if a kink was **crossed** in the evaluation of the loss. This can be done by keeping track of the identities of all "winners" in a function of form $$max(x,y)$$; That is, was x or y higher during the forward pass. If the identity of at least one winner changes when evaluating $$f(x+h)$$ and then $$f(x-h)$$, then a kink was crossed and the numerical gradient will not be exact.
 
 **Use only few datapoints**. One fix to the above problem of kinks is to use fewer datapoints, since loss functions that contain kinks (e.g. due to use of ReLUs or margin losses etc.) will have fewer kinks with fewer datapoints, so it is less likely for you to cross one when you perform the finite different approximation. Moreover, if your gradcheck for only 2 or 3 datapoints then you would almost certainly gradcheck for an entire batch. Using very few datapoints also makes your gradient check faster and more efficient.
 
-**Be careful with the step size** $$h$$. It is not necessarily the case that smaller is better, because when \\(h\\) is much smaller, you may start running into **numerical precision problems**. When the gradient doesn't check, it is possible that you change \\(h\\) to be 1e-4 or 1e-6 and suddenly the gradient will be correct. This [wikipedia article](http://en.wikipedia.org/wiki/Numerical_differentiation) contains a chart that plots the value of $$h$$ on the x-axis and the numerical gradient error on the y-axis.
+**Be careful with the step size** $$h$$. It is not necessarily the case that smaller is better, because when $$h$$ is much smaller, you may start running into **numerical precision problems**. When the gradient doesn't check, it is possible that you change $$h$$ to be 1e-4 or 1e-6 and suddenly the gradient will be correct. This [wikipedia article](http://en.wikipedia.org/wiki/Numerical_differentiation) contains a chart that plots the value of $$h$$ on the x-axis and the numerical gradient error on the y-axis.
 
 **Gradcheck during a "characteristic" mode of operation**. It is important to realize that a gradient check is performed at a particular (and usually random), single point in the space of parameters. **Even if the gradient check succeeds at that point, it is not immediately certain that the gradient is correctly implemented globally**. Additionally, a random initialization might not be the most "characteristic" point in the space of parameters and may in fact introduce pathological situations where the gradient seems to be correctly implemented but isn't. For instance, an SVM with very small weight initialization will assign almost exactly zero scores to all datapoints and the gradients will exhibit a particular pattern across all datapoints. An incorrect implementation of the gradient could still produce this pattern and not generalize to a more characteristic mode of operation where some scores are larger than others. Therefore, to be safe it is best to use a short **burn-in** time during which the network is allowed to learn and perform the gradient check after the loss starts to go down. The danger of performing it at the first iteration is that this could introduce pathological edge cases and mask an incorrect implementation of the gradient.
 
 **Don't let the regularization overwhelm the data**. It is often the case that a loss function is a sum of the data loss and the regularization loss (e.g. L2 penalty on weights). One danger to be aware of is that the regularization loss may overwhelm the data loss, in which case the gradients will be primarily coming from the regularization term (which usually has a much simpler gradient expression). This can mask an incorrect implementation of the data loss gradient. Therefore, it is recommended to turn off regularization and check the data loss alone first, and then the regularization term second and independently. One way to perform the latter is to hack the code to remove the data loss contribution. Another way is to increase the regularization strength so as to ensure that its effect is non-negligible in the gradient check, and that an incorrect implementation would be spotted.
 
-**Remember to turn off dropout**. When performing gradient check, remember to turn off any non-deterministic effects in the network, such as dropout etc. Otherwise these can clearly introduce huge errors when estimating the numerical gradient. The downside of turning off these effects is that you wouldn't be gradient checking them (e.g. it might be that dropout isn't backpropagated correctly). Therefore, a better solution might be to force a particular random seed before evaluating both \\(f(x+h)\\) and \\(f(x-h)\\), and when evaluating the analytic gradient.
+**Remember to turn off dropout**. When performing gradient check, remember to turn off any non-deterministic effects in the network, such as dropout etc. Otherwise these can clearly introduce huge errors when estimating the numerical gradient. The downside of turning off these effects is that you wouldn't be gradient checking them (e.g. it might be that dropout isn't backpropagated correctly). Therefore, a better solution might be to force a particular random seed before evaluating both $$f(x+h)$$ and $$f(x-h)$$, and when evaluating the analytic gradient.
 
 **Check only few dimensions**. In practice the gradients can have sizes of million parameters. In these cases it is only practical to check some of the dimensions of the gradient and assume that the others are correct. **Be careful**: One issue to be careful with is to make sure to gradient check a few dimensions for every separate parameter. In some applications, people combine the parameters into a single large parameter vector for convenience. In these cases, for example, the biases could only take up a tiny number of parameters from the whole vector, so it is important to not sample at random but to take this into account and check that all parameters receive the correct gradients.
 
@@ -166,13 +166,13 @@ v = mu * v - learning_rate * dx # integrate velocity
 x += v # integrate position
 ```
 
-Here we see an introduction of a `v` variable that is initialized at zero, and an additional hyperparameter (`mu`). As an unfortunate misnomer, this variable is in optimization referred to as *momentum* (its typical value is about 0.9), but its physical meaning is more consistent with the coefficient of friction. Effectively, this variable damps the velocity and reduces the kinetic energy of the system, or otherwise the particle would never come to a stop at the bottom of a hill. When cross-validated, this parameter is usually set to values such as [0.5, 0.9, 0.95, 0.99]. Similar to annealing schedules for learning rates (discussed later, below), optimization can sometimes benefit a little from momentum schedules, where the momentum is increased in later stages of learning. A typical setting is to start with momentum of about 0.5 and anneal it to 0.99 or so over multiple epochs.
+Here we see an introduction of a `v` variable that is initialized at zero, and an additional hyperparameter (`mu`). This variable is in optimization referred to as **momentum** (its typical value is about 0.9), but its physical meaning is more consistent with the coefficient of friction. Effectively, this variable damps the velocity, or otherwise the particle would never come to a stop at the bottom of a hill. When cross-validated, this parameter is usually set to values such as [0.5, 0.9, 0.95, 0.99]. Similar to annealing schedules for learning rates (discussed later, below), optimization can sometimes benefit a little from momentum schedules, where the momentum is increased in later stages of learning. A typical setting is to start with momentum of about 0.5 and anneal it to 0.99 or so over multiple epochs.
 
 With Momentum update, the parameter vector will build up velocity in any direction that has consistent gradient.
 
 **Nesterov Momentum** is a slightly different version of the momentum update that has recently been gaining popularity. It enjoys stronger theoretical converge guarantees for convex functions and in practice it also consistenly works slightly better than standard momentum.
 
-The core idea behind Nesterov momentum is that when the current parameter vector is at some position `x`, then looking at the momentum update above, we know that the momentum term alone (i.e. ignoring the second term with the gradient) is about to nudge the parameter vector by `mu * v`. Therefore, if we are about to compute the gradient, we can treat the future approximate position `x + mu * v` as a "lookahead" - this is a point in the vicinity of where we are soon going to end up. Hence, it makes sense to compute the gradient at `x + mu * v` instead of at the "old/stale" position `x`.
+The core idea behind Nesterov momentum is that when the current parameter vector is at some position `x`, then looking at the momentum update above, we know that the momentum term alone (i.e. ignoring the second term with the gradient) is about to nudge the parameter vector by `mu * v`. Therefore, if we are about to compute the gradient, we can treat the future approximate position `x + mu * v` as a "lookahead" - this is a point in the vicinity of where we are soon going to end up. Hence, it makes sense to compute the gradient at `x + mu * v` instead of at the "old stale" position `x`.
 
 {% include image.html description="Nesterov momentum. Instead of evaluating gradient at the current position (red circle), we know that our momentum is about to carry us to the tip of the green arrow. With Nesterov momentum we therefore instead evaluate the gradient at this looked-ahead position." image="blogs/nn-learning-and-evaluation/nesterov.jpeg" caption="true"%}
 
@@ -187,53 +187,45 @@ x += v
 
 However, in practice people prefer to express the update to look as similar to vanilla SGD or to the previous momentum update as possible. This is possible to achieve by manipulating the update above with a variable transform `x_ahead = x + mu * v`, and then expressing the update in terms of `x_ahead` instead of `x`. That is, the parameter vector we are actually storing is always the ahead version. The equations in terms of `x_ahead` (but renaming it back to `x`) then become:
 
+{% include image.html description="" image="blogs/nn-learning-and-evaluation/nesterov.png" caption="false"%}
+
 ```python
 v_prev = v # back this up
 v = mu * v - learning_rate * dx # velocity update stays the same
 x += -mu * v_prev + (1 + mu) * v # position update changes form
 ```
 
-We recommend this further reading to understand the source of these equations and the mathematical formulation of Nesterov's Accelerated Momentum (NAG):
-
-- [Advances in optimizing Recurrent Networks](http://arxiv.org/pdf/1212.0901v2.pdf) by Yoshua Bengio, Section 3.5.
-- [Ilya Sutskever's thesis](http://www.cs.utoronto.ca/~ilya/pubs/ilya_sutskever_phd_thesis.pdf) (pdf) contains a longer exposition of the topic in section 7.2
-
 #### Annealing the learning rate
 
-In training deep networks, it is usually helpful to anneal the learning rate over time. Good intuition to have in mind is that with a high learning rate, the system contains too much kinetic energy and the parameter vector bounces around chaotically, unable to settle down into deeper, but narrower parts of the loss function. Knowing when to decay the learning rate can be tricky: Decay it slowly and you'll be wasting computation bouncing around chaotically with little improvement for a long time. But decay it too aggressively and the system will cool too quickly, unable to reach the best position it can. There are three common types of implementing the learning rate decay:
+In training deep networks, it is usually helpful to anneal the learning rate over time. Good intuition to have in mind is that with a high learning rate, the system parameter vector bounces around chaotically, unable to settle down into deeper, but narrower parts of the loss function. Knowing when to decay the learning rate can be tricky: Decay it slowly and you'll be wasting computation bouncing around chaotically with little improvement for a long time. But decay it too aggressively and the system will cool too quickly, unable to reach the best position it can. There are three common types of implementing the learning rate decay:
 
-- **Step decay**: Reduce the learning rate by some factor every few epochs. Typical values might be reducing the learning rate by a half every 5 epochs, or by 0.1 every 20 epochs. These numbers depend heavily on the type of problem and the model. One heuristic you may see in practice is to watch the validation error while training with a fixed learning rate, and reduce the learning rate by a constant (e.g. 0.5) whenever the validation error stops improving.
-- **Exponential decay.** has the mathematical form \\(\alpha = \alpha_0 e^{-k t}\\), where \\(\alpha_0, k\\) are hyperparameters and \\(t\\) is the iteration number (but you can also use units of epochs).
-- **1/t decay** has the mathematical form \\(\alpha = \alpha_0 / (1 + k t )\\) where \\(a_0, k\\) are hyperparameters and \\(t\\) is the iteration number.
+- **Step decay** Reduce the learning rate by some factor every few epochs. Typical values might be reducing the learning rate by a half every 5 epochs, or by 0.1 every 20 epochs. These numbers depend heavily on the type of problem and the model. One heuristic you may see in practice is to watch the validation error while training with a fixed learning rate, and reduce the learning rate by a constant (e.g. 0.5) whenever the validation error stops improving.
+- **Exponential decay** has the mathematical form $$\alpha = \alpha_0 e^{-k t}$$, where $$\alpha_0, k$$ are hyperparameters and $$t$$ is the iteration number (but you can also use units of epochs).
+- **1/t decay** has the mathematical form $$\alpha = \alpha_0 / (1 + k t )$$ where $$a_0, k$$ are hyperparameters and $$t$$ is the iteration number.
 
-In practice, we find that the step decay is slightly preferable because the hyperparameters it involves (the fraction of decay and the step timings in units of epochs) are more interpretable than the hyperparameter \\(k\\). Lastly, if you can afford the computational budget, err on the side of slower decay and train for a longer time.
+In practice, we find that the step decay is slightly preferable because the hyperparameters it involves (the fraction of decay and the step timings in units of epochs) are more interpretable than the hyperparameter $$k$$.
 
 #### Second order methods
 
-A second, popular group of methods for optimization in context of deep learning is based on [Newton's method](http://en.wikipedia.org/wiki/Newton%27s_method_in_optimization), which iterates the following update:
+A second, popular group of methods for optimization in context of deep learning is based on **Newton's method** which iterates the following update:
 
 $$
 x \leftarrow x - [H f(x)]^{-1} \nabla f(x)
 $$
 
-Here, \\(H f(x)\\) is the [Hessian matrix](http://en.wikipedia.org/wiki/Hessian_matrix), which is a square matrix of second-order partial derivatives of the function. The term \\(\nabla f(x)\\) is the gradient vector, as seen in Gradient Descent. Intuitively, the Hessian describes the local curvature of the loss function, which allows us to perform a more efficient update. In particular, multiplying by the inverse Hessian leads the optimization to take more aggressive steps in directions of shallow curvature and shorter steps in directions of steep curvature. Note, crucially, the absence of any learning rate hyperparameters in the update formula, which the proponents of these methods cite this as a large advantage over first-order methods.
+Here, $$H f(x)$$ is the **Hessian matrix** which is a square matrix of second-order partial derivatives of the function. The term $$\nabla f(x)$$ is the gradient vector, as seen in Gradient Descent. Intuitively, the Hessian describes the local curvature of the loss function, which allows us to perform a more efficient update. In particular, multiplying by the inverse Hessian leads the optimization to take more aggressive steps in directions of shallow curvature and shorter steps in directions of steep curvature. Note, crucially, the absence of any learning rate hyperparameters in the update formula, which the proponents of these methods cite this as a large advantage over first-order methods.
 
-However, the update above is impractical for most deep learning applications because computing (and inverting) the Hessian in its explicit form is a very costly process in both space and time. For instance, a Neural Network with one million parameters would have a Hessian matrix of size [1,000,000 x 1,000,000], occupying approximately 3725 gigabytes of RAM. Hence, a large variety of *quasi-Newton* methods have been developed that seek to approximate the inverse Hessian. Among these, the most popular is [L-BFGS](http://en.wikipedia.org/wiki/Limited-memory_BFGS), which uses the information in the gradients over time to form the approximation implicitly (i.e. the full matrix is never computed).
+However, the update above is impractical for most deep learning applications because computing (and inverting) the Hessian in its explicit form is a very costly process in both space and time. For instance, a Neural Network with one million parameters would have a Hessian matrix of size [1,000,000 x 1,000,000], occupying approximately 3725 gigabytes of RAM. Hence, a large variety of **quasi newton methods** have been developed that seek to approximate the inverse Hessian. Among these, the most popular is **L-BFGS (Limited-memory BFGS)**, which uses the information in the gradients over time to form the approximation implicitly (i.e. the full matrix is never computed).
 
 However, even after we eliminate the memory concerns, a large downside of a naive application of L-BFGS is that it must be computed over the entire training set, which could contain millions of examples. Unlike mini-batch SGD, getting L-BFGS to work on mini-batches is more tricky and an active area of research.
 
 **In practice**, it is currently not common to see L-BFGS or similar second-order methods applied to large-scale Deep Learning and Convolutional Neural Networks. Instead, SGD variants based on (Nesterov's) momentum are more standard because they are simpler and scale more easily.
 
-Additional references:
-
-- [Large Scale Distributed Deep Networks](http://research.google.com/archive/large_deep_networks_nips2012.html) is a paper from the Google Brain team, comparing L-BFGS and SGD variants in large-scale distributed optimization.
-- [SFO](http://arxiv.org/abs/1311.2115) algorithm strives to combine the advantages of SGD with advantages of L-BFGS.
-
 #### Per-parameter adaptive learning rate methods
 
-All previous approaches we've discussed so far manipulated the learning rate globally and equally for all parameters. Tuning the learning rates is an expensive process, so much work has gone into devising methods that can adaptively tune the learning rates, and even do so per parameter. Many of these methods may still require other hyperparameter settings, but the argument is that they are well-behaved for a broader range of hyperparameter values than the raw learning rate. In this section we highlight some common adaptive methods you may encounter in practice:
+All approaches we've discussed so far manipulated the learning rate globally and equally for all parameters. Tuning the learning rates is an expensive process, so much work has gone into devising methods that can adaptively tune the learning rates, and even do so per parameter. Many of these methods may still require other hyperparameter settings, but the argument is that they are well-behaved for a broader range of hyperparameter values than the raw learning rate. In this section we highlight some common adaptive methods you may encounter in practice:
 
-**Adagrad** is an adaptive learning rate method originally proposed by [Duchi et al.](http://jmlr.org/papers/v12/duchi11a.html).
+**Adagrad** is an adaptive learning rate method.
 
 ```python
 # Assume the gradient dx and parameter vector x
@@ -243,7 +235,7 @@ x += - learning_rate * dx / (np.sqrt(cache) + eps)
 
 Notice that the variable `cache` has size equal to the size of the gradient, and keeps track of per-parameter sum of squared gradients. This is then used to normalize the parameter update step, element-wise. Notice that the weights that receive high gradients will have their effective learning rate reduced, while weights that receive small or infrequent updates will have their effective learning rate increased. Amusingly, the square root operation turns out to be very important and without it the algorithm performs much worse. The smoothing term `eps` (usually set somewhere in range from 1e-4 to 1e-8) avoids division by zero. A downside of Adagrad is that in case of Deep Learning, the monotonic learning rate usually proves too aggressive and stops learning too early.
 
-**RMSprop.** RMSprop is a very effective, but currently unpublished adaptive learning rate method. Amusingly, everyone who uses this method in their work currently cites [slide 29 of Lecture 6](http://www.cs.toronto.edu/~tijmen/csc321/slides/lecture_slides_lec6.pdf) of Geoff Hinton's Coursera class. The RMSProp update adjusts the Adagrad method in a very simple way in an attempt to reduce its aggressive, monotonically decreasing learning rate. In particular, it uses a moving average of squared gradients instead, giving:
+**RMSprop** is a very effective, but currently unpublished adaptive learning rate method. The RMSProp update adjusts the Adagrad method in a very simple way in an attempt to reduce its aggressive, monotonically decreasing learning rate. In particular, it uses a moving average of squared gradients instead, giving:
 
 ```python
 cache = decay_rate * cache + (1 - decay_rate) * dx**2
@@ -252,34 +244,30 @@ x += - learning_rate * dx / (np.sqrt(cache) + eps)
 
 Here, `decay_rate` is a hyperparameter and typical values are [0.9, 0.99, 0.999]. Notice that the `x+=` update is identical to Adagrad, but the `cache` variable is a "leaky". Hence, RMSProp still modulates the learning rate of each weight based on the magnitudes of its gradients, which has a beneficial equalizing effect, but unlike Adagrad the updates do not get monotonically smaller.
 
-**Adam.** [Adam](http://arxiv.org/abs/1412.6980) is a recently proposed update that looks a bit like RMSProp with momentum. The (simplified) update looks as follows:
+**Adam** is a recently proposed update that looks a bit like RMSProp with momentum. The (simplified) update looks as follows:
 
 ```python
-m = beta1*m + (1-beta1)*dx
-v = beta2*v + (1-beta2)*(dx**2)
+m = beta1 * m + (1-beta1) * dx
+v = beta2 * v + (1-beta2) * (dx**2)
 x += - learning_rate * m / (np.sqrt(v) + eps)
 ```
 
-Notice that the update looks exactly as RMSProp update, except the "smooth" version of the gradient `m` is used instead of the raw (and perhaps noisy) gradient vector `dx`. Recommended values in the paper are `eps = 1e-8`, `beta1 = 0.9`, `beta2 = 0.999`. In practice Adam is currently recommended as the default algorithm to use, and often works slightly better than RMSProp. However, it is often also worth trying SGD+Nesterov Momentum as an alternative. The full Adam update also includes a *bias correction* mechanism, which compensates for the fact that in the first few time steps the vectors `m,v` are both initialized and therefore biased at zero, before they fully "warm up". With the *bias correction* mechanism, the update looks as follows:
+Notice that the update looks exactly as RMSProp update, except the "smooth" version of the gradient `m` is used instead of the raw (and perhaps noisy) gradient vector `dx`. Recommended values in the paper are `eps = 1e-8`, `beta1 = 0.9`, `beta2 = 0.999`. In practice Adam is currently recommended as the default algorithm to use, and often works slightly better than RMSProp. However, it is often also worth trying SGD + Nesterov Momentum as an alternative. The full Adam update also includes a **bias correction** mechanism, which compensates for the fact that in the first few time steps the vectors `m,v` are both initialized and therefore biased at zero, before they fully "warm up". With the bias correction mechanism, the update looks as follows:
 
 ```python
 # t is your iteration counter going from 1 to infinity
-m = beta1*m + (1-beta1)*dx
-mt = m / (1-beta1**t)
-v = beta2*v + (1-beta2)*(dx**2)
-vt = v / (1-beta2**t)
+m = beta1 * m + (1 - beta1) * dx
+mt = m / (1 - beta1**t)
+v = beta2 * v + (1 - beta2) * (dx**2)
+vt = v / (1 - beta2**t)
 x += - learning_rate * mt / (np.sqrt(vt) + eps)
 ```
+
 Note that the update is now a function of the iteration as well as the other parameters.
-We refer the reader to the paper for the details, or the course slides where this is expanded on.
-
-Additional References:
-
-- [Unit Tests for Stochastic Optimization](http://arxiv.org/abs/1312.6055) proposes a series of tests as a standardized benchmark for stochastic optimization.
 
 {% include image.html description="Animations that may help your intuitions about the learning process dynamics. Contours of a loss surface and time evolution of different optimization algorithms. Notice the overshooting behavior of momentum-based methods, which make the optimization look like a ball rolling down the hill." image="blogs/nn-learning-and-evaluation/opt2.gif" caption="true"%}
 
-{% include image.html description="Animations that may help your intuitions about the learning process dynamics. A visualization of a saddle point in the optimization landscape, where the curvature along different dimension has different signs (one dimension curves up and another down). Notice that SGD has a very hard time breaking symmetry and gets stuck on the top. Conversely, algorithms such as RMSprop will see very low gradients in the saddle direction. Due to the denominator term in the RMSprop update, this will increase the effective learning rate along this direction, helping RMSProp proceed." image="blogs/nn-learning-and-evaluation/opt1.gif" caption="true"%}
+{% include image.html description="Animations that may help your intuitions about the learning process dynamics. A visualization of a <b>saddle point</b> in the optimization landscape, where the curvature along different dimension has different signs (one dimension curves up and another down). Notice that SGD has a very hard time breaking symmetry and gets stuck on the top. Conversely, algorithms such as RMSprop will see very low gradients in the saddle direction. Due to the denominator term in the RMSprop update, this will increase the effective learning rate along this direction, helping RMSProp proceed." image="blogs/nn-learning-and-evaluation/opt1.gif" caption="true"%}
 
 ### Hyperparameter optimization
 

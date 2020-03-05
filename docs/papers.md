@@ -116,5 +116,34 @@ micro_nav: false
             <td><a href="https://arxiv.org/abs/1409.1556">Very Deep Convolutional Networks for Large-Scale Image Recognition</a></td>
             <td>vgg net</td>
         </tr>
+		<tr>
+            <td id="" colspan="2" style="text-align:center; vertical-align:middle;background-color:#b7ffbf">
+                <strong>Optimization</strong>
+            </td>
+        </tr>
+        <tr>
+            <td><a href="http://arxiv.org/pdf/1212.0901v2.pdf">Advances in optimizing Recurrent Networks</a></td>
+            <td>Nesterov Momentum</td>
+        </tr>
+		<tr>
+            <td><a href="http://research.google.com/archive/large_deep_networks_nips2012.html">Large Scale Distributed Deep Networks</a></td>
+            <td>comparing L-BFGS and SGD variants</td>
+        </tr>
+		<tr>
+            <td><a href="http://arxiv.org/abs/1311.2115">SFO</a></td>
+            <td>combine the advantages of SGD with advantages of L-BFGS</td>
+        </tr>
+		<tr>
+            <td><a href="http://jmlr.org/papers/v12/duchi11a.html">Adaptive Subgradient Methods for Online Learning and Stochastic Optimization</a></td>
+            <td>Adagrad - adaptive learning rate method</td>
+        </tr>
+		<tr>
+            <td><a href="http://arxiv.org/abs/1412.6980">Adam: A Method for Stochastic Optimization</a></td>
+            <td>Adam</td>
+        </tr>
+		<tr>
+            <td><a href="http://arxiv.org/abs/1312.6055">Unit Tests for Stochastic Optimization</a></td>
+            <td>a series of tests as a standardized benchmark for stochastic optimization</td>
+        </tr>
     </tbody>
 </table>
