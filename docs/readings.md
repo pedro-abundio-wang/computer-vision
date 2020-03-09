@@ -58,5 +58,17 @@ micro_nav: false
             <td><a href="http://www.cs.utoronto.ca/~ilya/pubs/ilya_sutskever_phd_thesis.pdf">Ilya Sutskever's thesis</a></td>
             <td>Nesterov Momentum</td>
         </tr>
+		<tr>
+            <td><a href="http://nlpers.blogspot.com/2014/10/hyperparameter-search-bayesian.html">Bayesian Hyperparameter Optimization</a></td>
+            <td></td>
+        </tr>
+		<tr>
+            <td><a href="https://www.youtube.com/watch?v=EK61htlw8hY">Model Ensembles Dark Knowledge from Geoff Hinton</a></td>
+            <td></td>
+        </tr>
+		<tr>
+            <td><a href="http://research.microsoft.com/pubs/192769/tricks-2012.pdf">SGD tips and tricks</a></td>
+            <td></td>
+        </tr>
     </tbody>
 </table>

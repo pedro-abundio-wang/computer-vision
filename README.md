@@ -1,6 +1,6 @@
 # computer-vision
 
-## Setup
+## Jupyter Setup
 
 **Installing Anaconda:**
 If you decide to work locally, we recommend using the free [Anaconda Python distribution](https://www.anaconda.com/download/), which provides an easy way for you to handle package dependencies. Please be sure to download the Python 3 version.
@@ -21,3 +21,9 @@ To exit, you can simply close the window, or run
 `source deactivate computer-vision`
 
 You may refer to [this page](https://conda.io/docs/user-guide/tasks/manage-environments.html) for more detailed instructions on managing virtual environments with Anaconda.
+
+## Jekyll Setup
+
+`JEKYLL_ENV=production jekyll build`
+
+`JEKYLL_ENV=production jekyll server --host 127.0.0.1 --port 4000 --detach`

@@ -48,6 +48,10 @@ micro_nav: false
             <td><a href="http://arxiv.org/abs/1306.0239">Automatic differentiation in machine learning</a></td>
             <td>backpropagation</td>
         </tr>
+		<tr>
+            <td><a href="http://yann.lecun.com/exdb/publis/pdf/lecun-98b.pdf">Efficient BackProp</a></td>
+            <td>Efficient BackProp from Yann LeCun</td>
+        </tr>
         <tr>
             <td id="" colspan="2" style="text-align:center; vertical-align:middle;background-color:#b7ffbf">
                 <strong>Activation</strong>
@@ -144,6 +148,19 @@ micro_nav: false
 		<tr>
             <td><a href="http://arxiv.org/abs/1312.6055">Unit Tests for Stochastic Optimization</a></td>
             <td>a series of tests as a standardized benchmark for stochastic optimization</td>
+        </tr>
+		<tr>
+            <td><a href="http://arxiv.org/pdf/1206.5533v2.pdf">Practical Recommendations for Gradient-Based Training of Deep Architectures</a></td>
+            <td></td>
+        </tr>
+		<tr>
+            <td id="" colspan="2" style="text-align:center; vertical-align:middle;background-color:#b7ffbf">
+                <strong>HyperParameter Search</strong>
+            </td>
+        </tr>
+        <tr>
+            <td><a href="http://www.jmlr.org/papers/volume13/bergstra12a/bergstra12a.pdf">Random Search for Hyper-Parameter Optimization</a></td>
+            <td></td>
         </tr>
     </tbody>
 </table>

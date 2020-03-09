@@ -21,7 +21,7 @@ page_nav:
         url: '#'
 ---
 
-In this section we'll walk through a complete implementation of a toy Neural Network in 2 dimensions. We'll first implement a simple linear classifier and then extend the code to a 2-layer Neural Network. As we'll see, this extension is surprisingly simple and very few changes are necessary.
+In this section we'll walk through a complete implementation of a toy Neural Network. We'll first implement a simple linear classifier and then extend the code to a 2-layer Neural Network. As we'll see, this extension is surprisingly simple and very few changes are necessary.
 
 ## Generating some data
 
@@ -31,13 +31,13 @@ Lets generate a classification dataset that is not easily linearly separable. Ou
 N = 100 # number of points per class
 D = 2 # dimensionality
 K = 3 # number of classes
-X = np.zeros((N*K,D)) # data matrix (each row = single example)
-y = np.zeros(N*K, dtype='uint8') # class labels
+X = np.zeros((N * K, D)) # data matrix (each row = single example)
+y = np.zeros(N * K, dtype='uint8') # class labels
 for j in xrange(K):
-  ix = range(N*j,N*(j+1))
-  r = np.linspace(0.0,1,N) # radius
-  t = np.linspace(j*4,(j+1)*4,N) + np.random.randn(N)*0.2 # theta
-  X[ix] = np.c_[r*np.sin(t), r*np.cos(t)]
+  ix = range(N * j, N * (j + 1))
+  r = np.linspace(0.0, 1, N) # radius
+  t = np.linspace(j * 4, (j + 1) * 4, N) + np.random.randn(N) * 0.2 # theta
+  X[ix] = np.c_[r * np.sin(t), r * np.cos(t)]
   y[ix] = j
 # lets visualize the data:
 plt.scatter(X[:, 0], X[:, 1], c=y, s=40, cmap=plt.cm.Spectral)
@@ -56,8 +56,8 @@ Lets first train a Softmax classifier on this classification dataset. As we saw 
 
 ```python
 # initialize parameters randomly
-W = 0.01 * np.random.randn(D,K)
-b = np.zeros((1,K))
+W = 0.01 * np.random.randn(D, K)
+b = np.zeros((1, K))
 ```
 
 Recall that we `D = 2` is the dimensionality and `K = 3` is the number of classes.
@@ -109,8 +109,8 @@ The array `correct_logprobs` is a 1D array of just the probabilities assigned to
 
 ```python
 # compute the loss: average cross-entropy loss and regularization
-data_loss = np.sum(correct_logprobs)/num_examples
-reg_loss = 0.5*reg*np.sum(W*W)
+data_loss = np.sum(correct_logprobs) / num_examples
+reg_loss = 0.5 * reg * np.sum(W * W)
 loss = data_loss + reg_loss
 ```
 
@@ -145,10 +145,10 @@ Lastly, we had that `scores = np.dot(X, W) + b`, so armed with the gradient on `
 ```python
 dW = np.dot(X.T, dscores)
 db = np.sum(dscores, axis=0, keepdims=True)
-dW += reg*W # don't forget the regularization gradient
+dW += reg * W # don't forget the regularization gradient
 ```
 
-Where we see that we have backpropped through the matrix multiply operation, and also added the contribution from the regularization. Note that the regularization gradient has the very simple form `reg*W` since we used the constant `0.5` for its loss contribution (i.e. \\(\frac{d}{dw} ( \frac{1}{2} \lambda w^2) = \lambda w\\). This is a common convenience trick that simplifies the gradient expression.
+Where we see that we have backpropped through the matrix multiply operation, and also added the contribution from the regularization. Note that the regularization gradient has the very simple form `reg * W` since we used the constant `0.5` for its loss contribution (i.e. \\(\frac{d}{dw} ( \frac{1}{2} \lambda w^2) = \lambda w\\). This is a common convenience trick that simplifies the gradient expression.
 
 ### Performing a parameter update
 
@@ -168,8 +168,8 @@ Putting all of this together, here is the full code for training a Softmax class
 #Train a Linear Classifier
 
 # initialize parameters randomly
-W = 0.01 * np.random.randn(D,K)
-b = np.zeros((1,K))
+W = 0.01 * np.random.randn(D, K)
+b = np.zeros((1, K))
 
 # some hyperparameters
 step_size = 1e-0
@@ -188,8 +188,8 @@ for i in xrange(200):
 
   # compute the loss: average cross-entropy loss and regularization
   correct_logprobs = -np.log(probs[range(num_examples),y])
-  data_loss = np.sum(correct_logprobs)/num_examples
-  reg_loss = 0.5*reg*np.sum(W*W)
+  data_loss = np.sum(correct_logprobs) / num_examples
+  reg_loss = 0.5 * reg * np.sum(W * W)
   loss = data_loss + reg_loss
   if i % 10 == 0:
     print "iteration %d: loss %f" % (i, loss)
@@ -203,7 +203,7 @@ for i in xrange(200):
   dW = np.dot(X.T, dscores)
   db = np.sum(dscores, axis=0, keepdims=True)
 
-  dW += reg*W # regularization gradient
+  dW += reg * W # regularization gradient
 
   # perform a parameter update
   W += -step_size * dW
@@ -255,10 +255,10 @@ Clearly, a linear classifier is inadequate for this dataset and we would like to
 ```python
 # initialize parameters randomly
 h = 100 # size of hidden layer
-W = 0.01 * np.random.randn(D,h)
-b = np.zeros((1,h))
-W2 = 0.01 * np.random.randn(h,K)
-b2 = np.zeros((1,K))
+W = 0.01 * np.random.randn(D, h)
+b = np.zeros((1, h))
+W2 = 0.01 * np.random.randn(h, K)
+b2 = np.zeros((1, K))
 ```
 
 The forward pass to compute scores now changes form:
@@ -306,10 +306,10 @@ We're done! We have the gradients `dW,db,dW2,db2` and can perform the parameter 
 ```python
 # initialize parameters randomly
 h = 100 # size of hidden layer
-W = 0.01 * np.random.randn(D,h)
-b = np.zeros((1,h))
-W2 = 0.01 * np.random.randn(h,K)
-b2 = np.zeros((1,K))
+W = 0.01 * np.random.randn(D, h)
+b = np.zeros((1, h))
+W2 = 0.01 * np.random.randn(h, K)
+b2 = np.zeros((1, K))
 
 # some hyperparameters
 step_size = 1e-0
@@ -328,9 +328,9 @@ for i in xrange(10000):
   probs = exp_scores / np.sum(exp_scores, axis=1, keepdims=True) # [N x K]
 
   # compute the loss: average cross-entropy loss and regularization
-  correct_logprobs = -np.log(probs[range(num_examples),y])
-  data_loss = np.sum(correct_logprobs)/num_examples
-  reg_loss = 0.5*reg*np.sum(W*W) + 0.5*reg*np.sum(W2*W2)
+  correct_logprobs = -np.log(probs[range(num_examples), y])
+  data_loss = np.sum(correct_logprobs) / num_examples
+  reg_loss = 0.5 * reg * np.sum(W * W) + 0.5 * reg * np.sum(W2 * W2)
   loss = data_loss + reg_loss
   if i % 1000 == 0:
     print "iteration %d: loss %f" % (i, loss)

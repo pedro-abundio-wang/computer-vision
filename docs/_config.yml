@@ -10,12 +10,12 @@ doks:
             text: Computer Vision
             image: false
         nav:
-            - item_name: Papers
-              item_url: '/papers'
             - item_name: Projects
               item_url: '/projects'
             - item_name: Blogs
               item_url: '/blogs'
+            - item_name: Papers
+              item_url: '/papers'
             - item_name: Readings
               item_url: '/readings'
     footer:
