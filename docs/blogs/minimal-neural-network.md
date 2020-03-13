@@ -130,7 +130,7 @@ $$
 \frac{\partial L_i }{ \partial f_k } = p_k - \mathbb{1}(y_i = k)
 $$
 
-Notice how elegant and simple this expression is. Suppose the probabilities we computed were `p = [0.2, 0.3, 0.5]`, and that the correct class was the middle one (with probability 0.3). According to this derivation the gradient on the scores would be `df = [0.2, -0.7, 0.5]`. Recalling what the interpretation of the gradient, we see that this result is highly intuitive: increasing the first or last element of the score vector `f` (the scores of the incorrect classes) leads to an *increased* loss (due to the positive signs +0.2 and +0.5) - and increasing the loss is bad, as expected. However, increasing the score of the correct class has *negative* influence on the loss. The gradient of -0.7 is telling us that increasing the correct class score would lead to a decrease of the loss \\(L_i\\), which makes sense.
+Notice how elegant and simple this expression is. Suppose the probabilities we computed were `p = [0.2, 0.3, 0.5]`, and that the correct class was the middle one (with probability 0.3). According to this derivation the gradient on the scores would be `df = [0.2, -0.7, 0.5]`. Recalling what the interpretation of the gradient, we see that this result is highly intuitive: increasing the first or last element of the score vector `f` (the scores of the incorrect classes) leads to an *increased* loss (due to the positive signs +0.2 and +0.5) and increasing the loss is bad, as expected. However, increasing the score of the correct class has *negative* influence on the loss. The gradient of -0.7 is telling us that increasing the correct class score would lead to a decrease of the loss \\(L_i\\), which makes sense.
 
 All of this boils down to the following code. Recall that `probs` stores the probabilities of all classes (as rows) for each example. To get the gradient on the scores, which we call `dscores`, we proceed as follows:
 
@@ -165,7 +165,7 @@ b += -step_size * db
 Putting all of this together, here is the full code for training a Softmax classifier with Gradient descent:
 
 ```python
-#Train a Linear Classifier
+# Train a Linear Classifier
 
 # initialize parameters randomly
 W = 0.01 * np.random.randn(D, K)
@@ -395,6 +395,3 @@ Which prints **98%**!. We can also visualize the decision boundaries:
 ## Summary
 
 We've worked with a toy 2D dataset and trained both a linear network and a 2-layer Neural Network. We saw that the change from a linear classifier to a Neural Network involves very few changes in the code. The score function changes its form (1 line of code difference), and the backpropagation changes its form (we have to perform one more round of backprop through the hidden layer to the first layer of the network).
-
-- You may want to look at this IPython Notebook code [rendered as HTML](http://cs.stanford.edu/people/karpathy/cs231nfiles/minimal_net.html).
-- Or download the [ipynb file](http://cs.stanford.edu/people/karpathy/cs231nfiles/minimal_net.ipynb)

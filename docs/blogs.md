@@ -43,7 +43,7 @@ grid_navigation:
       url: 'nn-learning-and-evaluation'
     - title: Minimal Neural Network
       excerpt:
-      cta: generating data, training a softmax linear classifier, initialize the parameters, compute the class scores, compute the loss, computing the analytic gradient with backpropagation, performing a parameter update, training a Neural Network
+      cta: generating data, softmax linear classifier, initialize the parameters, class scores, loss, analytic gradient, backpropagation, parameter update, Neural Network
       url: 'minimal-neural-network'
     - title: Convolutional Neural Networks
       excerpt:
