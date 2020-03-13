@@ -130,7 +130,7 @@ $$
 \frac{\partial L_i }{ \partial f_k } = p_k - \mathbb{1}(y_i = k)
 $$
 
-Notice how elegant and simple this expression is. Suppose the probabilities we computed were `p = [0.2, 0.3, 0.5]`, and that the correct class was the middle one (with probability 0.3). According to this derivation the gradient on the scores would be `df = [0.2, -0.7, 0.5]`. Recalling what the interpretation of the gradient, we see that this result is highly intuitive: increasing the first or last element of the score vector `f` (the scores of the incorrect classes) leads to an *increased* loss (due to the positive signs +0.2 and +0.5) and increasing the loss is bad, as expected. However, increasing the score of the correct class has *negative* influence on the loss. The gradient of -0.7 is telling us that increasing the correct class score would lead to a decrease of the loss \\(L_i\\), which makes sense.
+Notice how elegant and simple this expression is. Suppose the probabilities we computed were `p = [0.2, 0.3, 0.5]`, and that the correct class was the middle one (with probability 0.3). According to this derivation the gradient on the scores would be `df = [0.2, -0.7, 0.5]`. Recalling what the interpretation of the gradient, we see that this result is highly intuitive: increasing the first or last element of the score vector `f` (the scores of the incorrect classes) leads to an **increased** loss (due to the positive signs +0.2 and +0.5) and increasing the loss is bad, as expected. However, increasing the score of the correct class has **negative** influence on the loss. The gradient of -0.7 is telling us that increasing the correct class score would lead to a decrease of the loss \\(L_i\\), which makes sense.
 
 All of this boils down to the following code. Recall that `probs` stores the probabilities of all classes (as rows) for each example. To get the gradient on the scores, which we call `dscores`, we proceed as follows:
 
@@ -152,7 +152,7 @@ Where we see that we have backpropped through the matrix multiply operation, and
 
 ### Performing a parameter update
 
-Now that we've evaluated the gradient we know how every parameter influences the loss function. We will now perform a parameter update in the *negative* gradient direction to *decrease* the loss:
+Now that we've evaluated the gradient we know how every parameter influences the loss function. We will now perform a parameter update in the **negative** gradient direction to **decrease** the loss:
 
 ```python
 # perform a parameter update
@@ -286,7 +286,7 @@ However, unlike before we are not yet done, because `hidden_layer` is itself a f
 dhidden = np.dot(dscores, W2.T)
 ```
 
-Now we have the gradient on the outputs of the hidden layer. Next, we have to backpropagate the ReLU non-linearity. This turns out to be easy because ReLU during the backward pass is effectively a switch. Since \\(r = max(0, x)\\), we have that \\(\frac{dr}{dx} = 1(x > 0) \\). Combined with the chain rule, we see that the ReLU unit lets the gradient pass through unchanged if its input was greater than 0, but *kills it* if its input was less than zero during the forward pass. Hence, we can backpropagate the ReLU in place simply with:
+Now we have the gradient on the outputs of the hidden layer. Next, we have to backpropagate the ReLU non-linearity. This turns out to be easy because ReLU during the backward pass is effectively a switch. Since \\(r = max(0, x)\\), we have that \\(\frac{dr}{dx} = 1(x > 0) \\). Combined with the chain rule, we see that the ReLU unit lets the gradient pass through unchanged if its input was greater than 0, but **kills it** if its input was less than zero during the forward pass. Hence, we can backpropagate the ReLU in place simply with:
 
 ```python
 # backprop the ReLU non-linearity

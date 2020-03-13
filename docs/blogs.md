@@ -19,19 +19,19 @@ grid_navigation:
       url: 'image-classification'
     - title: Linear Classification
       excerpt:
-      cta: svm, softmax, parameteric approach, bias trick, hinge loss, cross-entropy loss, L2 regularization
+      cta: svm, softmax, parameteric approach, bias trick, hinge loss, cross entropy loss, L2 regularization
       url: 'linear-classify'
     - title: Optimization
       excerpt:
-      cta: sgd, optimization landscapes, local search, learning rate, gradient check
+      cta: sgd, optimization landscapes, random search, learning rate, gradient check
       url: 'optimization'
     - title: Backpropagation
       excerpt:
-      cta: chain rule interpretation, real-valued circuits, patterns in gradient flow
+      cta: chain rule, computation graph, patterns in gradient flow
       url: 'backpropagation'
     - title: Neural Networks - Setting Up The Architecture
       excerpt:
-      cta: model of a biological neuron, activation functions, neural net architecture, representational power
+      cta: biological neuron, activation functions, neural net architecture, representational power
       url: 'nn-setting-up-the-architecture'
     - title: Neural Networks - Setting Up The Data And The Loss
       excerpt:
@@ -39,15 +39,15 @@ grid_navigation:
       url: 'nn-setting-up-the-data-and-the-loss'
     - title: Neural Networks - Learning And Evaluation
       excerpt:
-      cta: gradient checks, sanity checks, babysitting the learning process, momentum, second-order methods, adagrad, rmsprop, hyperparameter optimization, model ensembles
+      cta: gradient checks, sanity checks, babysitting, momentum, newton methods, adagrad, rmsprop, hyperparameter optimization, model ensembles
       url: 'nn-learning-and-evaluation'
     - title: Minimal Neural Network
       excerpt:
-      cta: generating data, softmax linear classifier, initialize the parameters, class scores, loss, analytic gradient, backpropagation, parameter update, Neural Network
+      cta: generating data, softmax linear classifier, initialize parameters, class scores, loss, analytic gradient, backpropagation, parameter update, Neural Network
       url: 'minimal-neural-network'
     - title: Convolutional Neural Networks
       excerpt:
-      cta: architectures, convolution layers, pooling layers, layers, spatial arrangement, layer patterns, layer sizing patterns, AlexNet/ZFNet/VGGNet, computational considerations
+      cta: architectures, convolution layers, pooling layers, spatial arrangement, layer patterns, layer sizing patterns, AlexNet/ZFNet/VGGNet, computational considerations
       url: 'convolutional-networks'
     - title: Understanding And Visualizing Convolutional Neural Networks
       excerpt:
