@@ -13,8 +13,8 @@ micro_nav: false
 
 <table id="schedule" class="table table-bordered no-more-tables" style="width: 100%; font-size: 0.8em;">
     <colgroup>
-        <col style="width: 60%;">
-        <col style="width: 40%;">
+        <col style="width: 50%;">
+        <col style="width: 50%;">
     </colgroup>
     <thead class="active" style="background-color:#f9f9f9" align="left">
         <th>Readings</th>
@@ -76,7 +76,7 @@ micro_nav: false
         </tr>
         <tr>
             <td><a href="https://github.com/BVLC/caffe/blob/master/examples/net_surgery.ipynb">Net Surgery</a></td>
-            <td>efficiently apply the original ConvNet sliding windowns over the large-image but at a smaller stride</td>
+            <td>apply ConvNet sliding windowns over the large-image but at a smaller stride</td>
         </tr>
     </tbody>
 </table>
