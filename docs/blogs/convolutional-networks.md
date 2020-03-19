@@ -111,28 +111,32 @@ Note that sometimes the parameter sharing assumption may not make sense. This is
 
 **Numpy examples** To make the discussion above more concrete, lets express the same ideas but in code and with a specific example. Suppose that the input volume is a numpy array `X`. Then:
 
-- A *depth column* (or a *fibre*) at position `(x,y)` would be the activations `X[x,y,:]`.
-- A *depth slice*, or equivalently an *activation map* at depth `d` would be the activations `X[:,:,d]`.
+- A **depth column** at position `(x,y)` would be the activations `X[x,y,:]`.
+- A **depth slice**, or equivalently an **activation map** at depth `d` would be the activations `X[:,:,d]`.
 
-*Conv Layer Example*. Suppose that the input volume `X` has shape `X.shape: (11,11,4)`. Suppose further that we use no zero padding (\\(P = 0\\)), that the filter size is \\(F = 5\\), and that the stride is \\(S = 2\\). The output volume would therefore have spatial size (11-5)/2+1 = 4, giving a volume with width and height of 4. The activation map in the output volume (call it `V`), would then look as follows (only some of the elements are computed in this example):
+**Conv Layer Example** Suppose that the input volume `X` has shape `X.shape: (11,11,4)`. Suppose further that we use no zero padding (\\(P = 0\\)), that the filter size is \\(F = 5\\), and that the stride is \\(S = 2\\). The output volume would therefore have spatial size (11-5)/2+1 = 4, giving a volume with width and height of 4. The activation map in the output volume (call it `V`), would then look as follows (only some of the elements are computed in this example):
 
-- `V[0,0,0] = np.sum(X[:5,:5,:] * W0) + b0`
-- `V[1,0,0] = np.sum(X[2:7,:5,:] * W0) + b0`
-- `V[2,0,0] = np.sum(X[4:9,:5,:] * W0) + b0`
-- `V[3,0,0] = np.sum(X[6:11,:5,:] * W0) + b0`
+```
+V[0,0,0] = np.sum(X[:5,:5,:] * W0) + b0
+V[1,0,0] = np.sum(X[2:7,:5,:] * W0) + b0
+V[2,0,0] = np.sum(X[4:9,:5,:] * W0) + b0
+V[3,0,0] = np.sum(X[6:11,:5,:] * W0) + b0
+```
 
 Remember that in numpy, the operation `*` above denotes elementwise multiplication between the arrays. Notice also that the weight vector `W0` is the weight vector of that neuron and `b0` is the bias. Here, `W0` is assumed to be of shape `W0.shape: (5,5,4)`, since the filter size is 5 and the depth of the input volume is 4. Notice that at each point, we are computing the dot product as seen before in ordinary neural networks. Also, we see that we are using the same weight and bias (due to parameter sharing), and where the dimensions along the width are increasing in steps of 2 (i.e. the stride). To construct a second activation map in the output volume, we would have:
 
-- `V[0,0,1] = np.sum(X[:5,:5,:] * W1) + b1`
-- `V[1,0,1] = np.sum(X[2:7,:5,:] * W1) + b1`
-- `V[2,0,1] = np.sum(X[4:9,:5,:] * W1) + b1`
-- `V[3,0,1] = np.sum(X[6:11,:5,:] * W1) + b1`
-- `V[0,1,1] = np.sum(X[:5,2:7,:] * W1) + b1` (example of going along y)
-- `V[2,3,1] = np.sum(X[4:9,6:11,:] * W1) + b1` (or along both)
+```
+V[0,0,1] = np.sum(X[:5,:5,:] * W1) + b1
+V[1,0,1] = np.sum(X[2:7,:5,:] * W1) + b1
+V[2,0,1] = np.sum(X[4:9,:5,:] * W1) + b1
+V[3,0,1] = np.sum(X[6:11,:5,:] * W1) + b1
+V[0,1,1] = np.sum(X[:5,2:7,:] * W1) + b1    # example of going along y
+V[2,3,1] = np.sum(X[4:9,6:11,:] * W1) + b1  # or along both
+```
 
 where we see that we are indexing into the second depth dimension in `V` (at index 1) because we are computing the second activation map, and that a different set of parameters (`W1`) is now used. In the example above, we are for brevity leaving out some of the other operations the Conv Layer would perform to fill the other parts of the output array `V`. Additionally, recall that these activation maps are often followed elementwise through an activation function such as ReLU, but this is not shown here.
 
-**Summary**. To summarize, the Conv Layer:
+To summarize, the Conv Layer:
 
 - Accepts a volume of size \\(W_1 \times H_1 \times D_1\\)
 - Requires four hyperparameters:
@@ -147,17 +151,15 @@ where we see that we are indexing into the second depth dimension in `V` (at ind
 - With parameter sharing, it introduces \\(F \cdot F \cdot D_1\\) weights per filter, for a total of \\((F \cdot F \cdot D_1) \cdot K\\) weights and \\(K\\) biases.
 - In the output volume, the \\(d\\)-th depth slice (of size \\(W_2 \times H_2\\)) is the result of performing a valid convolution of the \\(d\\)-th filter over the input volume with a stride of \\(S\\), and then offset by \\(d\\)-th bias.
 
-A common setting of the hyperparameters is \\(F = 3, S = 1, P = 1\\). However, there are common conventions and rules of thumb that motivate these hyperparameters. See the [ConvNet architectures](#architectures) section below.
+A common setting of the hyperparameters is \\(F = 3, S = 1, P = 1\\). However, there are common conventions and rules of thumb that motivate these hyperparameters.
 
 **Convolution Demo**. Below is a running demo of a CONV layer. Since 3D volumes are hard to visualize, all the volumes (the input volume (in blue), the weight volumes (in red), the output volume (in green)) are visualized with each depth slice stacked in rows. The input volume is of size \\(W_1 = 5, H_1 = 5, D_1 = 3\\), and the CONV layer parameters are \\(K = 2, F = 3, S = 2, P = 1\\). That is, we have two filters of size \\(3 \times 3\\), and they are applied with a stride of 2. Therefore, the output volume size has spatial size (5 - 3 + 2)/2 + 1 = 3. Moreover, notice that a padding of \\(P = 1\\) is applied to the input volume, making the outer border of the input volume zero. The visualization below iterates over the output activations (green), and shows that each element is computed by elementwise multiplying the highlighted input (blue) with the filter (red), summing it up, and then offsetting the result by the bias.
 
-<div class="fig figcenter fighighlight">
-  <iframe src="/assets/conv-demo/index.html" width="100%" height="700px;" style="border:none;"></iframe>
-</div>
+{% include conv-demo.html %}
 
 **Implementation as Matrix Multiplication**. Note that the convolution operation essentially performs dot products between the filters and local regions of the input. A common implementation pattern of the CONV layer is to take advantage of this fact and formulate the forward pass of a convolutional layer as one big matrix multiply as follows:
 
-1. The local regions in the input image are stretched out into columns in an operation commonly called **im2col**. For example, if the input is [227x227x3] and it is to be convolved with 11x11x3 filters at stride 4, then we would take [11x11x3] blocks of pixels in the input and stretch each block into a column vector of size 11\*11\*3 = 363. Iterating this process in the input at stride of 4 gives (227-11)/4+1 = 55 locations along both width and height, leading to an output matrix `X_col` of *im2col* of size [363 x 3025], where every column is a stretched out receptive field and there are 55*55 = 3025 of them in total. Note that since the receptive fields overlap, every number in the input volume may be duplicated in multiple distinct columns.
+1. The local regions in the input image are stretched out into columns in an operation commonly called **im2col**. For example, if the input is [227x227x3] and it is to be convolved with 11x11x3 filters at stride 4, then we would take [11x11x3] blocks of pixels in the input and stretch each block into a column vector of size 11x11x3 = 363. Iterating this process in the input at stride of 4 gives (227-11)/4+1 = 55 locations along both width and height, leading to an output matrix `X_col` of **im2col** of size [363 x 3025], where every column is a stretched out receptive field and there are 55*55 = 3025 of them in total. Note that since the receptive fields overlap, every number in the input volume may be duplicated in multiple distinct columns.
 2. The weights of the CONV layer are similarly stretched out into rows. For example, if there are 96 filters of size [11x11x3] this would give a matrix `W_row` of size [96 x 363].
 3. The result of a convolution is now equivalent to performing one large matrix multiply `np.dot(W_row, X_col)`, which evaluates the dot product between every filter and every receptive field location. In our example, the output of this operation would be [96 x 3025], giving the output of the dot product of each filter at each location.
 4. The result must finally be reshaped back to its proper output dimension [55x55x96].
