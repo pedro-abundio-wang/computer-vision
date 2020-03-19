@@ -50,25 +50,33 @@ micro_nav: false
             <td><a href="https://cs.stanford.edu/people/karpathy/">ConvNetJS</a></td>
             <td></td>
         </tr>
-		<tr>
+        <tr>
             <td><a href="http://docs.oracle.com/cd/E19957-01/806-3568/ncg_goldberg.html">What Every Computer Scientist Should Know About Floating-Point Arithmetic</a></td>
             <td>numerical issues</td>
         </tr>
-		<tr>
+        <tr>
             <td><a href="http://www.cs.utoronto.ca/~ilya/pubs/ilya_sutskever_phd_thesis.pdf">Ilya Sutskever's thesis</a></td>
             <td>Nesterov Momentum</td>
         </tr>
-		<tr>
+        <tr>
             <td><a href="http://nlpers.blogspot.com/2014/10/hyperparameter-search-bayesian.html">Bayesian Hyperparameter Optimization</a></td>
             <td></td>
         </tr>
-		<tr>
+        <tr>
             <td><a href="https://www.youtube.com/watch?v=EK61htlw8hY">Model Ensembles Dark Knowledge from Geoff Hinton</a></td>
             <td></td>
         </tr>
-		<tr>
+        <tr>
             <td><a href="http://research.microsoft.com/pubs/192769/tricks-2012.pdf">SGD tips and tricks</a></td>
             <td></td>
+        </tr>
+        <tr>
+            <td><a href="http://code.google.com/p/cuda-convnet/wiki/LayerParams#Local_response_normalization_layer_(same_map)">local response normalization layer</a></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/BVLC/caffe/blob/master/examples/net_surgery.ipynb">Net Surgery</a></td>
+            <td>efficiently apply the original ConvNet sliding windowns over the large-image but at a smaller stride</td>
         </tr>
     </tbody>
 </table>

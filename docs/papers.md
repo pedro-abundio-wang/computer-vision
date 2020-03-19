@@ -162,5 +162,22 @@ micro_nav: false
             <td><a href="http://www.jmlr.org/papers/volume13/bergstra12a/bergstra12a.pdf">Random Search for Hyper-Parameter Optimization</a></td>
             <td></td>
         </tr>
+		<tr>
+            <td id="" colspan="2" style="text-align:center; vertical-align:middle;background-color:#b7ffbf">
+                <strong>Convolutional Neural Networks</strong>
+            </td>
+        </tr>
+        <tr>
+            <td><a href="http://arxiv.org/abs/1312.4400">Network in Network</a></td>
+            <td></td>
+        </tr>
+		<tr>
+            <td><a href="https://arxiv.org/abs/1511.07122">Multi-Scale Context Aggregation by Dilated Convolutions</a></td>
+            <td>Dilated convolutions</td>
+        </tr>
+		<tr>
+            <td><a href="http://arxiv.org/abs/1412.6806">Striving for Simplicity: The All Convolutional Net</a></td>
+            <td></td>
+        </tr>
     </tbody>
 </table>
