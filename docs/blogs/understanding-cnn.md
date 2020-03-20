@@ -29,7 +29,7 @@ Several approaches for understanding and visualizing Convolutional Networks have
 
 ### Visualizing the activations and first-layer weights
 
-**Layer Activations**. The most straight-forward visualization technique is to show the activations of the network during the forward pass. For ReLU networks, the activations usually start out looking relatively blobby and dense, but as the training progresses the activations usually become more sparse and localized. One dangerous pitfall that can be easily noticed with this visualization is that some activation maps may be all zero for many different inputs, which can indicate *dead* filters, and can be a symptom of high learning rates.
+**Layer Activations**. The most straight-forward visualization technique is to **show the activations** of the network during the forward pass. For ReLU networks, the activations usually start out looking relatively blobby and dense, but as the training progresses the activations usually become more sparse and localized. One dangerous pitfall that can be easily noticed with this visualization is that some activation maps may be all zero for many different inputs, which can indicate **dead** filters, and can be a symptom of high learning rates.
 
 {% include image.html description="Typical-looking activations on the first CONV layer of a trained AlexNet looking at a picture of a cat. Every box shows an activation map corresponding to some filter. Notice that the activations are sparse (most values are zero, in this visualization shown in black) and mostly local." image="blogs/understanding-cnn/act1.jpeg" caption="true"%}
 
