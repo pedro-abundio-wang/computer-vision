@@ -45,26 +45,22 @@ grid_navigation:
       excerpt:
       cta: generating data, softmax linear classifier, initialize parameters, class scores, loss, analytic gradient, backpropagation, parameter update, Neural Network
       url: 'minimal-neural-network'
+    - title: Implement Batch Normalization
+      excerpt:
+      cta: computational graph
+      url: 'implement-batch-norm'
     - title: Convolutional Neural Networks
       excerpt:
-      cta: architectures, convolution layers, pooling layers, spatial arrangement, layer patterns, layer sizing patterns, AlexNet/ZFNet/VGGNet, computational considerations
+      cta: architectures, convolution, pooling, spatial arrangement, layer pattern, Alex/ZF/VGG, computational consideration
       url: 'convolutional-networks'
     - title: Understanding And Visualizing Convolutional Neural Networks
       excerpt:
-      cta: tSNE embeddings, deconvnets, data gradients, fooling ConvNets, human comparisons
+      cta: tSNE embeddings, deconvolution, Occluding, Saliency Maps, data gradients, fooling ConvNets, human comparisons
       url: 'understanding-cnn'
     - title: Transfer Learning And Fine Tuning Convolutional Neural Networks
       excerpt:
       cta: read more
       url: 'transfer-learning'
-    - title: Implement Batch Normalization
-      excerpt:
-      cta: computational graph
-      url: 'implement-batch-norm'
-    - title: Efficient Batch Normalization
-      excerpt:
-      cta: calculus
-      url: 'efficient-batch-normalization'
     - title: Understanding Reinforcement Learning
       excerpt:
       cta: Markov Decision Processes, Policies, Value Functions, Bellman Equations

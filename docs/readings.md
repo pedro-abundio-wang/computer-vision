@@ -34,11 +34,11 @@ micro_nav: false
             <td><a href="http://people.csail.mit.edu/torralba/shortCourseRLOC/index.html">Recognizing and Learning Object Categories</a></td>
             <td>a short course of object categorization at ICCV 2005</td>
         </tr>
-		    <tr>
+        <tr>
             <td><a href="http://stanford.edu/~boyd/cvxbook/">Convex Optimization</a></td>
             <td>stanford convex optimization</td>
         </tr>
-		    <tr>
+        <tr>
             <td><a href="http://cs231n.stanford.edu/vecDerivs.pdf">Vectorized Backpropagation</a></td>
             <td>Vector, Matrix, and Tensor Derivatives</td>
         </tr>
@@ -77,6 +77,34 @@ micro_nav: false
         <tr>
             <td><a href="https://github.com/BVLC/caffe/blob/master/examples/net_surgery.ipynb">Net Surgery</a></td>
             <td>apply ConvNet sliding windowns over the large-image but at a smaller stride</td>
+        </tr>
+        <tr>
+            <td><a href="https://www.youtube.com/watch?v=u6aEYuemt0M">Deep Learning school</a></td>
+            <td>train a ConvNet from scratch</td>
+        </tr>
+        <tr>
+            <td><a href="http://www.image-net.org/challenges/LSVRC/2014/">ImageNet ILSVRC challenge</a></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td><a href="https://www.youtube.com/watch?v=1PGLj-uKT1w">ResNet Video</a></td>
+            <td>Kaiming's presentation video</td>
+        </tr>
+        <tr>
+            <td><a href="http://research.microsoft.com/en-us/um/people/kahe/ilsvrc15/ilsvrc2015_deep_residual_learning_kaiminghe.pdf">ResNet Slides</a></td>
+            <td>Kaiming's presentation slides</td>
+        </tr>
+        <tr>
+            <td><a href="https://github.com/soumith/convnet-benchmarks">benchmarks for CONV performance</a></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td><a href="http://torch.ch/blog/2016/02/04/resnets.html">State of the art ResNets in Torch7</a></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td><a href="http://cs.stanford.edu/people/karpathy/convnetjs/demo/cifar10.html">ConvNetJS CIFAR-10 demo</a></td>
+            <td></td>
         </tr>
     </tbody>
 </table>

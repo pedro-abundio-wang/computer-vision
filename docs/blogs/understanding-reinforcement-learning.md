@@ -21,9 +21,9 @@ page_nav:
         url: '#'
 ---
 
-[David Silver’s Youtube lecture series](https://youtu.be/2pWv7GOvuf0)
+[Video: David Silver’s Youtube lecture series](https://youtu.be/2pWv7GOvuf0)
 
-[Reinforcement Learning: An Introduction](http://incompleteideas.net/sutton/book/the-book-2nd.html)
+[Book: Reinforcement Learning: An Introduction](http://incompleteideas.net/sutton/book/the-book-2nd.html)
 
 ### Supervised vs Evaluative Learning
 

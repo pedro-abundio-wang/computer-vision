@@ -111,15 +111,6 @@ micro_nav: false
             <td><a href="">DropConnect</a></td>
             <td></td>
         </tr>
-        <tr>
-            <td id="" colspan="2" style="text-align:center; vertical-align:middle;background-color:#b7ffbf">
-                <strong>VGG</strong>
-            </td>
-        </tr>
-        <tr>
-            <td><a href="https://arxiv.org/abs/1409.1556">Very Deep Convolutional Networks for Large-Scale Image Recognition</a></td>
-            <td>vgg net</td>
-        </tr>
 		<tr>
             <td id="" colspan="2" style="text-align:center; vertical-align:middle;background-color:#b7ffbf">
                 <strong>Optimization</strong>
@@ -147,7 +138,7 @@ micro_nav: false
         </tr>
 		<tr>
             <td><a href="http://arxiv.org/abs/1312.6055">Unit Tests for Stochastic Optimization</a></td>
-            <td>a series of tests as a standardized benchmark for stochastic optimization</td>
+            <td>a standardized benchmark for stochastic optimization</td>
         </tr>
 		<tr>
             <td><a href="http://arxiv.org/pdf/1206.5533v2.pdf">Practical Recommendations for Gradient-Based Training of Deep Architectures</a></td>
@@ -168,14 +159,46 @@ micro_nav: false
             </td>
         </tr>
         <tr>
+            <td><a href="http://yann.lecun.com/exdb/publis/pdf/lecun-98.pdf">Gradient-Based Learning Applied to Document Recognition</a></td>
+            <td>LeNet-5</td>
+        </tr>
+        <tr>
+            <td><a href="http://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks">ImageNet Classification with Deep Convolutional Neural Networks</a></td>
+            <td>AlexNet</td>
+        </tr>
+        <tr>
+            <td><a href="http://arxiv.org/abs/1311.2901">Visualizing and Understanding Convolutional Networks</a></td>
+            <td>ZF Net - Improvement on AlexNet</td>
+        </tr>
+        <tr>
+            <td><a href="http://arxiv.org/abs/1409.4842">(Inception Network) Going Deeper with Convolutions</a></td>
+            <td>GoogLeNet</td>
+        </tr>
+        <tr>
+            <td><a href="http://arxiv.org/abs/1602.07261">Inception-ResNet and the Impact of Residual Connections on Learning</a></td>
+            <td>Inception-v4</td>
+        </tr>
+        <tr>
+            <td><a href="http://www.robots.ox.ac.uk/~vgg/research/very_deep/">Very Deep Convolutional Networks for Large-Scale Image Recognition</a></td>
+            <td>VGGNet</td>
+        </tr>
+        <tr>
+            <td><a href="http://arxiv.org/abs/1512.03385">(ResNet) Deep residual networks for image recognition</a></td>
+            <td>Residual Network</td>
+        </tr>
+        <tr>
+            <td><a href="https://arxiv.org/abs/1603.05027">Identity Mappings in Deep Residual Networks</a></td>
+            <td></td>
+        </tr>
+        <tr>
             <td><a href="http://arxiv.org/abs/1312.4400">Network in Network</a></td>
             <td></td>
         </tr>
-		<tr>
+        <tr>
             <td><a href="https://arxiv.org/abs/1511.07122">Multi-Scale Context Aggregation by Dilated Convolutions</a></td>
             <td>Dilated convolutions</td>
         </tr>
-		<tr>
+        <tr>
             <td><a href="http://arxiv.org/abs/1412.6806">Striving for Simplicity: The All Convolutional Net</a></td>
             <td></td>
         </tr>
