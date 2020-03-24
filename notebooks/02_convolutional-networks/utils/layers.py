@@ -22,15 +22,15 @@ def affine_forward(x, w, b):
     """
     out = None
     ###########################################################################
-    # TODO: Implement the affine forward pass. Store the result in out. You   #
-    # will need to reshape the input into rows.                               #
+    # TODO: Implement the affine forward pass. Store the result in out.     #
+    # You will need to reshape the input into rows                   #
     ###########################################################################
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
     N = x.shape[0]
     out = np.dot(x.reshape(N, -1), w) + b
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
     ###########################################################################
-    #                             END OF YOUR CODE                            #
+    #                             END OF YOUR CODE          #
     ###########################################################################
     cache = (x, w, b)
     return out, cache
@@ -55,7 +55,7 @@ def affine_backward(dout, cache):
     x, w, b = cache
     dx, dw, db = None, None, None
     ###########################################################################
-    # TODO: Implement the affine backward pass.                               #
+    # TODO: Implement the affine backward pass.                     #
     ###########################################################################
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
     N = x.shape[0]
@@ -64,7 +64,7 @@ def affine_backward(dout, cache):
     db = np.sum(dout, axis = 0)
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
     ###########################################################################
-    #                             END OF YOUR CODE                            #
+    #                             END OF YOUR CODE          #
     ###########################################################################
     return dx, dw, db
 
@@ -158,14 +158,14 @@ def batchnorm_forward(x, gamma, beta, bn_param):
     - out: of shape (N, D)
     - cache: A tuple of values needed in the backward pass
     """
+    N, D = x.shape
+    
     mode = bn_param['mode']
     eps = bn_param.get('eps', 1e-5)
     momentum = bn_param.get('momentum', 0.9)
-
-    N, D = x.shape
     running_mean = bn_param.get('running_mean', np.zeros(D, dtype=x.dtype))
     running_var = bn_param.get('running_var', np.zeros(D, dtype=x.dtype))
-
+    
     out, cache = None, None
     if mode == 'train':
         #######################################################################
@@ -188,18 +188,21 @@ def batchnorm_forward(x, gamma, beta, bn_param):
         # deviation (square root of variance) instead!                        # 
         # Referencing the original paper (https://arxiv.org/abs/1502.03167)   #
         # might prove to be helpful.                                          #
-        #######################################################################
+        #######################################################################        
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
         sample_mean = x.mean(axis = 0)
-        sample_var = x.var(axis = 0)
-        x_normalized = (x - sample_mean) / np.sqrt(sample_var + eps)
+        sample_corrected = x - sample_mean
+        sample_squarred = sample_corrected ** 2
+        sample_var = np.mean(sample_squarred, axis=0)
+        sample_std = np.sqrt(sample_var + eps)
+        sample_invert_std = 1 / sample_std
+        x_normalized = sample_corrected * sample_invert_std
         x_shifted = gamma * x_normalized + beta
+        cache = (gamma, x_normalized, sample_corrected, sample_invert_std, sample_std)
+        out = x_shifted
         
         running_mean = momentum * running_mean + (1 - momentum) * sample_mean
         running_var = momentum * running_var + (1 - momentum) * sample_var
-        
-        cache = (x, gamma, beta, x_normalized, sample_mean, sample_var, eps)
-        out = x_shifted
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
         #######################################################################
         #                           END OF YOUR CODE                          #
@@ -248,25 +251,37 @@ def batchnorm_backward(dout, cache):
     """
     dx, dgamma, dbeta = None, None, None
     ###########################################################################
-    # TODO: Implement the backward pass for batch normalization. Store the    #
-    # results in the dx, dgamma, and dbeta variables.                         #
-    # Referencing the original paper (https://arxiv.org/abs/1502.03167)       #
-    # might prove to be helpful.                                              #
+    # TODO: Implement the backward pass for batch normalization. Store the   #
+    # results in the dx, dgamma, and dbeta variables.                 #
+    # Referencing the original paper (https://arxiv.org/abs/1502.03167)     #
+    # might prove to be helpful.                               #
     ###########################################################################
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-    x, gamma, beta, x_normalized, sample_mean, sample_var, eps = cache
-    N = x.shape[0]
+    N, D = dout.shape
+    gamma, x_normalized, sample_corrected, sample_invert_std, sample_std = cache
     
-    dgamma = np.sum(dout * x_normalized, axis = 0)
-    dbeta = np.sum(dout, axis = 0)
-
-    dnorm = dout * gamma 
-    dsample_var = np.sum((x - sample_mean) * dnorm * (-0.5) * np.power(sample_var + eps, -1.5), axis=0)
-    dsample_mean = np.sum(-1/np.sqrt(sample_var + eps) * dnorm, axis=0) + dsample_var * np.mean(-2 * (x - sample_mean), axis=0)
-    dx = dnorm * 1/np.sqrt(sample_var + eps) + dsample_var * 2/N * (x - sample_mean) + dsample_mean * 1/N
+    # (D,)
+    dbeta = np.sum(dout, axis=0)
+    dgamma = np.sum(x_normalized * dout, axis=0)
+    # (N,D)
+    dx_normalized = dout * gamma
+    # (D,)
+    dsample_invert_std = np.sum(dx_normalized * sample_corrected, axis=0)
+    # (D,)
+    dsample_std = dsample_invert_std * -1 / (sample_std**2)
+    # (D,)
+    dsample_var = dsample_std * 1 / (2 * sample_std)
+    # (N,D)
+    dsample_squarred = dsample_var * np.ones((N, D)) / N
+    # (N,D)
+    dsample_corrected = dx_normalized * sample_invert_std + dsample_squarred * 2 * sample_corrected
+    # (D,)
+    dsample_mean = np.sum(dsample_corrected, axis=0) * -1
+    # (N,D)
+    dx = dsample_corrected * 1 + dsample_mean * np.ones((N, D)) / N
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
     ###########################################################################
-    #                             END OF YOUR CODE                            #
+    #                             END OF YOUR CODE          #
     ###########################################################################
 
     return dx, dgamma, dbeta
@@ -288,41 +303,22 @@ def batchnorm_backward_alt(dout, cache):
     """
     dx, dgamma, dbeta = None, None, None
     ###########################################################################
-    # TODO: Implement the backward pass for batch normalization. Store the    #
-    # results in the dx, dgamma, and dbeta variables.                         #
-    #                                                                         #
-    # After computing the gradient with respect to the centered inputs, you   #
-    # should be able to compute gradients with respect to the inputs in a     #
+    # TODO: Implement the backward pass for batch normalization. Store the   #
+    # results in the dx, dgamma, and dbeta variables                  #
+    #                                                 #
+    # After computing the gradient with respect to the centered inputs you   #
+    # should be able to compute gradients with respect to the inputs in a    #
     # single statement; our implementation fits on a single 80-character line.#
     ###########################################################################
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-    x, gamma, beta, x_normalized, sample_mean, sample_var, eps = cache
-    N = x.shape[0]
-    
-    dgamma = np.sum(dout * x_normalized, axis = 0)
-    dbeta = np.sum(dout, axis = 0)
-
-    dnorm = dout * gamma # (N, D) = (N, D) * (1, D)
-    std = np.sqrt(sample_var + eps) # (1, D)
-    
-    partial_norm_x = 1/std # (1, D)
-    partial_norm_mean = -1/std # (1, D)
-    partial_norm_std = -(x - sample_mean)/(std**2) # (N, D)
-    
-    partial_std_var = 0.5 * (sample_var + eps) ** (-0.5) # (1, D)
-    partial_var_mean = -2/N * np.sum(x - sample_mean, axis = 0) # (N, D)
-    partial_var_x = 2/N * np.sum(x - sample_mean, axis = 0) # (N, D)
-    partial_mean_x = 1/N
-    
-    dvar = dnorm * partial_norm_std * partial_std_var
-    print(dvar.shape)
-    dmean = dnorm * partial_norm_mean + dvar * partial_var_mean
-    print(dmean.shape)
-    dx = dnorm * partial_norm_x + dmean * partial_mean_x + dvar * partial_var_x
-    
+    gamma, x_normalized, sample_corrected, sample_invert_std, sample_std = cache
+    N, _ = dout.shape
+    dbeta = np.sum(dout, axis=0)
+    dgamma = np.sum(x_normalized * dout, axis=0)
+    dx = (gamma * sample_invert_std / N) * (N * dout - x_normalized * dgamma - dbeta)
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
     ###########################################################################
-    #                             END OF YOUR CODE                            #
+    #                             END OF YOUR CODE          #
     ###########################################################################
 
     return dx, dgamma, dbeta
