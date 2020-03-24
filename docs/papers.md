@@ -87,7 +87,7 @@ micro_nav: false
             <td>weights initialization</td>
         </tr>
 		<tr>
-            <td><a href="http://arxiv.org/abs/1502.03167">Batch Normalization</a></td>
+            <td><a href="http://arxiv.org/abs/1502.03167">Batch Normalization: Accelerating Deep Network Training by Reducing Internal Covariate Shift</a></td>
             <td></td>
         </tr>
 		<tr>
