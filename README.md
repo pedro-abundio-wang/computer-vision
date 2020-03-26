@@ -14,11 +14,13 @@ to create an environment called `computer-vision`.
 
 Then, to activate and enter the environment, run
 
-`source activate computer-vision`
+`conda activate computer-vision`
+
+`jupyter notebook --ip=127.0.0.1`
 
 To exit, you can simply close the window, or run
 
-`source deactivate computer-vision`
+`conda deactivate computer-vision`
 
 You may refer to [this page](https://conda.io/docs/user-guide/tasks/manage-environments.html) for more detailed instructions on managing virtual environments with Anaconda.
 

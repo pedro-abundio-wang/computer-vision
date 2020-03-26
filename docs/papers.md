@@ -91,6 +91,10 @@ micro_nav: false
             <td></td>
         </tr>
 		<tr>
+            <td><a href="https://arxiv.org/abs/1607.06450">Layer Normalization</a></td>
+            <td>Instead of normalizing over the batch, we normalize over the features</td>
+        </tr>
+		<tr>
             <td id="" colspan="2" style="text-align:center; vertical-align:middle;background-color:#b7ffbf">
                 <strong>Regularization</strong>
             </td>
