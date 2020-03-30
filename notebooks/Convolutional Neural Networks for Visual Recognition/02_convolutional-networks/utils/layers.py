@@ -480,7 +480,7 @@ def dropout_forward(x, dropout_param):
     output; this might be contrary to some sources, where it is referred to
     as the probability of dropping a neuron output.
     """
-    p, mode = dropout_param['p'], dropout_param['mode']
+    keep_prob, mode = dropout_param['p'], dropout_param['mode']
     if 'seed' in dropout_param:
         np.random.seed(dropout_param['seed'])
 
@@ -490,16 +490,18 @@ def dropout_forward(x, dropout_param):
     if mode == 'train':
         #######################################################################
         # TODO: Implement training phase forward pass for inverted dropout.   #
-        # Store the dropout mask in the mask variable.                        #
+        # Store the dropout mask in the mask variable.                 #
         #######################################################################
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-        mask = (np.random.rand(*x.shape) > p) / p
+        mask = (np.random.rand(*x.shape))
+        mask = mask < keep_prob
         # drop
-        x *= mask 
+        x = x * mask
+        x = x / keep_prob
         out = x
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
         #######################################################################
-        #                           END OF YOUR CODE                          #
+        #                           END OF YOUR CODE         #
         #######################################################################
     elif mode == 'test':
         #######################################################################
@@ -529,24 +531,134 @@ def dropout_backward(dout, cache):
     - cache: (dropout_param, mask) from dropout_forward.
     """
     dropout_param, mask = cache
-    mode = dropout_param['mode']
+    keep_prob, mode = dropout_param['p'], dropout_param['mode']
 
     dx = None
     if mode == 'train':
-        #######################################################################
+        ########################################################################
         # TODO: Implement training phase backward pass for inverted dropout   #
-        #######################################################################
+        ########################################################################
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
         
-        dx = mask
+        dx = dout * mask
+        dx = dx / keep_prob
 
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-        #######################################################################
-        #                          END OF YOUR CODE                           #
-        #######################################################################
+        ########################################################################
+        #                          END OF YOUR CODE           #
+        ########################################################################
     elif mode == 'test':
         dx = dout
     return dx
+
+
+def zero_pad(X, pad):
+    """
+    Pad with zeros all images of the dataset X. The padding is applied to the height and width of an image, 
+    as illustrated in Figure 1.
+    
+    Argument:
+    X -- python numpy array of shape (m, n_H, n_W, n_C) representing a batch of m images
+    pad -- integer, amount of padding around each image on vertical and horizontal dimensions
+    
+    Returns:
+    X_pad -- padded image of shape (m, n_H + 2*pad, n_W + 2*pad, n_C)
+    """
+    
+    ### START CODE HERE ### (≈ 1 line)
+    X_pad = np.pad(X, ((0, 0), (pad, pad), (pad, pad), (0, 0)), 'constant', constant_values=(0, 0))
+    ### END CODE HERE ###
+    
+    return X_pad
+
+
+def conv_single_step(a_slice_prev, W, b):
+    """
+    Apply one filter defined by parameters W on a single slice (a_slice_prev) of the output activation 
+    of the previous layer.
+    
+    Arguments:
+    a_slice_prev -- slice of input data of shape (f, f, n_C_prev)
+    W -- Weight parameters contained in a window - matrix of shape (f, f, n_C_prev)
+    b -- Bias parameters contained in a window - matrix of shape (1, 1, 1)
+    
+    Returns:
+    Z -- a scalar value, result of convolving the sliding window (W, b) on a slice x of the input data
+    """
+
+    ### START CODE HERE ### (≈ 2 lines of code)
+    # Element-wise product between a_slice and W. Add bias.
+    s = np.multiply(a_slice_prev, W) + b
+    # Sum over all entries of the volume s
+    Z = np.sum(s)
+    ### END CODE HERE ###
+
+    return Z
+
+
+def conv_forward(A_prev, W, b, hparameters):
+    """
+    Implements the forward propagation for a convolution function
+    
+    Arguments:
+    A_prev -- output activations of the previous layer, numpy array of shape (m, n_H_prev, n_W_prev, n_C_prev)
+    W -- Weights, numpy array of shape (f, f, n_C_prev, n_C)
+    b -- Biases, numpy array of shape (1, 1, 1, n_C)
+    hparameters -- python dictionary containing "stride" and "pad"
+        
+    Returns:
+    Z -- conv output, numpy array of shape (m, n_H, n_W, n_C)
+    cache -- cache of values needed for the conv_backward() function
+    """
+    
+    ### START CODE HERE ###
+    # Retrieve dimensions from A_prev's shape (≈1 line)  
+    (m, n_H_prev, n_W_prev, n_C_prev) = A_prev.shape
+    
+    # Retrieve dimensions from W's shape (≈1 line)
+    (f, f, n_C_prev, n_C) = W.shape
+    
+    # Retrieve information from "hparameters" (≈2 lines)
+    stride = hparameters["stride"]
+    pad = hparameters["pad"]
+    
+    # Compute the dimensions of the CONV output volume using the formula given above. Hint: use int() to floor. (≈2 lines)
+    n_H = int(1 + (n_H_prev - f + 2 * pad) / stride)     
+    
+    n_W = int(1 + (n_W_prev - f + 2 * pad) / stride)
+    
+    # Initialize the output volume Z with zeros. (≈1 line)
+    Z = np.zeros((m, n_H, n_W, n_C))
+    
+    # Create A_prev_pad by padding A_prev
+    A_prev_pad = zero_pad(A_prev, pad)
+    
+    for i in range(m):                               # loop over the batch of training examples
+        a_prev_pad = A_prev_pad[i, :, :, :]            # Select ith training example's padded activation
+        
+        for h in range(n_H):                           # loop over vertical axis of the output volume
+            for w in range(n_W):                         # loop over horizontal axis of the output volume
+                for c in range(n_C):                       # loop over channels (= #filters) of the output volume
+                    
+                    # Find the corners of the current "slice" (≈4 lines)
+                    vert_start = h * stride
+                    vert_end = vert_start + f
+                    horiz_start = w * stride
+                    horiz_end = horiz_start + f
+                    
+                    # Use the corners to define the (3D) slice of a_prev_pad (See Hint above the cell). (≈1 line)
+                    a_slice_prev = a_prev_pad[vert_start: vert_end, horiz_start: horiz_end, :]
+                    
+                    # Convolve the (3D) slice with the correct filter W and bias b, to get back one output neuron. (≈1 line)
+                    Z[i, h, w, c] = conv_single_step(a_slice_prev, W[:, :, :, c], b[:, :, :, c]) 
+    
+    # Making sure your output shape is correct
+    assert(Z.shape == (m, n_H, n_W, n_C))
+    
+    # Save information in "cache" for the backprop
+    cache = (A_prev, W, b, hparameters)
+    
+    return Z, cache
 
 
 def conv_forward_naive(x, w, b, conv_param):
@@ -579,16 +691,23 @@ def conv_forward_naive(x, w, b, conv_param):
     """
     out = None
     ###########################################################################
-    # TODO: Implement the convolutional forward pass.                         #
-    # Hint: you can use the function np.pad for padding.                      #
+    # TODO: Implement the convolutional forward pass.                 #
+    # Hint: you can use the function np.pad for padding.               #
     ###########################################################################
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-
-    pass
-
+    from numpy import moveaxis
+    # change channels first to channels last format
+    x_channel_last = moveaxis(x, 1, 3)
+    w = moveaxis(w, 1, 3)
+    w_channel_last = moveaxis(w, 0, 3)
+    b_channel_last = b.reshape(1, 1, 1, b.shape[0])
+    z_channel_last, _ = conv_forward(x_channel_last, w_channel_last, b_channel_last, conv_param)
+    # change channels last to channels first format
+    Z = moveaxis(z_channel_last, 3, 1)
+    out = Z
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
     ###########################################################################
-    #                             END OF YOUR CODE                            #
+    #                             END OF YOUR CODE          #
     ###########################################################################
     cache = (x, w, b, conv_param)
     return out, cache

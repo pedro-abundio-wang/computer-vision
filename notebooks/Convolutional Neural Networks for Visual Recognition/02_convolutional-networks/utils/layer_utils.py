@@ -62,6 +62,25 @@ def affine_bn_relu_backward(dout, cache):
     return dx, dw, db, dgamma, dbeta
 
 
+def affine_relu_dropout_forward(x, w, b, dropout_param):
+    a, fc_cache = affine_forward(x, w, b)
+    out, relu_cache = relu_forward(a)
+    out, drop_cache = dropout_forward(out, dropout_param)
+    cache = (fc_cache, relu_cache, drop_cache)
+    return out, cache
+
+
+def affine_relu_dropout_backward(dout, cache):
+    """
+    Backward pass for the affine-relu convenience layer
+    """
+    fc_cache, relu_cache, drop_cache = cache
+    dout = dropout_backward(dout, drop_cache)
+    da = relu_backward(dout, relu_cache)
+    dx, dw, db = affine_backward(da, fc_cache)
+    return dx, dw, db
+
+
 def affine_relu_forward(x, w, b):
     """
     Convenience layer that perorms an affine transform followed by a ReLU
