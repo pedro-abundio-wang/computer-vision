@@ -108,6 +108,10 @@ micro_nav: false
             <td>dropout</td>
         </tr>
 		<tr>
+            <td><a href="https://arxiv.org/abs/1207.0580">Improving neural networks by preventing co-adaptation of feature detectors</a></td>
+            <td></td>
+        </tr>
+		<tr>
             <td><a href="http://papers.nips.cc/paper/4882-dropout-training-as-adaptive-regularization.pdf">Dropout Training as Adaptive Regularization</a></td>
             <td>dropout relation to the other regularization techniques</td>
         </tr>
