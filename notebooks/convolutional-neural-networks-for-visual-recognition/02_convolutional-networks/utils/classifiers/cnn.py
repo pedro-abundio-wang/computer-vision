@@ -41,17 +41,17 @@ class ThreeLayerConvNet(object):
         ############################################################################
         # TODO: Initialize weights and biases for the three-layer convolutional    #
         # network. Weights should be initialized from a Gaussian centered at 0.0   #
-        # with standard deviation equal to weight_scale; biases should be          #
-        # initialized to zero. All weights and biases should be stored in the      #
-        #  dictionary self.params. Store weights and biases for the convolutional  #
-        # layer using the keys 'W1' and 'b1'; use keys 'W2' and 'b2' for the       #
+        # with standard deviation equal to weight_scale; biases should be        #
+        # initialized to zero. All weights and biases should be stored in the     #
+        #  dictionary self.params. Store weights and biases for the convolutional   #
+        # layer using the keys 'W1' and 'b1'; use keys 'W2' and 'b2' for the      #
         # weights and biases of the hidden affine layer, and keys 'W3' and 'b3'    #
-        # for the weights and biases of the output affine layer.                   #
-        #                                                                          #
-        # IMPORTANT: For this assignment, you can assume that the padding          #
-        # and stride of the first convolutional layer are chosen so that           #
-        # **the width and height of the input are preserved**. Take a look at      #
-        # the start of the loss() function to see how that happens.                #                           
+        # for the weights and biases of the output affine layer.              #
+        #                                                  #
+        # IMPORTANT: For this assignment, you can assume that the padding        #
+        # and stride of the first convolutional layer are chosen so that         #
+        # **the width and height of the input are preserved**. Take a look at     #
+        # the start of the loss() function to see how that happens.            #                           
         ############################################################################
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
         self.params["W1"] = weight_scale * np.random.randn(num_filters, 3, filter_size, filter_size)
