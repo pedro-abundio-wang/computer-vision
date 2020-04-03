@@ -8,7 +8,7 @@ from scipy.misc import imread
 import platform
 
 def load_pickle(f):
-    return  pickle.load(f, encoding='latin1')
+    return pickle.load(f, encoding='latin1')
 
 def load_CIFAR_batch(filename):
     """ load single batch of cifar """
@@ -36,28 +36,51 @@ def load_CIFAR10(ROOT):
     return Xtr, Ytr, Xte, Yte
 
 
-def get_CIFAR10_data(num_training=49000, num_validation=1000, num_test=1000,
-                     subtract_mean=True):
+def get_CIFAR10_data(cifar10_dir, num_training=49000, num_validation=1000, num_test=10000,
+                     subtract_mean=True, channels_first=True):
     """
     Load the CIFAR-10 dataset from disk and perform preprocessing to prepare
-    it for classifiers. These are the same steps as we used for the SVM, but
-    condensed to a single function.
+    it for classifiers.
     """
+    # Cleaning up variables to prevent loading data multiple times (which may cause memory issue)
+    try:
+        del X_train, y_train
+        print('Clear previously loaded train data.')
+    except:
+        pass
+    
+    # Cleaning up variables to prevent loading data multiple times (which may cause memory issue)
+    try:
+        del X_val, y_val
+        print('Clear previously loaded validation data.')
+    except:
+        pass   
+    
+    # Cleaning up variables to prevent loading data multiple times (which may cause memory issue)
+    try:
+        del X_test, y_test
+        print('Clear previously loaded test data.')
+    except:
+        pass    
+    
     # Load the raw CIFAR-10 data
-    cifar10_dir = 'utils/datasets/cifar-10-batches-py'
     X_train, y_train, X_test, y_test = load_CIFAR10(cifar10_dir)
 
-    # Subsample the data
+    # Subsample the validation data
     mask = list(range(num_training, num_training + num_validation))
     X_val = X_train[mask]
     y_val = y_train[mask]
+    
+    # Subsample the train data
     mask = list(range(num_training))
     X_train = X_train[mask]
     y_train = y_train[mask]
+
+    # Subsample the test data
     mask = list(range(num_test))
     X_test = X_test[mask]
     y_test = y_test[mask]
-
+    
     # Normalize the data: subtract the mean image
     if subtract_mean:
         mean_image = np.mean(X_train, axis=0)
@@ -66,9 +89,10 @@ def get_CIFAR10_data(num_training=49000, num_validation=1000, num_test=1000,
         X_test -= mean_image
 
     # Transpose so that channels come first
-    X_train = X_train.transpose(0, 3, 1, 2).copy()
-    X_val = X_val.transpose(0, 3, 1, 2).copy()
-    X_test = X_test.transpose(0, 3, 1, 2).copy()
+    if channels_first:
+        X_train = X_train.transpose(0, 3, 1, 2).copy()
+        X_val = X_val.transpose(0, 3, 1, 2).copy()
+        X_test = X_test.transpose(0, 3, 1, 2).copy()
 
     # Package data into a dictionary
     return {

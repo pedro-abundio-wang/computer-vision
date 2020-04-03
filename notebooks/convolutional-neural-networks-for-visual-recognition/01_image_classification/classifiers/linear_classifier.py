@@ -3,8 +3,8 @@ from __future__ import print_function
 from builtins import range
 from builtins import object
 import numpy as np
-from utils.classifiers.linear_svm import *
-from utils.classifiers.softmax import *
+from classifiers.linear_svm import *
+from classifiers.softmax import *
 from past.builtins import xrange
 
 
