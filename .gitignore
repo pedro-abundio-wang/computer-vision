@@ -136,5 +136,5 @@ dmypy.json
 **/tiny-100-A-pretrained/*
 **/cat-dog-panda/*
 **/datasets/*
-
+**/*.hdf5
 

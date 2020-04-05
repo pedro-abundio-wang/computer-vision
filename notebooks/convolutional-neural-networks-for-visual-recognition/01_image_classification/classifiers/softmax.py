@@ -82,7 +82,6 @@ def softmax_loss_vectorized(W, X, y, reg):
     correct_class_probs = probs[np.arange(probs.shape[0]),y]
     loss += np.mean(-np.log(correct_class_probs))
     loss += reg * np.sum(W * W)
-    
     #############################################################################
     # Implement a vectorized version of the gradient for the structured softmax #
     # loss, storing the result in dW.                                           #

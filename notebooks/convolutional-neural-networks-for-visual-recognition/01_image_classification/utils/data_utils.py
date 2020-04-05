@@ -36,8 +36,7 @@ def load_CIFAR10(ROOT):
     return Xtr, Ytr, Xte, Yte
 
 
-def get_CIFAR10_data(cifar10_dir, num_training=49000, num_validation=1000, num_test=10000,
-                     subtract_mean=True, channels_first=True):
+def get_CIFAR10_data(cifar10_dir, num_training=49000, num_dev=5000, num_validation=1000, num_test=10000, channels_first=False):
     """
     Load the CIFAR-10 dataset from disk and perform preprocessing to prepare
     it for classifiers.
@@ -76,27 +75,27 @@ def get_CIFAR10_data(cifar10_dir, num_training=49000, num_validation=1000, num_t
     X_train = X_train[mask]
     y_train = y_train[mask]
 
+    # Subsample the dev data
+    mask = np.random.choice(num_training, num_dev, replace=False)
+    X_dev = X_train[mask]
+    y_dev = y_train[mask]
+    
     # Subsample the test data
     mask = list(range(num_test))
     X_test = X_test[mask]
     y_test = y_test[mask]
-    
-    # Normalize the data: subtract the mean image
-    if subtract_mean:
-        mean_image = np.mean(X_train, axis=0)
-        X_train -= mean_image
-        X_val -= mean_image
-        X_test -= mean_image
 
     # Transpose so that channels come first
     if channels_first:
         X_train = X_train.transpose(0, 3, 1, 2).copy()
+        X_dev = X_dev.transpose(0, 3, 1, 2).copy()
         X_val = X_val.transpose(0, 3, 1, 2).copy()
         X_test = X_test.transpose(0, 3, 1, 2).copy()
 
     # Package data into a dictionary
     return {
       'X_train': X_train, 'y_train': y_train,
+      'X_dev': X_dev, 'y_dev': y_dev,
       'X_val': X_val, 'y_val': y_val,
       'X_test': X_test, 'y_test': y_test,
     }
