@@ -76,6 +76,7 @@ def get_CIFAR10_data(cifar10_dir, num_training=49000, num_dev=5000, num_validati
     y_train = y_train[mask]
 
     # Subsample the dev data
+    np.random.seed(1)
     mask = np.random.choice(num_training, num_dev, replace=False)
     X_dev = X_train[mask]
     y_dev = y_train[mask]

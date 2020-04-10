@@ -67,20 +67,22 @@ def svm_loss_vectorized(W, X, y, reg):
     """
     loss = 0.0
     dW = np.zeros(W.shape) # initialize the gradient as zero
-
+    num_train = X.shape[0]
     #############################################################################
     # TODO:                                                                     #
     # Implement a vectorized version of the structured SVM loss, storing the    #
     # result in loss.                                                           #
     #############################################################################
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-    num_train = X.shape[0]
     scores = np.dot(X, W)
+    
     correct_scores = scores[np.arange(scores.shape[0]),y]
     margins = np.maximum(0, scores - correct_scores.reshape(-1,1) + 1)
     margins[np.arange(scores.shape[0]),y] = 0
-    loss += np.mean(np.sum(margins, axis=1))
-    loss += reg * np.sum(W * W)
+    
+    data_loss = np.mean(np.sum(margins, axis=1))
+    reg_loss = reg * np.sum(W * W)
+    loss = data_loss + reg_loss
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
     #############################################################################
@@ -93,11 +95,15 @@ def svm_loss_vectorized(W, X, y, reg):
     # loss.                                                                     #
     #############################################################################
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-    masks = margins
-    masks[margins > 0] = 1
-    loss_count = np.sum(masks, axis=1)
-    masks[np.arange(masks.shape[0]), y] = -loss_count.T
-    dW = np.dot(X.T, masks)
+    dmargins = margins
+    dmargins[margins > 0] = 1
+    
+    loss_count = np.sum(dmargins, axis=1)
+    dmargins[np.arange(dmargins.shape[0]), y] = -loss_count.T
+    dscores = dmargins
+    
+    dW = np.dot(X.T, dscores)
+    
     # Average
     dW /= num_train
     # Regularize
