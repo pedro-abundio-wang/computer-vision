@@ -95,8 +95,8 @@ def svm_loss_vectorized(W, X, y, reg):
     # loss.                                                                     #
     #############################################################################
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
+    margins[margins > 0] = 1
     dmargins = margins
-    dmargins[margins > 0] = 1
     
     loss_count = np.sum(dmargins, axis=1)
     dmargins[np.arange(dmargins.shape[0]), y] = -loss_count.T

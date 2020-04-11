@@ -86,9 +86,10 @@ def softmax_loss_vectorized(W, X, y, reg):
     # Implement a vectorized version of the gradient for the structured softmax #
     # loss, storing the result in dW.                                           #
     #############################################################################
-    masks = probs
-    masks[np.arange(masks.shape[0]),y] += -1
-    dW = np.dot(X.T, masks)
+    probs[np.arange(probs.shape[0]),y] += -1
+    dscores = probs
+    
+    dW = np.dot(X.T, dscores)
     dW /= num_train
     dW += 2 * reg * W
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****

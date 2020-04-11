@@ -82,7 +82,7 @@ class TwoLayerNet(object):
         Z1 = np.dot(X, W1) + b1
         A1 = np.maximum(0, Z1)
         Z2 = np.dot(A1, W2) + b2
-        A2 = np.exp(Z2) / np.sum(np.exp(Z2), axis = 1).reshape(-1,1)
+        A2 = np.exp(Z2) / np.sum(np.exp(Z2), axis=1).reshape(-1,1)
         
         scores = Z2
         probs = A2
@@ -118,16 +118,19 @@ class TwoLayerNet(object):
         # grads['W1'] should store the gradient on W1, and be a matrix of same size #
         #############################################################################
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-        masks = probs
-        masks[np.arange(masks.shape[0]),y] += -1
-        dZ2 = masks
+        probs[np.arange(probs.shape[0]),y] += -1
+        dscores = probs
+        
+        dZ2 = dscores
         grads['W2'] += np.dot(A1.T, dZ2)
         grads['b2'] += np.sum(dZ2, axis = 0)
         
         dA1 = np.dot(dZ2, W2.T)
+        
         relu_masks = A1
         relu_masks[A1 > 0] = 1
         dZ1 = dA1 * relu_masks
+        
         grads['W1'] += np.dot(X.T, dZ1)
         grads['b1'] += np.sum(dZ1, axis = 0)
         
@@ -242,12 +245,8 @@ class TwoLayerNet(object):
         # TODO: Implement this function; it should be VERY simple!                #
         ###########################################################################
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-        Z1 = np.dot(X, self.params['W1']) + self.params['b1']
-        A1 = np.maximum(0, Z1)
-        Z2 = np.dot(A1, self.params['W2']) + self.params['b2']
-        A2 = np.exp(Z2) / np.sum(np.exp(Z2), axis = 1).reshape(-1,1)
-        scores = Z2
-        probs = A2
+        scores = self.loss(X)
+        probs = np.exp(scores) / np.sum(np.exp(scores), axis=1).reshape(-1,1)
         y_pred = np.argmax(probs, axis = 1)
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
