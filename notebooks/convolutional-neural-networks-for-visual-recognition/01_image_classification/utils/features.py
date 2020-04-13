@@ -16,9 +16,9 @@ def extract_features(imgs, feature_fns, verbose=False):
     a single matrix.
 
     Inputs:
-    - imgs: N x H X W X C array of pixel data for N images.
+    - imgs: N x H x W x C array of pixel data for N images.
     - feature_fns: List of k feature functions. The ith feature function should
-      take as input an H x W x D array and return a (one-dimensional) array of
+      take as input an H x W x C array and return a (one-dimensional) array of
       length F_i.
     - verbose: Boolean; if true, print progress.
 
@@ -52,7 +52,7 @@ def extract_features(imgs, feature_fns, verbose=False):
             next_idx = idx + feature_dim
             imgs_features[i, idx:next_idx] = feature_fn(imgs[i].squeeze())
             idx = next_idx
-        if verbose and i % 1000 == 999:
+        if verbose and (i+1) % 1000 == 0:
             print('Done extracting features for %d / %d images' % (i+1, num_images))
 
     return imgs_features
@@ -113,10 +113,8 @@ def hog_feature(im):
     for i in range(orientations):
         # create new integral image for this orientation
         # isolate orientations in this range
-        temp_ori = np.where(grad_ori < 180 / orientations * (i + 1),
-                            grad_ori, 0)
-        temp_ori = np.where(grad_ori >= 180 / orientations * i,
-                            temp_ori, 0)
+        temp_ori = np.where(grad_ori < 180 / orientations * (i + 1), grad_ori, 0)
+        temp_ori = np.where(grad_ori >= 180 / orientations * i, temp_ori, 0)
         # select magnitudes for those orientations
         cond2 = temp_ori > 0
         temp_mag = np.where(cond2, grad_mag, 0)
