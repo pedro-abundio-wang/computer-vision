@@ -78,19 +78,26 @@ def softmax_loss_vectorized(W, X, y, reg):
     # the result in loss.                                                       #
     #############################################################################
     scores = np.dot(X, W)
-    probs = np.exp(scores) / np.sum(np.exp(scores), axis = 1).reshape(-1,1)
-    correct_class_probs = probs[np.arange(probs.shape[0]),y]
-    loss += np.mean(-np.log(correct_class_probs))
-    loss += reg * np.sum(W * W)
+    
+    shifted_logits = score - np.max(score, axis=1, keepdims=True)
+    denominator = np.sum(np.exp(shifted_logits), axis=1, keepdims=True)
+    log_probs = shifted_logits - np.log(denominator)
+    probs = np.exp(log_probs)
+    
+    data_loss = np.mean(-log_probs[np.arange(num_train), y])
+    reg_loss = reg * np.sum(W * W)
+    loss = data_loss + reg_loss
     #############################################################################
     # Implement a vectorized version of the gradient for the structured softmax #
     # loss, storing the result in dW.                                           #
     #############################################################################
-    probs[np.arange(probs.shape[0]),y] += -1
-    dscores = probs
-    
+    dscore = probs.copy()
+    dscore[np.arange(num_train), y] += -1
+
     dW = np.dot(X.T, dscores)
+    # Average
     dW /= num_train
+    # Regularize
     dW += 2 * reg * W
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 

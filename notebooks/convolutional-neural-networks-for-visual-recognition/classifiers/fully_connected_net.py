@@ -39,13 +39,13 @@ class TwoLayerNet(object):
         self.reg = reg
 
         #############################################################################
-        # TODO: Initialize the weights and biases of the two-layer net. Weights    #
-        # should be initialized from a Gaussian centered at 0.0 with           #
-        # standard deviation equal to weight_scale and biases should be         #
-        # initialized to zero. All weights and biases should be stored in the     #
-        # dictionary self.params, with first layer weights                  #
-        # and biases using the keys 'W1' and 'b1' and second layer             #
-        # weights and biases using the keys 'W2' and 'b2'.                  #
+        # TODO: Initialize the weights and biases of the two-layer net. Weights     #
+        # should be initialized from a Gaussian centered at 0.0 with                #
+        # standard deviation equal to weight_scale and biases should be             #
+        # initialized to zero. All weights and biases should be stored in the       #
+        # dictionary self.params, with first layer weights                          #
+        # and biases using the keys 'W1' and 'b1' and second layer                  #
+        # weights and biases using the keys 'W2' and 'b2'.                          #
         #############################################################################
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
         self.params["W1"] = weight_scale * np.random.randn(input_dim, hidden_dim)
@@ -119,7 +119,7 @@ class TwoLayerNet(object):
         
         dA2 = dscores
         dA1, dW2, db2 = affine_backward(dA2, cache2)
-        dx, dW1, db1 = affine_relu_backward(dA1, cache1)
+        dX, dW1, db1 = affine_relu_backward(dA1, cache1)
         
         dW1 += reg * W1
         dW2 += reg * W2
@@ -185,16 +185,16 @@ class FullyConnectedNet(object):
         self.params = {}
 
         ############################################################################
-        # TODO: Initialize the parameters of the network, storing all values in   #
+        # TODO: Initialize the parameters of the network, storing all values in    #
         # the self.params dictionary. Store weights and biases for the first layer #
         # in W1 and b1; for the second layer use W2 and b2, etc. Weights should be #
-        # initialized from a normal distribution centered at 0 with standard     #
-        # deviation equal to weight_scale. Biases should be initialized to zero   #
-        #                                                  #
+        # initialized from a normal distribution centered at 0 with standard       #
+        # deviation equal to weight_scale. Biases should be initialized to zero    #
+        #                                                                          #
         # When using batch normalization, store scale and shift parameters for the #
-        # first layer in gamma1 and beta1; for the second layer use gamma2 and    #
-        # beta2, etc. Scale parameters should be initialized to ones and shift    #
-        # parameters should be initialized to zeros.                     #
+        # first layer in gamma1 and beta1; for the second layer use gamma2 and     #
+        # beta2, etc. Scale parameters should be initialized to ones and shift     #
+        # parameters should be initialized to zeros.                               #
         ############################################################################
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
         layers = []
@@ -208,7 +208,7 @@ class FullyConnectedNet(object):
             self.params["b" + str(l + 1)] = np.zeros(layers[l + 1])
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
         #############################################################################
-        #                             END OF YOUR CODE           #
+        #                             END OF YOUR CODE                              #
         #############################################################################
 
         # When using dropout we need to pass a dropout_param dictionary to each
@@ -261,15 +261,15 @@ class FullyConnectedNet(object):
         scores = None
         ############################################################################
         # TODO: Implement the forward pass for the fully-connected net, computing  #
-        # the class scores for X and storing them in the scores variable.       #
-        #                                                  #
-        # When using dropout, you'll need to pass self.dropout_param to each     #
-        # dropout forward pass.                                   #
-        #                                                  #
+        # the class scores for X and storing them in the scores variable.          #
+        #                                                                          #
+        # When using dropout, you'll need to pass self.dropout_param to each       #
+        # dropout forward pass.                                                    #
+        #                                                                          #
         # When using batch normalization, you'll need to pass self.bn_params[0] to #
-        # the forward pass for the first batch normalization layer, pass        #
+        # the forward pass for the first batch normalization layer, pass           #
         # self.bn_params[1] to the forward pass for the second batch normalization #
-        # layer, etc.                                          #
+        # layer, etc.                                                              #
         ############################################################################
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
         A = X
@@ -314,14 +314,14 @@ class FullyConnectedNet(object):
         # TODO: Implement the backward pass for the fully-connected net. Store the #
         # loss in the loss variable and gradients in the grads dictionary. Compute #
         # data loss using softmax, and make sure that grads[k] holds the gradients #
-        # for self.params[k]. Don't forget to add L2 regularization           #
-        #                                                  #
-        # When using batch/layer normalization, you dont need to regularize the   #
-        # scale and shift parameters.                               #
-        #                                                  #
+        # for self.params[k]. Don't forget to add L2 regularization                #
+        #                                                                          #
+        # When using batch/layer normalization, you dont need to regularize the    #
+        # scale and shift parameters.                                              #
+        #                                                                          #
         # NOTE: To ensure that your implementation matches ours and you pass the   #
-        # automated tests, make sure that your L2 regularization includes a factor  #
-        # of 0.5 to simplify the expression for the gradient.                #
+        # automated tests, make sure that your L2 regularization includes a factor #
+        # of 0.5 to simplify the expression for the gradient.                      #
         ############################################################################
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
         data_loss, dscores = softmax_loss(scores, y)
@@ -368,7 +368,7 @@ class FullyConnectedNet(object):
 
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
         ############################################################################
-        #                             END OF YOUR CODE           #
+        #                             END OF YOUR CODE                             #
         ############################################################################
 
         return loss, grads

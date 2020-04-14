@@ -76,9 +76,9 @@ def svm_loss_vectorized(W, X, y, reg):
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
     scores = np.dot(X, W)
     
-    correct_scores = scores[np.arange(scores.shape[0]),y]
-    margins = np.maximum(0, scores - correct_scores.reshape(-1,1) + 1)
-    margins[np.arange(scores.shape[0]),y] = 0
+    correct_scores = scores[np.arange(num_train), y]
+    margins = np.maximum(0, scores - correct_scores.reshape(-1,1) + 1.0)
+    margins[np.arange(num_train),y] = 0
     
     data_loss = np.mean(np.sum(margins, axis=1))
     reg_loss = reg * np.sum(W * W)
@@ -95,15 +95,12 @@ def svm_loss_vectorized(W, X, y, reg):
     # loss.                                                                     #
     #############################################################################
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-    margins[margins > 0] = 1
-    dmargins = margins
-    
-    loss_count = np.sum(dmargins, axis=1)
-    dmargins[np.arange(dmargins.shape[0]), y] = -loss_count.T
-    dscores = dmargins
+    loss_count = np.sum(margins > 0, axis=1)
+    dscore = np.zeros_like(score)
+    dscore[margins > 0] = 1
+    dscore[np.arange(num_train), y] -= loss_count.T
     
     dW = np.dot(X.T, dscores)
-    
     # Average
     dW /= num_train
     # Regularize
