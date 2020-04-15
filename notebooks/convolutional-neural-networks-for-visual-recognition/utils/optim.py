@@ -146,17 +146,11 @@ def adam(w, dw, config=None):
     ###########################################################################
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
     config['t'] = config['t'] + 1
-    
     config['m'] = (config['beta1'] * config['m']) + (1 - config['beta1']) * dw         # momentum
-    
     config['v'] = (config['beta2'] * config['v']) + (1 - config['beta2']) * dw * dw    # RMSprop
-    
     m_bias_correct = config['m'] / (1 - config['beta1'] ** config['t'])      # fixing bias
-
     v_bias_correct = config['v'] / (1 - config['beta2'] ** config['t'])      # fixing bias
-    
     next_w = w - config['learning_rate'] * m_bias_correct / (np.sqrt(v_bias_correct) + config['epsilon'])
-    
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
     ###########################################################################
     #                             END OF YOUR CODE                            #

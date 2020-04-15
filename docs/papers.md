@@ -141,6 +141,10 @@ micro_nav: false
             <td>Adagrad - adaptive learning rate method</td>
         </tr>
 		<tr>
+            <td><a href="">RMSProp: Divide the gradient by a running average of its recent magnitude</a></td>
+            <td>rmsprop</td>
+        </tr>
+		<tr>
             <td><a href="http://arxiv.org/abs/1412.6980">Adam: A Method for Stochastic Optimization</a></td>
             <td>Adam</td>
         </tr>

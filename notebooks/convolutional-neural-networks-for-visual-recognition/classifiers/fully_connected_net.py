@@ -183,7 +183,6 @@ class FullyConnectedNet(object):
         self.num_layers = 1 + len(hidden_dims)
         self.dtype = dtype
         self.params = {}
-
         ############################################################################
         # TODO: Initialize the parameters of the network, storing all values in    #
         # the self.params dictionary. Store weights and biases for the first layer #
@@ -203,7 +202,7 @@ class FullyConnectedNet(object):
         layers.extend(hidden_dims)
         layers.append(num_classes)
         
-        for l in np.arange(len(layers)-1):
+        for l in np.arange(self.num_layers):
             self.params["W" + str(l + 1)] = weight_scale * np.random.randn(layers[l], layers[l + 1])
             self.params["b" + str(l + 1)] = np.zeros(layers[l + 1])
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
@@ -342,29 +341,22 @@ class FullyConnectedNet(object):
         for l in np.arange(self.num_layers - 1)[::-1]:
             if self.use_dropout:
                 dA, dW, db = affine_relu_dropout_backward(dA, caches[l])
-                grads["W" + str(l + 1)] = dW
-                grads["b" + str(l + 1)] = db
             elif self.normalization=='batchnorm':
                 dA, dW, db, dgamma, dbeta = affine_bn_relu_backward(dA, caches[l])
-                grads["W" + str(l + 1)] = dW
-                grads["b" + str(l + 1)] = db
                 grads["gamma" + str(l + 1)] = dgamma
                 grads["beta" + str(l + 1)] = dbeta
             elif self.normalization=='layernorm':
                 dA, dW, db, dgamma, dbeta = affine_ln_relu_backward(dA, caches[l])
-                grads["W" + str(l + 1)] = dW
-                grads["b" + str(l + 1)] = db
                 grads["gamma" + str(l + 1)] = dgamma
                 grads["beta" + str(l + 1)] = dbeta
             else:
                 dA, dW, db = affine_relu_backward(dA, caches[l])
-                grads["W" + str(l + 1)] = dW
-                grads["b" + str(l + 1)] = db
+            
+            grads["W" + str(l + 1)] = dW
+            grads["b" + str(l + 1)] = db
 
         for l in np.arange(self.num_layers):
-            W = self.params["W" + str(l + 1)]
-            dW = reg * W
-            grads["W" + str(l + 1)] += dW
+            grads["W" + str(l + 1)] += reg * self.params["W" + str(l + 1)]
 
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
         ############################################################################

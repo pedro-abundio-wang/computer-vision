@@ -272,13 +272,10 @@ def batchnorm_backward(dout, cache):
     dx_normalized = dout * gamma
     # (D,)
     dsample_invert_std = np.sum(dx_normalized * sample_corrected, axis=0)
-    # (D,)
     dsample_std = dsample_invert_std * -1 / (sample_std**2)
-    # (D,)
     dsample_var = dsample_std * 1 / (2 * sample_std)
     # (N,D)
     dsample_squarred = dsample_var * np.ones((N, D)) / N
-    # (N,D)
     dsample_corrected = dx_normalized * sample_invert_std + dsample_squarred * 2 * sample_corrected
     # (D,)
     dsample_mean = np.sum(dsample_corrected, axis=0) * -1
@@ -387,7 +384,6 @@ def layernorm_forward(x, gamma, beta, ln_param):
     x_shifted = gamma * x_normalized + beta
     cache = (gamma, x_normalized, sample_corrected, sample_invert_std, sample_std)
     out = x_shifted
-
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
     ###########################################################################
     #                             END OF YOUR CODE                            #
