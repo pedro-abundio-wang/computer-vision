@@ -203,6 +203,11 @@ def batchnorm_forward(x, gamma, beta, bn_param):
         x_normalized = sample_corrected * sample_invert_std
         x_shifted = gamma * x_normalized + beta
         
+        # gamma = (D,)
+        # x_normalized = (N,D)
+        # sample_corrected = (N,D)
+        # sample_invert_std = (D,)
+        # sample_std = (D,)
         cache = (gamma, x_normalized, sample_corrected, sample_invert_std, sample_std)
         out = x_shifted
         
@@ -263,6 +268,11 @@ def batchnorm_backward(dout, cache):
     ###########################################################################
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
     N, D = dout.shape
+    # gamma = (D,)
+    # x_normalized = (N,D)
+    # sample_corrected = (N,D)
+    # sample_invert_std = (D,)
+    # sample_std = (D,)
     gamma, x_normalized, sample_corrected, sample_invert_std, sample_std = cache
     
     # (D,)
@@ -316,11 +326,23 @@ def batchnorm_backward_alt(dout, cache):
     # single statement; our implementation fits on a single 80-character line.#
     ###########################################################################
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-    gamma, x_normalized, sample_corrected, sample_invert_std, sample_std = cache
     N, _ = dout.shape
+    # gamma = (D,)
+    # x_normalized = (N,D)
+    # sample_corrected = (N,D)
+    # sample_invert_std = (D,)
+    # sample_std = (D,)
+    gamma, x_normalized, sample_corrected, sample_invert_std, sample_std = cache
+    # dbeta = (D,)
     dbeta = np.sum(dout, axis=0)
+    # dgamma = (D,)
     dgamma = np.sum(x_normalized * dout, axis=0)
-    dx = (gamma * sample_invert_std / N) * (N * dout - x_normalized * dgamma - dbeta)
+    
+    # dx_normalized (N, D) = (N, D) * (D,)
+    dx_normalized = dout * gamma
+    # (N,D) = (D,) * [(N,D) - (D,) - (N,D) * (D,)]
+    dx = (sample_invert_std / N) * (N * dx_normalized - np.sum(dx_normalized, axis=0) - x_normalized * np.sum(dx_normalized * x_normalized, axis=0))
+    
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
     ###########################################################################
     #                             END OF YOUR CODE                            #
@@ -385,6 +407,12 @@ def layernorm_forward(x, gamma, beta, ln_param):
     
     # (N, D) = (D,) (N, D) + (D,)
     x_shifted = gamma * x_normalized + beta
+    
+    # gamma = (D,)
+    # x_normalized = (N,D)
+    # sample_corrected = (D,N)
+    # sample_invert_std = (N,)
+    # sample_std = (N,)
     cache = (gamma, x_normalized, sample_corrected, sample_invert_std, sample_std)
     out = x_shifted
 
@@ -421,6 +449,11 @@ def layernorm_backward(dout, cache):
     ###########################################################################
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
     N, D = dout.shape
+    # gamma = (D,)
+    # x_normalized = (N,D)
+    # sample_corrected = (D,N)
+    # sample_invert_std = (N,)
+    # sample_std = (N,)
     gamma, x_normalized, sample_corrected, sample_invert_std, sample_std = cache
     
     # (D,)
@@ -454,6 +487,53 @@ def layernorm_backward(dout, cache):
     ###########################################################################
     return dx, dgamma, dbeta
 
+
+def layernorm_backward_alt(dout, cache):
+    """
+    Backward pass for layer normalization.
+
+    For this implementation, you can heavily rely on the work you've done already
+    for batch normalization.
+
+    Inputs:
+    - dout: Upstream derivatives, of shape (N, D)
+    - cache: Variable of intermediates from layernorm_forward.
+
+    Returns a tuple of:
+    - dx: Gradient with respect to inputs x, of shape (N, D)
+    - dgamma: Gradient with respect to scale parameter gamma, of shape (D,)
+    - dbeta: Gradient with respect to shift parameter beta, of shape (D,)
+    """
+    dx, dgamma, dbeta = None, None, None
+    
+    N, D = dout.shape
+    # gamma = (D,)
+    # x_normalized = (N,D)
+    # sample_corrected = (D,N)
+    # sample_invert_std = (N,)
+    # sample_std = (N,)
+    gamma, x_normalized, sample_corrected, sample_invert_std, sample_std = cache
+
+    # dbeta = (D,)
+    dbeta = np.sum(dout, axis=0)
+    # dgamma = (D,)
+    dgamma = np.sum(x_normalized * dout, axis=0)
+    
+    # dx_normalized (N, D) = (N, D) * (D,)
+    dx_normalized = dout * gamma
+    # Reshape
+    # dx_normalized = (D,N)
+    dx_normalized = dx_normalized.T
+    # x_normalized = (D,N)
+    x_normalized = x_normalized.T
+
+    # (D,N) = (N,) * [(D,N) - (N,) - (D,N) * (N,)]
+    dx = (sample_invert_std / D) * (D * dx_normalized - np.sum(dx_normalized, axis=0) - x_normalized * np.sum(dx_normalized * x_normalized, axis=0))
+    
+    dx = dx.T
+
+    return dx, dgamma, dbeta
+    
 
 def dropout_forward(x, dropout_param):
     """
