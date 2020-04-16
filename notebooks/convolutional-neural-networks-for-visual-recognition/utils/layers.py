@@ -112,7 +112,7 @@ def relu_backward(dout, cache):
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
     masks = np.maximum(0, x)
     masks[masks > 0] = 1
-    dx = dout * masks
+    dx = dout * masks 
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
     ###########################################################################
     #                             END OF YOUR CODE                            #
@@ -272,10 +272,13 @@ def batchnorm_backward(dout, cache):
     dx_normalized = dout * gamma
     # (D,)
     dsample_invert_std = np.sum(dx_normalized * sample_corrected, axis=0)
+    # (D,)
     dsample_std = dsample_invert_std * -1 / (sample_std**2)
+    # (D,)
     dsample_var = dsample_std * 1 / (2 * sample_std)
     # (N,D)
     dsample_squarred = dsample_var * np.ones((N, D)) / N
+    # (N,D)
     dsample_corrected = dx_normalized * sample_invert_std + dsample_squarred * 2 * sample_corrected
     # (D,)
     dsample_mean = np.sum(dsample_corrected, axis=0) * -1
@@ -384,6 +387,7 @@ def layernorm_forward(x, gamma, beta, ln_param):
     x_shifted = gamma * x_normalized + beta
     cache = (gamma, x_normalized, sample_corrected, sample_invert_std, sample_std)
     out = x_shifted
+
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
     ###########################################################################
     #                             END OF YOUR CODE                            #
@@ -727,8 +731,8 @@ def conv_backward_naive(dout, cache):
         a_prev_pad = A_prev_pad[i, :, :, :]
         da_prev_pad = dA_prev_pad[i, :, :, :]
         
-        for c in range(n_C):            # loop over the channels of the output volume
-            for h in range(n_H):        # loop over vertical axis of the output volume
+        for c in range(n_C):    # loop over the channels of the output volume
+            for h in range(n_H):    # loop over vertical axis of the output volume
                 for w in range(n_W):    # loop over horizontal axis of the output volume
                     # Find the corners of the current "slice"
                     vert_start = h * stride
@@ -779,7 +783,7 @@ def max_pool_forward_naive(x, pool_param):
     out = None
     A_prev = x
     hparameters = pool_param
-    mode = 'max'
+    
     ###########################################################################
     # TODO: Implement the max-pooling forward pass                            #
     ###########################################################################
@@ -815,10 +819,7 @@ def max_pool_forward_naive(x, pool_param):
                     a_prev_slice = A_prev[i,c,:,:]
                     
                     # Compute the pooling operation on the slice. Use an if statment to differentiate the modes. Use np.max/np.mean.
-                    if mode == "max":
-                        A[i, c, h, w] = np.max(a_prev_slice[vert_start:vert_end, horiz_start:horiz_end])
-                    elif mode == "average":
-                        A[i, c, h, w] = np.mean(a_prev_slice[vert_start:vert_end, horiz_start:horiz_end])
+                    A[i, c, h, w] = np.max(a_prev_slice[vert_start:vert_end, horiz_start:horiz_end])
     
     
     # Making sure your output shape is correct
@@ -853,32 +854,6 @@ def create_mask_from_window(x):
     return mask
 
 
-def distribute_value(dz, shape):
-    """
-    Distributes the input value in the matrix of dimension shape
-    
-    Arguments:
-    dz -- input scalar
-    shape -- the shape (n_H, n_W) of the output matrix for which we want to distribute the value of dz
-    
-    Returns:
-    a -- Array of size (n_H, n_W) for which we distributed the value of dz
-    """
-    
-    ### START CODE HERE ###
-    # Retrieve dimensions from shape (≈1 line)
-    (n_H, n_W) = shape
-    
-    # Compute the value to distribute on the matrix (≈1 line)
-    average = dz / (n_H * n_W)
-    
-    # Create a matrix where every entry is the "average" value (≈1 line)
-    a = np.ones(shape) * average
-    ### END CODE HERE ###
-    
-    return a
-
-
 def max_pool_backward_naive(dout, cache):
     """
     A naive implementation of the backward pass for a max-pooling layer.
@@ -891,7 +866,6 @@ def max_pool_backward_naive(dout, cache):
     - dx: Gradient with respect to x
     """
     dx = None
-    mode = 'max'
     dA = dout
     ###########################################################################
     # TODO: Implement the max-pooling backward pass                           #
@@ -931,22 +905,14 @@ def max_pool_backward_naive(dout, cache):
                     horiz_end = horiz_start + pool_width
                     
                     # Compute the backward propagation in both modes.
-                    if mode == "max":
-                        # Use the corners and "c" to define the current slice from a_prev (≈1 line)
-                        a_prev_slice = a_prev[c,vert_start: vert_end, horiz_start: horiz_end]
-                        # Create the mask from a_prev_slice (≈1 line)
-                        mask = create_mask_from_window(a_prev_slice)
-                        # Set dA_prev to be dA_prev + (the mask multiplied by the correct entry of dA) (≈1 line)
-                        dA_prev[i, c, vert_start:vert_end, horiz_start:horiz_end] += np.multiply(mask, dA[i, c, h, w])
-                    elif mode == "average":
-                        # Get the value a from dA (≈1 line)
-                        da = dA[i, c, h, w]
-                        # Define the shape of the filter as fxf (≈1 line)
-                        shape = (pool_height, pool_width)
-                        # Distribute it to get the correct slice of dA_prev. i.e. Add the distributed value of da. (≈1 line)
-                        dA_prev[i, c, vert_start: vert_end, horiz_start: horiz_end] += distribute_value(da, shape)
+                    # Use the corners and "c" to define the current slice from a_prev (≈1 line)
+                    a_prev_slice = a_prev[c,vert_start: vert_end, horiz_start: horiz_end]
+                    # Create the mask from a_prev_slice (≈1 line)
+                    mask = create_mask_from_window(a_prev_slice)
+                    # Set dA_prev to be dA_prev + (the mask multiplied by the correct entry of dA) (≈1 line)
+                    dA_prev[i, c, vert_start:vert_end, horiz_start:horiz_end] += np.multiply(mask, dA[i, c, h, w])
 
-                        
+
     dx = dA_prev
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
     ###########################################################################
@@ -1063,9 +1029,32 @@ def spatial_groupnorm_forward(x, gamma, beta, G, gn_param):
     # and layer normalization!                                                # 
     ###########################################################################
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-
-    pass
-
+    N, C, H, W = x.shape
+    # x.shape --> (N, D) --> N = N * G, D = C // G * H * W
+    x = np.reshape(x, (N * G, C // G * H * W))
+    
+    # same code as layer norm
+    # Tranpose x to use bath normalization code, now shape (D, N)
+    x = x.T
+    
+    # (N,)
+    sample_mean = x.mean(axis = 0)
+    # (D,N)
+    sample_corrected = x - sample_mean
+    sample_squarred = sample_corrected ** 2
+    # (N,)
+    sample_var = np.mean(sample_squarred, axis=0)
+    sample_std = np.sqrt(sample_var + eps)
+    sample_invert_std = 1 / sample_std
+    # (D,N)
+    x_normalized = sample_corrected * sample_invert_std 
+    
+    # Transform back and reshape
+    x_normalized = np.reshape(x_normalized.T, (N, C, H, W))
+    x_shifted = gamma[np.newaxis, :, np.newaxis, np.newaxis] * x_normalized + beta[np.newaxis, :, np.newaxis, np.newaxis]
+    
+    cache = (gamma, sample_invert_std, x_normalized, sample_corrected, sample_invert_std, sample_std, G)
+    out = x_shifted
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
     ###########################################################################
     #                             END OF YOUR CODE                            #
@@ -1093,8 +1082,25 @@ def spatial_groupnorm_backward(dout, cache):
     # This will be extremely similar to the layer norm implementation.        #
     ###########################################################################
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
+    N, C, H, W = dout.shape
+    gamma, sample_invert_std, x_normalized, sample_corrected, sample_invert_std, sample_std, G = cache
+    
+    # Set keepdims=True to make dbeta and dgamma's shape be (1, C, 1, 1)
+    dbeta = np.sum(dout, axis=(0, 2, 3), keepdims=True)
+    dgamma = np.sum(dout * x_normalized, axis=(0, 2, 3), keepdims=True)
+    
+    dx_normalized = dout * gamma[np.newaxis, :, np.newaxis, np.newaxis]
+    # Reshape
+    dx_normalized = np.reshape(dx_normalized, (N * G, C // G * H * W)).T
+    x_normalized = np.reshape(x_normalized, (N * G, C // G * H * W)).T
 
-    pass
+    # M = N * G
+    M, _ = dx_normalized.shape
+
+    dx = (sample_invert_std / M) * (M * dx_normalized - np.sum(dx_normalized, axis=0) - x_normalized * np.sum(dx_normalized * x_normalized, axis=0))
+
+    # transpose back
+    dx = np.reshape(dx.T, (N, C, H, W))
 
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
     ###########################################################################
@@ -1103,12 +1109,12 @@ def spatial_groupnorm_backward(dout, cache):
     return dx, dgamma, dbeta
 
 
-def svm_loss(score, y):
+def svm_loss(x, y):
     """
     Computes the loss and gradient using for multiclass SVM classification.
 
     Inputs:
-    - score: Input data, of shape (N, C) where score[i, j] is the score for the jth
+    - x: Input data, of shape (N, C) where x[i, j] is the score for the jth
       class for the ith input.
     - y: Vector of labels, of shape (N,) where y[i] is the label for x[i] and
       0 <= y[i] < C
@@ -1117,30 +1123,25 @@ def svm_loss(score, y):
     - loss: Scalar giving the loss
     - dx: Gradient of the loss with respect to x
     """
-    N = score.shape[0]
-    
-    correct_class_scores = score[np.arange(N), y]
-    margins = np.maximum(0, score - correct_class_scores[:, np.newaxis] + 1.0)
+    N = x.shape[0]
+    correct_class_scores = x[np.arange(N), y]
+    margins = np.maximum(0, x - correct_class_scores[:, np.newaxis] + 1.0)
     margins[np.arange(N), y] = 0
-    
     loss = np.sum(margins) / N
-    
-    loss_count = np.sum(margins > 0, axis=1)
-    dscore = np.zeros_like(score)
-    dscore[margins > 0] = 1
-    dscore[np.arange(N), y] -= loss_count
-    
-    dscore /= N
-    
-    return loss, dscore
+    num_pos = np.sum(margins > 0, axis=1)
+    dx = np.zeros_like(x)
+    dx[margins > 0] = 1
+    dx[np.arange(N), y] -= num_pos
+    dx /= N
+    return loss, dx
 
 
-def softmax_loss(score, y):
+def softmax_loss(x, y):
     """
     Computes the loss and gradient for softmax classification.
 
     Inputs:
-    - score: Input data, of shape (N, C) where score[i, j] is the score for the jth
+    - x: Input data, of shape (N, C) where x[i, j] is the score for the jth
       class for the ith input.
     - y: Vector of labels, of shape (N,) where y[i] is the label for x[i] and
       0 <= y[i] < C
@@ -1149,18 +1150,13 @@ def softmax_loss(score, y):
     - loss: Scalar giving the loss
     - dx: Gradient of the loss with respect to x
     """
-    N = score.shape[0]
-    
-    shifted_logits = score - np.max(score, axis=1, keepdims=True)
-    denominator = np.sum(np.exp(shifted_logits), axis=1, keepdims=True)
-    log_probs = shifted_logits - np.log(denominator)
+    shifted_logits = x - np.max(x, axis=1, keepdims=True)
+    Z = np.sum(np.exp(shifted_logits), axis=1, keepdims=True)
+    log_probs = shifted_logits - np.log(Z)
     probs = np.exp(log_probs)
-    
+    N = x.shape[0]
     loss = -np.sum(log_probs[np.arange(N), y]) / N
-    
-    dscore = probs.copy()
-    dscore[np.arange(N), y] -= 1
-    
-    dscore /= N
-    
-    return loss, dscore
+    dx = probs.copy()
+    dx[np.arange(N), y] -= 1
+    dx /= N
+    return loss, dx
