@@ -419,7 +419,30 @@ def batchnorm_backward_alt(dout, cache):
   dbeta = np.sum(dout, axis=0)
   dgamma = np.sum(xhat * dout, axis=0)
   dx = (gamma*istd/N) * (N*dout - xhat*dgamma - dbeta)
+  
+  return dx, dgamma, dbeta
+```
 
+When we implements **Layer Normalization** and **Group Normalization**, we need to transform the matrix so that we can reuse **Batch Normalization** code, so we derive the expression like the following. The benifits is that it only use `dxhat` and `xhat` to calucate, make our code more simpler when deal with matrix transform.
+
+```python
+= (gamma*istd/N) * (N*dout - xhat*dgamma - dbeta)
+= (istd/N) * (N*gamma*dout - xhat*gamma*dgamma - gamma*dbeta)
+= (istd/N) * (N*dxhat - xhat * np.sum(dxhat * xhat, axis=0) - np.sum(dxhat, axis=0))
+```
+
+so we have
+
+```python
+def batchnorm_backward_alt(dout, cache):
+  gamma, xhat, istd = cache
+  N, _ = dout.shape
+
+  dbeta = np.sum(dout, axis=0)
+  dgamma = np.sum(xhat * dout, axis=0)
+  dxhat = dout * gamma
+  
+  dx = (istd/N) * (N*dxhat - xhat * np.sum(dxhat * xhat, axis=0) - np.sum(dxhat, axis=0))
   return dx, dgamma, dbeta
 ```
 
