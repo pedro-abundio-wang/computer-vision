@@ -87,12 +87,21 @@ micro_nav: false
             <td>weights initialization</td>
         </tr>
 		<tr>
+            <td id="" colspan="2" style="text-align:center; vertical-align:middle;background-color:#b7ffbf">
+                <strong>Normalization</strong>
+            </td>
+        </tr>
+		<tr>
             <td><a href="http://arxiv.org/abs/1502.03167">Batch Normalization: Accelerating Deep Network Training by Reducing Internal Covariate Shift</a></td>
-            <td></td>
+            <td>Fully Connected and Spatial Batch Normalization</td>
         </tr>
 		<tr>
             <td><a href="https://arxiv.org/abs/1607.06450">Layer Normalization</a></td>
             <td>Instead of normalizing over the batch, we normalize over the features</td>
+        </tr>
+        <tr>
+            <td><a href="https://arxiv.org/abs/1803.08494">Group Normalization</a></td>
+            <td>Layer Normalization Variant for CNN</td>
         </tr>
 		<tr>
             <td id="" colspan="2" style="text-align:center; vertical-align:middle;background-color:#b7ffbf">
