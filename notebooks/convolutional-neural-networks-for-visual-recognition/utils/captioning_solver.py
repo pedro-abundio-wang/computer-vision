@@ -3,8 +3,8 @@ from builtins import range
 from builtins import object
 import numpy as np
 
-from cs231n import optim
-from cs231n.coco_utils import sample_coco_minibatch
+from utils import optim
+from utils.coco_utils import sample_coco_minibatch
 
 
 class CaptioningSolver(object):

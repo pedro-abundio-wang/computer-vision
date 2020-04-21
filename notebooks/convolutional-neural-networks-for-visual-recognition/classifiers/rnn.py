@@ -2,8 +2,8 @@ from builtins import range
 from builtins import object
 import numpy as np
 
-from cs231n.layers import *
-from cs231n.rnn_layers import *
+from utils.layers import *
+from utils.rnn_layers import *
 
 
 class CaptioningRNN(object):
