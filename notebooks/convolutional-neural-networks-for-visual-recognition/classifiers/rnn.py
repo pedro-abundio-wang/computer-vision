@@ -141,9 +141,40 @@ class CaptioningRNN(object):
         # in your implementation, if needed.                                       #
         ############################################################################
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
+        h0, cache_proj = affine_forward(features, W_proj, b_proj)
+        x, cache_word_embedding = word_embedding_forward(captions_in, W_embed)
+        if self.cell_type == 'rnn':
+            h, cache_rnn = rnn_forward(x, h0, Wx, Wh, b)
+        elif self.cell_type == 'lstm':
+            h, cache_rnn = lstm_forward(x, h0, Wx, Wh, b)
+        else:
+            raise ValueError('%s not implemented' % (self.cell_type))
+        scores, cache_temporal = temporal_affine_forward(h, W_vocab, b_vocab)
+        
+        loss, dscores = temporal_softmax_loss(scores, captions_out, mask)
+        
+        dh, dW_vocab, db_vocab = temporal_affine_backward(dscores, cache_temporal)
+        if self.cell_type == 'rnn':
+            dx, dh0, dWx, dWh, db = rnn_backward(dh, cache_rnn)
+        elif self.cell_type == 'lstm':
+            dx, dh0, dWx, dWh, db = lstm_backward(dh, cache_rnn)
+        else:
+            raise ValueError('%s not implemented' % (self.cell_type))
+        dW_embed = word_embedding_backward(dx, cache_word_embedding)
+        dfeatures, dW_proj, db_proj = affine_backward(dh0, cache_proj)
+        
+        grads['W_embed'] = dW_embed
 
-        pass
+        grads['W_proj'] = dW_proj
+        grads['b_proj'] = db_proj
 
+        grads['Wx'] = dWx
+        grads['Wh'] = dWh
+        grads['b'] = db
+
+        grads['W_vocab'] = dW_vocab
+        grads['b_vocab'] = db_vocab
+        
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
         ############################################################################
         #                             END OF YOUR CODE                             #
@@ -210,8 +241,43 @@ class CaptioningRNN(object):
         # you are using an LSTM, initialize the first cell state to zeros.        #
         ###########################################################################
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-
-        pass
+        
+        # Get hidden state
+        h0, _ = affine_forward(features, W_proj, b_proj)
+        captions[:, 0] = self._start
+        # Previous hidden state
+        prev_h = h0
+        # Previous cell state
+        prev_c = np.zeros_like(h0)
+        # Current word (start word)
+        capt = self._start * np.ones((N, 1), dtype=np.int32)
+        
+        # Let's go over the sequence
+        for t in np.arange(max_length): 
+            # Embedded current word
+            word_embed, _ = word_embedding_forward(capt, W_embed) 
+            if self.cell_type == 'rnn':
+                # Run a step of rnn
+                h, _ = rnn_step_forward(np.squeeze(word_embed), prev_h, Wx, Wh, b)
+            elif self.cell_type == 'lstm':
+                # Run a step of lstm
+                h, c, _ = lstm_step_forward(np.squeeze(word_embed), prev_h, prev_c, Wx, Wh, b)
+            else:
+                raise ValueError('%s not implemented' % (self.cell_type))
+        
+            # Compute the score distrib over the dictionary
+            scores, _ = temporal_affine_forward(h[:, np.newaxis, :], W_vocab, b_vocab)
+            # Squeeze unnecessarily dimension and get the best word idx
+            idx_best = np.squeeze(np.argmax(scores, axis=2))
+            # Put it in the captions
+            captions[:, t] = idx_best
+            # Update the hidden state, the cell state (if lstm) and the current word
+            prev_h = h
+            
+            if self.cell_type == 'lstm':
+                prev_c = c
+            
+            capt = captions[:, t]
 
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
         ############################################################################

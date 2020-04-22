@@ -264,14 +264,11 @@ def load_imagenet_val(num=None):
     - y: numpy array of integer image labels, shape [num]
     - class_names: dict mapping integer label to class name
     """
-    imagenet_fn = 'utils/datasets/imagenet_val_25.npz'
+    imagenet_fn = 'datasets/imagenet_val_25.npz'
     if not os.path.isfile(imagenet_fn):
       print('file %s not found' % imagenet_fn)
-      print('Run the following:')
-      print('cd cs231n/datasets')
-      print('bash get_imagenet_val.sh')
       assert False, 'Need to download imagenet_val_25.npz'
-    f = np.load(imagenet_fn)
+    f = np.load(imagenet_fn, allow_pickle=True)
     X = f['X']
     y = f['y']
     class_names = f['label_map'].item()
