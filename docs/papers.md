@@ -44,11 +44,11 @@ micro_nav: false
                 <strong>Autograd</strong>
             </td>
         </tr>
-    	<tr>
+        <tr>
             <td><a href="http://arxiv.org/abs/1306.0239">Automatic differentiation in machine learning</a></td>
             <td>backpropagation</td>
         </tr>
-		<tr>
+        <tr>
             <td><a href="http://yann.lecun.com/exdb/publis/pdf/lecun-98b.pdf">Efficient BackProp</a></td>
             <td>Efficient BackProp from Yann LeCun</td>
         </tr>
@@ -57,7 +57,7 @@ micro_nav: false
                 <strong>Activation</strong>
             </td>
         </tr>
-		<tr>
+        <tr>
             <td><a href="http://www.dartmouth.edu/~gvc/Cybenko_MCSS.pdf">Approximation by Superpositions of Sigmoidal Function</a></td>
             <td>universal approximators</td>
         </tr>
@@ -82,20 +82,20 @@ micro_nav: false
             <td><a href="http://arxiv.org/abs/1412.0233">The Loss Surfaces of Multilayer Networks</a></td>
             <td></td>
         </tr>
-		<tr>
+        <tr>
             <td><a href="http://jmlr.org/proceedings/papers/v9/glorot10a/glorot10a.pdf">Understanding the difficulty of training deep feedforward neural networks</a></td>
             <td>weights initialization</td>
         </tr>
-		<tr>
+        <tr>
             <td id="" colspan="2" style="text-align:center; vertical-align:middle;background-color:#b7ffbf">
                 <strong>Normalization</strong>
             </td>
         </tr>
-		<tr>
+        <tr>
             <td><a href="http://arxiv.org/abs/1502.03167">Batch Normalization: Accelerating Deep Network Training by Reducing Internal Covariate Shift</a></td>
             <td>Fully Connected and Spatial Batch Normalization</td>
         </tr>
-		<tr>
+        <tr>
             <td><a href="https://arxiv.org/abs/1607.06450">Layer Normalization</a></td>
             <td>Instead of normalizing over the batch, we normalize over the features</td>
         </tr>
@@ -103,7 +103,7 @@ micro_nav: false
             <td><a href="https://arxiv.org/abs/1803.08494">Group Normalization</a></td>
             <td>Layer Normalization Variant for CNN</td>
         </tr>
-		<tr>
+        <tr>
             <td id="" colspan="2" style="text-align:center; vertical-align:middle;background-color:#b7ffbf">
                 <strong>Regularization</strong>
             </td>
@@ -112,23 +112,23 @@ micro_nav: false
             <td><a href="https://web.stanford.edu/~hastie/Papers/elasticnet.pdf">Elastic net regularization</a></td>
             <td>L1 regularization, L2 regularization</td>
         </tr>
-		<tr>
+        <tr>
             <td><a href="http://www.cs.toronto.edu/~rsalakhu/papers/srivastava14a.pdf">Dropout: A Simple Way to Prevent Neural Networks from Overfitting</a></td>
             <td>dropout</td>
         </tr>
-		<tr>
+        <tr>
             <td><a href="https://arxiv.org/abs/1207.0580">Improving neural networks by preventing co-adaptation of feature detectors</a></td>
             <td></td>
         </tr>
-		<tr>
+        <tr>
             <td><a href="http://papers.nips.cc/paper/4882-dropout-training-as-adaptive-regularization.pdf">Dropout Training as Adaptive Regularization</a></td>
             <td>dropout relation to the other regularization techniques</td>
         </tr>
-		<tr>
+        <tr>
             <td><a href="">DropConnect</a></td>
             <td></td>
         </tr>
-		<tr>
+        <tr>
             <td id="" colspan="2" style="text-align:center; vertical-align:middle;background-color:#b7ffbf">
                 <strong>Optimization</strong>
             </td>
@@ -137,35 +137,35 @@ micro_nav: false
             <td><a href="http://arxiv.org/pdf/1212.0901v2.pdf">Advances in optimizing Recurrent Networks</a></td>
             <td>Nesterov Momentum</td>
         </tr>
-		<tr>
+        <tr>
             <td><a href="http://research.google.com/archive/large_deep_networks_nips2012.html">Large Scale Distributed Deep Networks</a></td>
             <td>comparing L-BFGS and SGD variants</td>
         </tr>
-		<tr>
+        <tr>
             <td><a href="http://arxiv.org/abs/1311.2115">SFO</a></td>
             <td>combine the advantages of SGD with advantages of L-BFGS</td>
         </tr>
-		<tr>
+        <tr>
             <td><a href="http://jmlr.org/papers/v12/duchi11a.html">Adaptive Subgradient Methods for Online Learning and Stochastic Optimization</a></td>
             <td>Adagrad - adaptive learning rate method</td>
         </tr>
-		<tr>
+        <tr>
             <td><a href="">RMSProp: Divide the gradient by a running average of its recent magnitude</a></td>
             <td>rmsprop</td>
         </tr>
-		<tr>
+        <tr>
             <td><a href="http://arxiv.org/abs/1412.6980">Adam: A Method for Stochastic Optimization</a></td>
             <td>Adam</td>
         </tr>
-		<tr>
+        <tr>
             <td><a href="http://arxiv.org/abs/1312.6055">Unit Tests for Stochastic Optimization</a></td>
             <td>a standardized benchmark for stochastic optimization</td>
         </tr>
-		<tr>
+        <tr>
             <td><a href="http://arxiv.org/pdf/1206.5533v2.pdf">Practical Recommendations for Gradient-Based Training of Deep Architectures</a></td>
             <td></td>
         </tr>
-		<tr>
+        <tr>
             <td id="" colspan="2" style="text-align:center; vertical-align:middle;background-color:#b7ffbf">
                 <strong>HyperParameter Search</strong>
             </td>
@@ -174,7 +174,7 @@ micro_nav: false
             <td><a href="http://www.jmlr.org/papers/volume13/bergstra12a/bergstra12a.pdf">Random Search for Hyper-Parameter Optimization</a></td>
             <td></td>
         </tr>
-		<tr>
+        <tr>
             <td id="" colspan="2" style="text-align:center; vertical-align:middle;background-color:#b7ffbf">
                 <strong>Convolutional Neural Networks</strong>
             </td>
@@ -222,6 +222,10 @@ micro_nav: false
         <tr>
             <td><a href="http://arxiv.org/abs/1412.6806">Striving for Simplicity: The All Convolutional Net</a></td>
             <td></td>
+        </tr>
+        <tr>
+            <td><a href="https://arxiv.org/abs/1603.07285">A guide to convolution arithmetic for deep learning</a></td>
+            <td>transpose convolution and checkerboard artifacts</td>
         </tr>
     </tbody>
 </table>
