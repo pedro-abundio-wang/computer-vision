@@ -274,9 +274,60 @@ The **pool layers** are in charge of downsampling the spatial dimensions of the 
 
 The first successful applications of Convolutional Networks were developed by Yann LeCun in 1990's. Of these, the best known is the architecture that was used to read zip codes, digits, etc.
 
+{% include image.html description="LeNet5" image="blogs/cnn/LeNet5.png" caption="true"%}
+
+- The goal was to identify handwritten digits in a `32x32x1` gray image
+- This model was published in 1998. The last layer wasn't using softmax back then.
+- It has 60k parameters.
+- The dimensions of the image decreases as the number of channels increases.
+- Architecture: Conv => Pool => Conv => Pool => FC => FC => softmax.
+- Conv filters were 5x5, applied at stride 1
+- Subsampling (Pooling) layers were 2x2 applied at stride 2
+- The activation function used in the paper was Sigmoid and Tanh. 
+- Modern implementation uses RELU in most of the cases.
+
 #### AlexNet
 
 The first work that popularized Convolutional Networks in Computer Vision developed by Alex Krizhevsky, Ilya Sutskever and Geoff Hinton. The AlexNet was submitted to the **ImageNet ILSVRC challenge** in 2012 and significantly outperformed the second runner-up (top 5 error of 16% compared to runner-up with 26% error). The Network had a very similar architecture to LeNet, but was deeper, bigger, and featured Convolutional Layers stacked on top of each other (previously it was common to only have a single CONV layer always immediately followed by a POOL layer).
+
+{% include image.html description="AlexNet" image="blogs/cnn/AlexNet.png" caption="true"%}
+
+```
+Full (simplified) AlexNet architecture:
+[227x227x3] INPUT
+[55x55x96] CONV1: 96 11x11 filters at stride 4, pad 0
+[27x27x96] MAX POOL1: 3x3 filters at stride 2
+[27x27x96] NORM1: Normalization layer
+[27x27x256] CONV2: 256 5x5 filters at stride 1, pad 2
+[13x13x256] MAX POOL2: 3x3 filters at stride 2
+[13x13x256] NORM2: Normalization layer
+[13x13x384] CONV3: 384 3x3 filters at stride 1, pad 1
+[13x13x384] CONV4: 384 3x3 filters at stride 1, pad 1
+[13x13x256] CONV5: 256 3x3 filters at stride 1, pad 1
+[6x6x256] MAX POOL3: 3x3 filters at stride 2
+[4096] FC6: 4096 neurons weights (6*6*256)*4096 = 38M params
+[4096] FC7: 4096 neurons weights 4096*4096 = 17M params
+[1000] FC8: 1000 neurons weights 4096*1000 = 4M params
+```
+
+weights: (3*3*512)*512 = 2,359,296
+
+- Conv => MaxPool => LRN => Conv => MaxPool => LRN => Conv => Conv => Conv => MaxPool => FC => FC => Softmax
+- The goal for the model was the ImageNet challenge which classifies images into 1000 classes.
+- Has 60 Million parameter compared to 60k parameter of LeNet5, 59M params in FC layers
+- It first used the RELU activation function.
+- The original paper contains Multiple GPUs and **Local Response normalization (LRN)**.
+  - Multiple GPUs were used because the GPUs were not so fast back then.
+  - Researchers proved that Local Response normalization doesn't help much so for now don't bother yourself for understanding or implementing it.
+- CONV1, CONV2, CONV4, CONV5: Connections only with feature maps on same GPU
+- CONV3, FC6, FC7, FC8: Connections with all feature maps in preceding layer, communication across GPUs
+- heavy data augmentation ( flipping/jittering/cropping/color normalization)
+- dropout 0.5
+- batch size 128
+- SGD Momentum 0.9
+- Learning rate 1e-2, reduced by 10 manually when val accuracy plateaus
+- L2 weight decay 5e-4
+- 7 CNN ensemble: 18.2% -> 15.4%
 
 #### ZF Net
 
