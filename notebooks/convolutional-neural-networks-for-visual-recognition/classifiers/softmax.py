@@ -79,7 +79,7 @@ def softmax_loss_vectorized(W, X, y, reg):
     #############################################################################
     scores = np.dot(X, W)
     
-    shifted_logits = score - np.max(score, axis=1, keepdims=True)
+    shifted_logits = scores - np.max(scores, axis=1, keepdims=True)
     denominator = np.sum(np.exp(shifted_logits), axis=1, keepdims=True)
     log_probs = shifted_logits - np.log(denominator)
     probs = np.exp(log_probs)
@@ -94,7 +94,7 @@ def softmax_loss_vectorized(W, X, y, reg):
     dscore = probs.copy()
     dscore[np.arange(num_train), y] += -1
 
-    dW = np.dot(X.T, dscores)
+    dW = np.dot(X.T, dscore)
     # Average
     dW /= num_train
     # Regularize

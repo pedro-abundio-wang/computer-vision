@@ -96,11 +96,11 @@ def svm_loss_vectorized(W, X, y, reg):
     #############################################################################
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
     loss_count = np.sum(margins > 0, axis=1)
-    dscore = np.zeros_like(score)
+    dscore = np.zeros_like(scores)
     dscore[margins > 0] = 1
     dscore[np.arange(num_train), y] -= loss_count.T
     
-    dW = np.dot(X.T, dscores)
+    dW = np.dot(X.T, dscore)
     # Average
     dW /= num_train
     # Regularize
