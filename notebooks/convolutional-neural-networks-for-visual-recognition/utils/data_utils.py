@@ -266,8 +266,8 @@ def load_imagenet_val(num=None):
     """
     imagenet_fn = 'datasets/imagenet_val_25.npz'
     if not os.path.isfile(imagenet_fn):
-      print('file %s not found' % imagenet_fn)
-      assert False, 'Need to download imagenet_val_25.npz'
+        print('file %s not found' % imagenet_fn)
+        assert False, 'Need to download imagenet_val_25.npz'
     f = np.load(imagenet_fn, allow_pickle=True)
     X = f['X']
     y = f['y']
