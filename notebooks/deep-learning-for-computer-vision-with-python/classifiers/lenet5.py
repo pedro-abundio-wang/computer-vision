@@ -11,7 +11,7 @@ from keras import backend as K
 
 class LeNet5:
     
-    def build(self, width=32, height=32, depth=1, classes=10):
+    def build(self, width=28, height=28, depth=1, classes=10):
         
         inputShape = (height, width, depth)
 
@@ -23,7 +23,7 @@ class LeNet5:
         model = Sequential()
         
         # CONV => RELU => POOL layers
-        model.add(Conv2D(6, (5, 5), padding="valid", input_shape=inputShape))
+        model.add(Conv2D(6, (5, 5), padding="same", input_shape=inputShape))
         model.add(Activation("relu"))
         model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
         
