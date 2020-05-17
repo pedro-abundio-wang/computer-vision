@@ -43,7 +43,7 @@ class ImagePreprocessor:
         return (np.array(data))
 
 
-class ChannelPreprocessor:
+class ImageToArrayPreprocessor:
     def __init__(self, dataFormat=None):
         # store the image data format
         self.dataFormat = dataFormat
