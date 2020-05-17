@@ -30,7 +30,7 @@ class ImagePreprocessor:
                 # the image
                 for p in self.preprocessors:
                     image = p.preprocess(image)
-
+                    image = image.astype('uint8')
             # treat our processed image as a "feature vector"
             # by updating the data list followed by the labels
             data.append(image)
@@ -87,14 +87,16 @@ class AspectAwarePreprocessor:
         # update the deltas to crop the height to the desired
         # dimension
         if w < h:
-            image = imutils.resize(image, width=self.width, inter=self.inter)
+            scale_rate = w / self.width
+            image = cv2.resize(image, (self.width, int(h / scale_rate)), interpolation=self.inter)
             dH = int((image.shape[0] - self.height) / 2.0)
 
         # otherwise, the height is smaller than the width so
         # resize along the height and then update the deltas
         # to crop along the width
         else:
-            image = imutils.resize(image, height=self.height, inter=self.inter)
+            scale_rate = h / self.height
+            image = cv2.resize(image, (int(w / scale_rate), self.height), interpolation=self.inter)
             dW = int((image.shape[1] - self.width) / 2.0)
 
         # now that our images have been resized, we need to
