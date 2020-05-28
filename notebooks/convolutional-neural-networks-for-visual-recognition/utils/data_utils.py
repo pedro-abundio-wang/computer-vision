@@ -7,8 +7,10 @@ import os
 from scipy.misc import imread
 import platform
 
+
 def load_pickle(f):
     return pickle.load(f, encoding='latin1')
+
 
 def load_CIFAR_batch(filename):
     """ load single batch of cifar """
@@ -19,6 +21,7 @@ def load_CIFAR_batch(filename):
         X = X.reshape(10000, 3, 32, 32).transpose(0,2,3,1).astype("float")
         Y = np.array(Y)
         return X, Y
+
 
 def load_CIFAR10(ROOT):
     """ load all of cifar """
