@@ -21,8 +21,6 @@ page_nav:
         url: '#'
 ---
 
-(this page is currently in draft form)
-
 ## Visualizing what ConvNets learn
 
 Several approaches for understanding and visualizing Convolutional Networks have been developed in the literature, partly as a response the common criticism that the learned features in a Neural Network are not interpretable. In this section we briefly survey some of these approaches and related work.
@@ -37,7 +35,7 @@ Several approaches for understanding and visualizing Convolutional Networks have
 
 **Conv/FC Filters.** The second common strategy is to visualize the weights. These are usually most interpretable on the first CONV layer which is looking directly at the raw pixel data, but it is possible to also show the filter weights deeper in the network. The weights are useful to visualize because well-trained networks usually display nice and smooth filters without any noisy patterns. Noisy patterns can be an indicator of a network that hasn't been trained for long enough, or possibly a very low regularization strength that may have led to overfitting.
 
-{% include image.html description="Typical-looking activations on the 5th CONV layer of a trained AlexNet. Notice that the first-layer weights are very nice and smooth, indicating nicely converged network. The color/grayscale features are clustered because the AlexNet contains two separate streams of processing, and an apparent consequence of this architecture is that one stream develops high-frequency grayscale features and the other low-frequency color features." image="blogs/understanding-cnn/filt1.jpeg" caption="true"%}
+{% include image.html description="Notice that the first-layer weights are very nice and smooth, indicating nicely converged network. The color/grayscale features are clustered because the AlexNet contains two separate streams of processing, and an apparent consequence of this architecture is that one stream develops high-frequency grayscale features and the other low-frequency color features." image="blogs/understanding-cnn/filt1.jpeg" caption="true"%}
 
 {% include image.html description="Typical-looking activations on the 2nd CONV layer of a trained AlexNet. Notice that the 2nd CONV layer weights are not as interpretable, but it is apparent that they are still smooth, well-formed, and absent of noisy patterns." image="blogs/understanding-cnn/filt2.jpeg" caption="true"%}
 
@@ -65,7 +63,7 @@ Suppose that a ConvNet classifies an image as a dog. How can we be certain that 
 
 {% include image.html description="Three input images (top). Notice that the occluder region is shown in grey. As we slide the occluder over the image we record the probability of the correct class and then visualize it as a heatmap (shown below each image). For instance, in the left-most image we see that the probability of Pomeranian plummets when the occluder covers the face of the dog, giving us some level of confidence that the dog's face is primarily responsible for the high classification score. Conversely, zeroing out other parts of the image is seen to have relatively negligible impact." image="blogs/understanding-cnn/occlude.jpeg" caption="true"%}
 
-### Visualizing the data gradient and friends
+### Visualizing the data gradient
 
 **Data Gradient**.
 
@@ -85,7 +83,7 @@ Suppose that a ConvNet classifies an image as a dog. How can we be certain that 
 
 ### How much spatial information is preserved?
 
-[Do ConvNets Learn Correspondence?](http://papers.nips.cc/paper/5420-do-convnets-learn-correspondence.pdf) (tldr: yes)
+[Do ConvNets Learn Correspondence?](http://papers.nips.cc/paper/5420-do-convnets-learn-correspondence.pdf)
 
 ### Plotting performance as a function of image attributes
 
