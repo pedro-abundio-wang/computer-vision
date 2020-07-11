@@ -137,4 +137,4 @@ dmypy.json
 **/cat-dog-panda/*
 **/datasets/*
 **/*.hdf5
-
+**/output/*
