@@ -18,9 +18,9 @@ dependencies:
   - bleach=3.1.0=py_0
   - bzip2=1.0.8=h7b6447c_0
   - c-ares=1.15.0=h7b6447c_1001
-  - ca-certificates=2020.4.5.1=hecc5488_0
+  - ca-certificates=2020.6.20=hecda079_0
   - cairo=1.14.12=h8948797_3
-  - certifi=2020.4.5.1=py36_0
+  - certifi=2020.6.20=py36h9f0ad1d_0
   - cffi=1.13.2=py36h2e261b9_0
   - chardet=3.0.4=py36_1003
   - cloudpickle=1.3.0=py_0
@@ -38,23 +38,24 @@ dependencies:
   - defusedxml=0.6.0=py_0
   - entrypoints=0.3=py36_0
   - expat=2.2.6=he6710b0_0
-  - ffmpeg=4.0=hcdf2ecd_0
+  - ffmpeg=4.1.3=h167e202_0
   - fontconfig=2.13.0=h9420a91_0
   - freeglut=3.0.0=hf484d3e_5
   - freetype=2.9.1=h8a8886c_1
   - fribidi=1.0.5=h7b6447c_0
   - future=0.18.2=py36_0
   - gast=0.3.2=py_0
+  - giflib=5.2.1=h516909a_2
   - glib=2.63.1=h5a9c865_0
   - gmp=6.1.2=h6c8ec71_1
+  - gnutls=3.6.13=h79a8f9a_0
   - graphite2=1.3.13=h23475e2_0
-  - graphviz=2.40.1=h21bd128_2
   - grpcio=1.16.1=py36hf8bcb03_1
   - gst-plugins-base=1.14.0=hbbd80ab_1
   - gstreamer=1.14.0=hb453b48_1
-  - h5py=2.8.0=py36h989c5e5_3
-  - harfbuzz=1.8.8=hffaf4a1_0
-  - hdf5=1.10.2=hba1933b_1
+  - h5py=2.10.0=nompi_py36h513d04c_102
+  - harfbuzz=2.4.0=hca77d97_0
+  - hdf5=1.10.5=nompi_h3c11f04_1104
   - icu=58.2=h9c2bf20_1
   - idna=2.9=py_1
   - imageio=2.8.0=py_0
@@ -64,11 +65,11 @@ dependencies:
   - ipython=7.11.1=py36h39e3cac_0
   - ipython_genutils=0.2.0=py36_0
   - ipywidgets=7.5.1=py_0
-  - jasper=2.0.14=h07fcdf6_1
+  - jasper=1.900.1=h07fcdf6_1006
   - jedi=0.16.0=py36_0
   - jinja2=2.10.3=py_0
   - joblib=0.14.1=py_0
-  - jpeg=9b=h024ee3a_2
+  - jpeg=9d=h516909a_0
   - jsonschema=3.2.0=py36_0
   - jupyter=1.0.0=py36_7
   - jupyter_client=5.3.4=py36_0
@@ -79,12 +80,17 @@ dependencies:
   - keras-base=2.2.4=py36_0
   - keras-preprocessing=1.1.0=py_1
   - kiwisolver=1.1.0=py36he6710b0_0
+  - lame=3.100=h14c3975_1001
+  - libblas=3.8.0=14_mkl
+  - libcblas=3.8.0=14_mkl
   - libedit=3.1.20181209=hc058e9b_0
   - libffi=3.2.1=hd88cf55_4
   - libgcc-ng=9.1.0=hdf63c60_0
   - libgfortran-ng=7.3.0=hdf63c60_0
   - libglu=9.0.0=hf484d3e_1
-  - libopencv=3.4.2=hb342d67_1
+  - libiconv=1.15=h516909a_1006
+  - liblapack=3.8.0=14_mkl
+  - liblapacke=3.8.0=14_mkl
   - libopus=1.3=h7b6447c_0
   - libpng=1.6.37=hbc83047_0
   - libprotobuf=3.11.2=hd408876_0
@@ -93,6 +99,7 @@ dependencies:
   - libtiff=4.1.0=h2733197_0
   - libuuid=1.0.3=h1bed415_2
   - libvpx=1.7.0=h439df22_0
+  - libwebp=1.0.2=h56121f0_5
   - libxcb=1.13=h1bed415_1
   - libxml2=2.9.9=hea5a465_1
   - markdown=3.1.1=py36_0
@@ -107,18 +114,19 @@ dependencies:
   - nbconvert=5.6.1=py36_0
   - nbformat=5.0.4=py_0
   - ncurses=6.1=he6710b0_1
+  - nettle=3.4.1=h1bed415_1002
   - networkx=2.4=py_0
   - ninja=1.9.0=py36hfd86e86_0
   - notebook=6.0.3=py36_0
   - numpy=1.17.4=py36hc1035e2_0
   - numpy-base=1.17.4=py36hde5b4d6_0
   - olefile=0.46=py_0
-  - opencv=3.4.2=py36h6fd60c2_1
+  - opencv=4.1.0=py36h3aa1047_6
+  - openh264=1.8.0=hdbcaa40_1000
   - openssl=1.1.1g=h516909a_0
   - packaging=20.3=py_0
   - pandoc=2.2.3.2=0
   - pandocfilters=1.4.2=py36_1
-  - pango=1.42.4=h049681c_0
   - parso=0.6.0=py_0
   - patool=1.12=py36ha7d2b2a_0
   - pcre=8.43=he6710b0_0
@@ -135,9 +143,8 @@ dependencies:
   - protobuf=3.11.2=py36he6710b0_0
   - ptyprocess=0.6.0=py36_0
   - py=1.8.1=py_0
-  - py-opencv=3.4.2=py36hb342d67_1
   - pycparser=2.19=py_0
-  - pydot=1.4.1=py36_0
+  - pydot=1.2.4=py_0
   - pygments=2.5.2=py_0
   - pyopenssl=19.1.0=py36_0
   - pyparsing=2.4.6=py_0
@@ -183,6 +190,7 @@ dependencies:
   - werkzeug=0.16.1=py_0
   - wheel=0.33.6=py36_0
   - widgetsnbextension=3.5.1=py36_0
+  - x264=1!152.20180806=h14c3975_0
   - xmltodict=0.11.0=py36h79ba24e_0
   - xz=5.2.4=h14c3975_4
   - yaml=0.1.7=had09818_2
