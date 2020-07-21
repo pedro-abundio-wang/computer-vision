@@ -4,8 +4,7 @@ import numpy as np
 
 
 """
-This file defines layer types that are commonly used for recurrent neural
-networks.
+This file defines layer types that are commonly used for recurrent neural networks.
 """
 
 
@@ -68,16 +67,18 @@ def rnn_step_backward(dnext_h, cache):
     ##############################################################################
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
     x, prev_h, Wx, Wh, b, next_h = cache
+    # (N, H) = (N, H) * (N, H)
+    dz = dnext_h * (1 - next_h**2)
     # (N, D) = (N, H) * (H, D)
-    dx = np.dot(dnext_h * (1 - next_h**2), Wx.T)
+    dx = np.dot(dz, Wx.T)
     # (N, H) = (N, H) * (H, H)
-    dprev_h = np.dot(dnext_h * (1 - next_h**2), Wh.T)
+    dprev_h = np.dot(dz, Wh.T)
     # (D, H) = (D, N) * (N, H)
-    dWx = np.dot(x.T, dnext_h * (1 - next_h**2))
+    dWx = np.dot(x.T, dz)
     # (H, H) = (H, N) * (N, H)
-    dWh = np.dot(prev_h.T, dnext_h * (1 - next_h**2))
+    dWh = np.dot(prev_h.T, dz)
     # (H,)
-    db = np.sum(dnext_h * (1 - next_h**2), axis = 0)
+    db = np.sum(dz, axis = 0)
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
     ##############################################################################
     #                               END OF YOUR CODE                             #
@@ -111,14 +112,14 @@ def rnn_forward(x, h0, Wx, Wh, b):
     ##############################################################################
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
     N, T, _ = x.shape
-    _, H = h0.shape 
+    _, H = h0.shape
     
     next_h = h0
     h = np.zeros((N, T, H))
     
     for i in np.arange(T):
-        next_h, step_cache = rnn_step_forward(x[:,i,:], next_h, Wx, Wh, b)
-        h[:,i,:] = next_h
+        next_h, step_cache = rnn_step_forward(x[:, i, :], next_h, Wx, Wh, b)
+        h[:, i, :] = next_h
         cache.append(step_cache)
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
     ##############################################################################
@@ -186,7 +187,7 @@ def word_embedding_forward(x, W):
 
     Inputs:
     - x: Integer array of shape (N, T) giving indices of words. Each element idx
-      of x muxt be in the range 0 <= idx < V.
+      of x must be in the range 0 <= idx < V.
     - W: Weight matrix of shape (V, D) giving word vectors for all words.
 
     Returns a tuple of:
@@ -234,6 +235,7 @@ def word_embedding_backward(dout, cache):
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
     x, W = cache
     dW = np.zeros_like(W)
+    # x.shape = (N, T)
     np.add.at(dW, x, dout)
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
     ##############################################################################
