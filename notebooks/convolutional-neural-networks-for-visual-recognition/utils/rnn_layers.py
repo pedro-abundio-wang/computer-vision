@@ -235,7 +235,6 @@ def word_embedding_backward(dout, cache):
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
     x, W = cache
     dW = np.zeros_like(W)
-    # x.shape = (N, T)
     np.add.at(dW, x, dout)
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
     ##############################################################################
@@ -476,26 +475,26 @@ def lstm_backward(dh, cache):
     return dx, dh0, dWx, dWh, db
 
 
-def temporal_affine_forward(x, w, b):
+def temporal_affine_forward(h, w, b):
     """
-    Forward pass for a temporal affine layer. The input is a set of D-dimensional
+    Forward pass for a temporal affine layer. The input is a set of H dimensional
     vectors arranged into a minibatch of N timeseries, each of length T. We use
-    an affine function to transform each of those vectors into a new vector of
-    dimension M.
+    an affine function to transform each of those vectors into a output vector of
+    dimension V.
 
     Inputs:
-    - x: Input data of shape (N, T, D)
-    - w: Weights of shape (D, M)
-    - b: Biases of shape (M,)
+    - h: Input data of shape (N, T, H)
+    - w: Weights of shape (H, V)
+    - b: Biases of shape (V,)
 
     Returns a tuple of:
-    - out: Output data of shape (N, T, M)
+    - out: Output data of shape (N, T, V)
     - cache: Values needed for the backward pass
     """
-    N, T, D = x.shape
-    M = b.shape[0]
-    out = np.dot(x.reshape(N * T, D), w).reshape(N, T, M) + b
-    cache = x, w, b, out
+    N, T, H = h.shape
+    _, V = w.shape
+    out = np.dot(h.reshape(N * T, H), w).reshape(N, T, V) + b
+    cache = h, w, b, out
     return out, cache
 
 
@@ -504,23 +503,23 @@ def temporal_affine_backward(dout, cache):
     Backward pass for temporal affine layer.
 
     Input:
-    - dout: Upstream gradients of shape (N, T, M)
+    - dout: Upstream gradients of shape (N, T, V)
     - cache: Values from forward pass
 
     Returns a tuple of:
-    - dx: Gradient of input, of shape (N, T, D)
-    - dw: Gradient of weights, of shape (D, M)
-    - db: Gradient of biases, of shape (M,)
+    - dh: Gradient of input, of shape (N, T, H)
+    - dw: Gradient of weights, of shape (H, V)
+    - db: Gradient of biases, of shape (V,)
     """
-    x, w, b, out = cache
-    N, T, D = x.shape
-    M = b.shape[0]
+    h, w, b, out = cache
+    N, T, H = h.shape
+    _, V = w.shape
 
-    dx = np.dot(dout.reshape(N * T, M), w.T).reshape(N, T, D)
-    dw = np.dot(dout.reshape(N * T, M).T, x.reshape(N * T, D)).T
+    dh = np.dot(dout.reshape(N * T, V), w.T).reshape(N, T, H)
+    dw = np.dot(dout.reshape(N * T, V).T, h.reshape(N * T, H)).T
     db = np.sum(dout, axis=(0, 1))
 
-    return dx, dw, db
+    return dh, dw, db
 
 
 def temporal_softmax_loss(x, y, mask, verbose=False):
@@ -529,7 +528,7 @@ def temporal_softmax_loss(x, y, mask, verbose=False):
     making predictions over a vocabulary of size V for each timestep of a
     timeseries of length T, over a minibatch of size N. The input x gives scores
     for all vocabulary elements at all timesteps, and y gives the indices of the
-    ground-truth element at each timestep. We use a cross-entropy loss at each
+    ground truth element at each timestep. We use a cross-entropy loss at each
     timestep, summing the loss over all timesteps and averaging across the
     minibatch.
 
