@@ -1,6 +1,8 @@
 from __future__ import print_function, division
 from builtins import range
 import numpy as np
+from utils.activation_layers import sigmoid
+from utils.activation_layers import softmax
 
 
 """
@@ -35,7 +37,7 @@ def rnn_step_forward(x, prev_h, Wx, Wh, b):
     ##############################################################################
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
     next_h = np.tanh(np.dot(prev_h, Wh) + np.dot(x, Wx) + b)
-    cache = (x, prev_h, Wx, Wh, b, next_h)
+    cache = x, prev_h, Wx, Wh, b, next_h
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
     ##############################################################################
     #                               END OF YOUR CODE                             #
@@ -117,9 +119,9 @@ def rnn_forward(x, h0, Wx, Wh, b):
     next_h = h0
     h = np.zeros((N, T, H))
     
-    for i in np.arange(T):
-        next_h, step_cache = rnn_step_forward(x[:, i, :], next_h, Wx, Wh, b)
-        h[:, i, :] = next_h
+    for t in np.arange(T):
+        next_h, step_cache = rnn_step_forward(x[:, t, :], next_h, Wx, Wh, b)
+        h[:, t, :] = next_h
         cache.append(step_cache)
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
     ##############################################################################
@@ -165,10 +167,10 @@ def rnn_backward(dh, cache):
     db = np.zeros(H)
     dprev_h_step = np.zeros((N, H))
     
-    for i in np.arange(T)[::-1]:
-        dx_step, dprev_h_step, dWx_step, dWh_step, db_step = rnn_step_backward(dh[:,i,:] + dprev_h_step, cache[i])
+    for t in np.arange(T)[::-1]:
+        dx_step, dprev_h_step, dWx_step, dWh_step, db_step = rnn_step_backward(dh[:,t,:] + dprev_h_step, cache[t])
         dh0 = dprev_h_step
-        dx[:,i,:] = dx_step
+        dx[:,t,:] = dx_step
         dWx += dWx_step
         dWh += dWh_step
         db += db_step
@@ -243,28 +245,12 @@ def word_embedding_backward(dout, cache):
     return dW
 
 
-def sigmoid(x):
-    """
-    A numerically stable version of the logistic sigmoid function.
-    """
-    pos_mask = (x >= 0)
-    neg_mask = (x < 0)
-    z = np.zeros_like(x)
-    z[pos_mask] = np.exp(-x[pos_mask])
-    z[neg_mask] = np.exp(x[neg_mask])
-    top = np.ones_like(x)
-    top[neg_mask] = z[neg_mask]
-    return top / (1 + z)
-
-
 def lstm_step_forward(x, prev_h, prev_c, Wx, Wh, b):
     """
     Forward pass for a single timestep of an LSTM.
 
     The input data has dimension D, the hidden state has dimension H, and we use
     a minibatch size of N.
-
-    Note that a sigmoid() function has already been provided for you in this file.
 
     Inputs:
     - x: Input data, of shape (N, D)
@@ -282,30 +268,29 @@ def lstm_step_forward(x, prev_h, prev_c, Wx, Wh, b):
     next_h, next_c, cache = None, None, None
     #############################################################################
     # TODO: Implement the forward pass for a single timestep of an LSTM.        #
-    # You may want to use the numerically stable sigmoid implementation above.  #
     #############################################################################
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
     # Get the size
     _, H = prev_h.shape
     # compute the intermediate vector
-    a = np.dot(x, Wx) + np.dot(prev_h, Wh) + b
+    z = np.dot(x, Wx) + np.dot(prev_h, Wh) + b
     # compute the gates
-    ai = a[:, :H]
-    af = a[:, H:2 * H]
-    ao = a[:, 2 * H:3 * H]
-    ag = a[:, 3 * H:4 * H]
-    # compute the gate
-    i = sigmoid(ai)
-    f = sigmoid(af)
-    o = sigmoid(ao)
-    g = np.tanh(ag)
+    zf = z[:, :H]
+    zi = z[:, H:2*H]
+    zg = z[:, 2*H:3*H]
+    zo = z[:, 3*H:4*H]
+    # compute the gates: f -> forget gate, i -> update gate, g -> cell gate, o -> output gate
+    f = sigmoid(zf)
+    i = sigmoid(zi)
+    g = np.tanh(zg)
+    o = sigmoid(zo)
     # compute the next cell state
     next_c = f * prev_c + i * g
     # compute next hidden state
     next_h = o * np.tanh(next_c)
     # Get the cache for the backward pass
-    cache = i, f, o, g, a, ai, af, ao, ag, Wx, Wh, b, prev_h, prev_c, x, next_c, next_h
+    cache = x, prev_h, prev_c, Wx, Wh, b, zf, zi, zg, zo, f, i, g, o, next_c, next_h
 
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
     ##############################################################################
@@ -343,7 +328,7 @@ def lstm_step_backward(dnext_h, dnext_c, cache):
 
     # Backward pass
     # unroll cache
-    i, f, o, g, a, ai, af, ao, ag, Wx, Wh, b, prev_h, prev_c, x, next_c, next_h = cache
+    x, prev_h, prev_c, Wx, Wh, b, zf, zi, zg, zo, f, i, g, o, next_c, next_h = cache
     # backprop
     do = np.tanh(next_c) * dnext_h
     dnext_c += o * (1 - np.tanh(next_c)**2) * dnext_h
@@ -353,18 +338,18 @@ def lstm_step_backward(dnext_h, dnext_c, cache):
     di = g * dnext_c
     dg = i * dnext_c
     # backprop
-    dag = (1 - np.tanh(ag)**2) * dg
-    dao = sigmoid(ao) * (1 - sigmoid(ao)) * do
-    daf = sigmoid(af) * (1 - sigmoid(af)) * df
-    dai = sigmoid(ai) * (1 - sigmoid(ai)) * di
+    dzo = sigmoid(zo) * (1 - sigmoid(zo)) * do
+    dzg = (1 - np.tanh(zg)**2) * dg
+    dzi = sigmoid(zi) * (1 - sigmoid(zi)) * di
+    dzf = sigmoid(zf) * (1 - sigmoid(zf)) * df
     # backprop
-    da = np.hstack((dai, daf, dao, dag))
+    dz = np.hstack((dzf, dzi, dzg, dzo))
     # backprop
-    dx = np.dot(da, Wx.T)
-    dWx = np.dot(x.T, da)
-    dprev_h = np.dot(da, Wh.T)
-    dWh = np.dot(prev_h.T, da)
-    db = np.sum(da, axis=0)
+    dx = np.dot(dz, Wx.T)
+    dWx = np.dot(x.T, dz)
+    dprev_h = np.dot(dz, Wh.T)
+    dWh = np.dot(prev_h.T, dz)
+    db = np.sum(dz, axis=0)
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
     ##############################################################################
     #                               END OF YOUR CODE                             #
@@ -380,7 +365,7 @@ def lstm_forward(x, h0, Wx, Wh, b):
     size of H, and we work over a minibatch containing N sequences. After running
     the LSTM forward, we return the hidden states for all timesteps.
 
-    Note that the initial cell state is passed as input, but the initial cell
+    Note that the initial hidden state is passed as input, but the initial cell
     state is set to zero. Also note that the cell state is not returned; it is
     an internal variable to the LSTM and is not accessed from outside.
 
@@ -395,27 +380,24 @@ def lstm_forward(x, h0, Wx, Wh, b):
     - h: Hidden states for all timesteps of all sequences, of shape (N, T, H)
     - cache: Values needed for the backward pass.
     """
-    h, cache = None, None
+    h, cache = None, []
     #############################################################################
     # TODO: Implement the forward pass for an LSTM over an entire timeseries.   #
     # You should use the lstm_step_forward function that you just defined.      #
     #############################################################################
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
     # define sizes
-    N, T, D = x.shape
-    N, H = h0.shape
+    N, T, _ = x.shape
+    _, H = h0.shape
     # initialization
-    prev_h = h0
-    prev_c = np.zeros_like(prev_h)
+    next_h = h0
+    next_c = np.zeros_like(next_h)
     h = np.zeros((N, T, H))
-    cache = []
     # run the loop on times
     for t in np.arange(T):
-        if t > 0:
-            prev_h = h[:,t - 1,:]
-            prev_c = next_c
-        h[:,t,:], next_c, cache_next = lstm_step_forward(x[:,t,:], prev_h, prev_c, Wx, Wh, b)
-        cache.append(cache_next)
+        next_h, next_c, step_cache = lstm_step_forward(x[:,t,:], next_h, next_c, Wx, Wh, b)
+        h[:,t,:] = next_h
+        cache.append(step_cache)
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
     ##############################################################################
     #                               END OF YOUR CODE                             #
@@ -426,7 +408,7 @@ def lstm_forward(x, h0, Wx, Wh, b):
 
 def lstm_backward(dh, cache):
     """
-    Backward pass for an LSTM over an entire sequence of data.]
+    Backward pass for an LSTM over an entire sequence of data.
 
     Inputs:
     - dh: Upstream gradients of hidden states, of shape (N, T, H)
@@ -448,22 +430,22 @@ def lstm_backward(dh, cache):
     # Backprop into the lstm.
     # Dimensions
     N, T, H = dh.shape
-    i, f, o, g, a, ai, af, ao, ag, Wx, Wh, b, prev_h, prev_c, x, next_c, next_h = cache[T-1]
-    _, D = x.shape
+    x_T, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _ = cache[T-1]
+    _, D = x_T.shape
     # Initialize dx,dh0,dWx,dWh,db
     dx = np.zeros((N, T, D))
     dh0 = np.zeros((N, H))
-    db = np.zeros((4 * H,))
-    dWh = np.zeros((H, 4 * H))
-    dWx = np.zeros((D, 4 * H))
+    dWx = np.zeros((D, 4*H))
+    dWh = np.zeros((H, 4*H))
+    db = np.zeros((4*H,))
     # On transpose dh
-    dh_prev_step = np.zeros((N, H))
-    dc_prev_step = np.zeros_like(dh_prev_step)
+    dprev_h_step = np.zeros((N, H))
+    dprev_c_step = np.zeros_like(dprev_h_step)
     
     for t in np.arange(T)[::-1]:
-        dx_step, dh_prev_step, dc_prev_step, dWx_step, dWh_step, db_step = lstm_step_backward(dh[:,t,:] + dh_prev_step, dc_prev_step, cache[t])
-        dh0 = dh_prev_step
-        dx[:,t,:] += dx_step
+        dx_step, dprev_h_step, dprev_c_step, dWx_step, dWh_step, db_step = lstm_step_backward(dh[:,t,:] + dprev_h_step, dprev_c_step, cache[t])
+        dh0 = dprev_h_step
+        dx[:,t,:] = dx_step
         dWx += dWx_step
         dWh += dWh_step
         db += db_step
@@ -522,49 +504,3 @@ def temporal_affine_backward(dout, cache):
     return dh, dw, db
 
 
-def temporal_softmax_loss(x, y, mask, verbose=False):
-    """
-    A temporal version of softmax loss for use in RNNs. We assume that we are
-    making predictions over a vocabulary of size V for each timestep of a
-    timeseries of length T, over a minibatch of size N. The input x gives scores
-    for all vocabulary elements at all timesteps, and y gives the indices of the
-    ground truth element at each timestep. We use a cross-entropy loss at each
-    timestep, summing the loss over all timesteps and averaging across the
-    minibatch.
-
-    As an additional complication, we may want to ignore the model output at some
-    timesteps, since sequences of different length may have been combined into a
-    minibatch and padded with NULL tokens. The optional mask argument tells us
-    which elements should contribute to the loss.
-
-    Inputs:
-    - x: Input scores, of shape (N, T, V)
-    - y: Ground-truth indices, of shape (N, T) where each element is in the range
-         0 <= y[i, t] < V
-    - mask: Boolean array of shape (N, T) where mask[i, t] tells whether or not
-      the scores at x[i, t] should contribute to the loss.
-
-    Returns a tuple of:
-    - loss: Scalar giving loss
-    - dx: Gradient of loss with respect to scores x.
-    """
-
-    N, T, V = x.shape
-
-    x_flat = x.reshape(N * T, V)
-    y_flat = y.reshape(N * T)
-    mask_flat = mask.reshape(N * T)
-
-    probs = np.exp(x_flat - np.max(x_flat, axis=1, keepdims=True))
-    probs /= np.sum(probs, axis=1, keepdims=True)
-    loss = -np.sum(mask_flat * np.log(probs[np.arange(N * T), y_flat])) / N
-    dx_flat = probs.copy()
-    dx_flat[np.arange(N * T), y_flat] -= 1
-    dx_flat /= N
-    dx_flat *= mask_flat[:, None]
-
-    if verbose: print('dx_flat: ', dx_flat.shape)
-
-    dx = dx_flat.reshape(N, T, V)
-
-    return loss, dx
