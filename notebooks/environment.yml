@@ -1,12 +1,4 @@
 name: computer-vision
-channels:
-  - http://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free
-  - http://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge
-  - farrajota
-  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main
-  - conda-forge
-  - http://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/
-  - http://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main/
 dependencies:
   - _libgcc_mutex=0.1=main
   - _pytorch_select=0.2=gpu_0
