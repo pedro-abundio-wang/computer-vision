@@ -4,7 +4,7 @@ import os
 
 class HDF5DatasetWriter:
     
-    def __init__(self, dims, outputPath, dataKey="images", bufSize=1000):
+    def __init__(self, dims, outputPath, dataKey="images", bufSize=1024):
         # check to see if the output path exists, and if so, raise
         # an exception
         if os.path.exists(outputPath):

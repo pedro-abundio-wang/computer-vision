@@ -1,4 +1,8 @@
 name: computer-vision
+channels:
+  - conda-forge
+  - https://conda.anaconda.org/farrajota
+  - defaults
 dependencies:
   - _libgcc_mutex=0.1=main
   - _pytorch_select=0.2=gpu_0
@@ -11,16 +15,16 @@ dependencies:
   - bleach=3.1.0=py_0
   - bzip2=1.0.8=h7b6447c_0
   - c-ares=1.15.0=h7b6447c_1001
-  - ca-certificates=2020.6.20=hecda079_0
+  - ca-certificates=2020.7.22=0
   - cairo=1.14.12=h8948797_3
-  - certifi=2020.6.20=py36h9f0ad1d_0
+  - certifi=2020.6.20=py36_0
   - cffi=1.13.2=py36h2e261b9_0
   - chardet=3.0.4=py36_1003
   - cloudpickle=1.3.0=py_0
   - cryptography=2.9.2=py36h1ba5d50_0
-  - cudatoolkit=9.2=0
-  - cudnn=7.6.4=cuda9.2_0
-  - cupti=9.2.148=0
+  - cudatoolkit=10.0.130=0
+  - cudnn=7.6.5=cuda10.0_0
+  - cupti=10.0.130=0
   - cycler=0.10.0=py36_0
   - cython=0.29.15=py36he6710b0_0
   - cytoolz=0.10.1=py36h7b6447c_0
@@ -29,6 +33,7 @@ dependencies:
   - dbus=1.13.12=h746ee38_0
   - decorator=4.4.1=py_0
   - defusedxml=0.6.0=py_0
+  - dill=0.3.2=py_0
   - entrypoints=0.3=py36_0
   - expat=2.2.6=he6710b0_0
   - ffmpeg=4.1.3=h167e202_0
@@ -37,11 +42,13 @@ dependencies:
   - freetype=2.9.1=h8a8886c_1
   - fribidi=1.0.5=h7b6447c_0
   - future=0.18.2=py36_0
-  - gast=0.3.2=py_0
+  - gast=0.2.2=py36_0
   - giflib=5.2.1=h516909a_2
   - glib=2.63.1=h5a9c865_0
   - gmp=6.1.2=h6c8ec71_1
   - gnutls=3.6.13=h79a8f9a_0
+  - google-pasta=0.2.0=py_0
+  - googleapis-common-protos=1.52.0=py36_0
   - graphite2=1.3.13=h23475e2_0
   - grpcio=1.16.1=py36hf8bcb03_1
   - gst-plugins-base=1.14.0=hbbd80ab_1
@@ -68,7 +75,6 @@ dependencies:
   - jupyter_client=5.3.4=py36_0
   - jupyter_console=6.1.0=py_0
   - jupyter_core=4.6.1=py36_0
-  - keras=2.2.4=0
   - keras-applications=1.0.8=py_0
   - keras-base=2.2.4=py36_0
   - keras-preprocessing=1.1.0=py_1
@@ -116,7 +122,8 @@ dependencies:
   - olefile=0.46=py_0
   - opencv=4.1.0=py36h3aa1047_6
   - openh264=1.8.0=hdbcaa40_1000
-  - openssl=1.1.1g=h516909a_0
+  - openssl=1.1.1h=h7b6447c_0
+  - opt_einsum=3.1.0=py_0
   - packaging=20.3=py_0
   - pandoc=2.2.3.2=0
   - pandocfilters=1.4.2=py36_1
@@ -132,8 +139,10 @@ dependencies:
   - progressbar=2.5=py_0
   - progressbar2=3.37.1=py36_0
   - prometheus_client=0.7.1=py_0
+  - promise=2.3=py36_0
   - prompt_toolkit=3.0.2=py_0
   - protobuf=3.11.2=py36he6710b0_0
+  - psutil=5.7.2=py36h7b6447c_0
   - ptyprocess=0.6.0=py36_0
   - py=1.8.1=py_0
   - pycparser=2.19=py_0
@@ -150,7 +159,7 @@ dependencies:
   - python-dateutil=2.8.1=py_0
   - python-utils=2.3.0=py36_0
   - python_abi=3.6=1_cp36m
-  - pytorch=1.3.1=cuda92py36hb0ba70e_0
+  - pytorch=1.4.0=cuda100py36h75a84eb_0
   - pytz=2019.3=py_0
   - pywavelets=1.1.1=py36h7b6447c_0
   - pyyaml=5.3.1=py36h7b6447c_0
@@ -167,9 +176,13 @@ dependencies:
   - sip=4.19.8=py36hf484d3e_0
   - six=1.14.0=py36_0
   - sqlite=3.30.1=h7b6447c_0
-  - tensorboard=1.11.0=py36hf484d3e_0
-  - tensorflow=1.11.0=gpu_py36h9c9050a_0
-  - tensorflow-base=1.11.0=gpu_py36had579c0_0
+  - tensorboard=2.0.0=pyhb38c66f_1
+  - tensorflow=2.0.0=gpu_py36h6b29c10_0
+  - tensorflow-base=2.0.0=gpu_py36h0ec5d1f_0
+  - tensorflow-datasets=1.2.0=py36_0
+  - tensorflow-estimator=2.0.0=pyh2649769_0
+  - tensorflow-gpu=2.0.0=h0d30ee6_0
+  - tensorflow-metadata=0.14.0=pyhe6710b0_1
   - termcolor=1.1.0=py36_1
   - terminado=0.8.3=py36_0
   - testpath=0.4.4=py_0
@@ -177,6 +190,7 @@ dependencies:
   - toolz=0.10.0=py_0
   - torchvision=0.1.8=py36_0
   - tornado=6.0.3=py36h7b6447c_0
+  - tqdm=4.50.0=py_0
   - traitlets=4.3.3=py36_0
   - urllib3=1.25.8=py36_0
   - wcwidth=0.1.7=py36_0
@@ -184,6 +198,7 @@ dependencies:
   - werkzeug=0.16.1=py_0
   - wheel=0.33.6=py36_0
   - widgetsnbextension=3.5.1=py36_0
+  - wrapt=1.12.1=py36h7b6447c_1
   - x264=1!152.20180806=h14c3975_0
   - xmltodict=0.11.0=py36h79ba24e_0
   - xz=5.2.4=h14c3975_4
@@ -192,5 +207,5 @@ dependencies:
   - zipp=0.6.0=py_0
   - zlib=1.2.11=h7b6447c_3
   - zstd=1.3.7=h0b5b093_0
-prefix: /home/pedro/miniconda3/envs/computer-vision
+prefix: /home/pedro/anaconda3/envs/computer-vision
 
